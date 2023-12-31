@@ -1,40 +1,96 @@
 package com.maestro.desktop.controllers;
 
-import com.maestro.desktop.models.Project;
+import com.maestro.desktop.App;
 import com.maestro.desktop.models.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.stage.Stage;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.BitSet;
+
 
 public class AppController {
 
-	@FXML
-	private Button loginButton;
+    private User user;
 
-	public void handleLoginButton(ActionEvent e) {
-		User loggedInUser = new User("John Doe", "jdoe@mail.com", "1234");
-		loggedInUser.addProject(new Project("Project1"));
+    @FXML
+    private AnchorPane currentView;
 
-		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Dashboard.fxml"));
-			Parent load = loader.load();
-			DashboardController dashboardController = loader.getController();
-			dashboardController.setLoggedInUser(loggedInUser);
-			Stage dashboardStage = new Stage();
-			dashboardStage.setScene(new Scene(load));
-			dashboardStage.setTitle("Dashboard");
-			dashboardStage.show();
-			Stage loginStage = (Stage) loginButton.getScene().getWindow();
-			loginStage.close();
+    @FXML
+    private Button dashboardButton;
 
-		} catch (IOException error) {
-			error.printStackTrace();
-		}
-	}
+    @FXML
+    private Button projectsButton;
+
+
+    public void initialize(User user) {
+        System.out.println(user.getName());
+        this.user = user;
+        updateSidebar(dashboardButton);
+        updateView("/views/dashboard-view.fxml");
+
+    }
+
+    private void updateView(String fxml) {
+        try {
+            AnchorPane view = (AnchorPane) FXMLLoader.load(getClass().getResource(fxml));
+            AnchorPane.setTopAnchor(view, 0.0);
+            AnchorPane.setBottomAnchor(view, 0.0);
+            AnchorPane.setLeftAnchor(view, 0.0);
+            AnchorPane.setRightAnchor(view, 0.0);
+            this.currentView.getChildren().setAll(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void updateView(String fxml, Object data) {
+        try {
+            AnchorPane view = (AnchorPane) FXMLLoader.load(getClass().getResource(fxml));
+            AnchorPane.setTopAnchor(view, 0.0);
+            AnchorPane.setBottomAnchor(view, 0.0);
+            AnchorPane.setLeftAnchor(view, 0.0);
+            AnchorPane.setRightAnchor(view, 0.0);
+            this.currentView.getChildren().setAll(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void updateSidebar(Button selBtn) {
+        for (Button btn : new Button[]{dashboardButton, projectsButton}) {
+            if (btn == selBtn) {
+                selBtn.getStyleClass().setAll("selected-sidebar-item");
+            } else {
+                btn.getStyleClass().setAll("default-sidebar-item");
+            }
+        }
+    }
+
+    public void logout() {
+        System.out.println("Logging out");
+    }
+
+    public void changeView(ActionEvent e) {
+        Object source = e.getSource();
+        System.out.println(source);
+        if (source instanceof Button) {
+            if (source == dashboardButton) {
+                updateSidebar(dashboardButton);
+                updateView("/views/dashboard-view.fxml");
+            } else if (source == projectsButton){
+                updateSidebar(projectsButton);
+                updateView("/views/projects-view.fxml");
+            } else {
+                updateView("/views/project-view.fxml", ((Button) source).getUserData());
+            }
+
+        }
+    }
 }
