@@ -35,6 +35,10 @@
     -fx-text-fill: #818181;
 }
 
+.icon {
+    -fx-background-color: #818181;
+}
+
 .selected-sidebar-item .icon {
     -fx-background-color: #000;
 }
@@ -43,7 +47,22 @@
     -fx-background-color: #818181;
 }
 
-.icon {
-    -fx-background-color: #818181;
+.selected-sidebar-item .icon#project-icon {
+    -fx-border-color: transparent;
+    -fx-background-color: #000;
+    -fx-shape: "M11.5 23C17.8513 23 23 17.8513 23 11.5C23 5.14873 17.8513 0 11.5 0C5.14873 0 0 5.14873 0 11.5C0 17.8513 5.14873 23 11.5 23Z";
 }
 
+.default-sidebar-item .icon#project-icon {
+    -fx-background-color: transparent;
+    -fx-border-color: #818181;
+    -fx-shape: "M22 11.5C22 17.299 17.299 22 11.5 22C5.70101 22 1 17.299 1 11.5C1 5.70101 5.70101 1 11.5 1C17.299 1 22 5.70101 22 11.5Z";
+}
+
+.legend {
+    -fx-text-fill: #818181;
+}
+
+.sidebar-sep {
+    -fx-stroke: #818181;
+}

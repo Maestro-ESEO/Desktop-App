@@ -14,6 +14,10 @@ import javafx.util.StringConverter;
 
 import java.io.IOException;
 
-public class DashboardController {
+public class DashboardController extends NavigationViewController {
 
+    @Override
+    public void initialize(Object data) {
+        System.out.println("yo");
+    }
 }

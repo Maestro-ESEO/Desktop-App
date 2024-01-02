@@ -20,6 +20,10 @@ public class LoginController {
         User loggedInUser = new User("John Doe", "jdoe@mail.com", "1234");
         loggedInUser.addProject(new Project("Project1"));
         loggedInUser.addProject(new Project("Project2"));
+        loggedInUser.addProject(new Project("Project3"));
+        loggedInUser.addProject(new Project("Project4"));
+        loggedInUser.addProject(new Project("Project5"));
+        loggedInUser.addProject(new Project("Project6"));
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/app-view.fxml"));
