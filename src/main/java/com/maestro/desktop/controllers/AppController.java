@@ -4,6 +4,8 @@ import com.maestro.desktop.models.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -37,16 +39,21 @@ public class AppController {
     @FXML
     private VBox recentContainer;
 
+    @FXML
+    private Button profileBtn;
+
     public static AppController getInstance() {
         return INSTANCE;
     }
 
     public void initialize(User user) {
         this.user = user;
+        this.profileBtn.setText(this.user.getName());
         AppController.INSTANCE = this;
         this.dashboard = new NavigableView(null, NavigableView.FxmlView.DASHBOARD, dashboardButton);
         this.allProjects = new NavigableView(this.user.getProjects(), NavigableView.FxmlView.ALL_PROJECTS, allProjectsButton);
         recents = new ArrayList<>();
+        this.recentContainer.setVisible(false);
         updateView(dashboard);
     }
 
@@ -69,13 +76,13 @@ public class AppController {
             AnchorPane.setRightAnchor(view, 0.0);
             NavigationViewController controller = loader.getController();
             if (nav.getData() != null) {
-                System.out.println(nav.getData());
                 controller.initialize(nav.getData());
             }
             this.currentView.getChildren().setAll(view);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.recentContainer.setVisible(!this.recents.isEmpty());
     }
 
     public void logout() {
@@ -92,15 +99,43 @@ public class AppController {
             } else {
                 throw new Error("Button not recognized");
             }
-
         }
     }
 
-    public void updateRecents() {
-        List<Button> listOfRecents = new ArrayList<>();
+    public void navigateWithData(Object data) {
+
+        // Check if already in recent Navigable Views
         for (NavigableView nav : recents) {
-            listOfRecents.add((Button) nav.getNavSource());
+            if (nav.getData() == data) {
+                AppController.getInstance().updateView(nav);
+                return;
+            }
         }
-        ((VBox) this.recentContainer.getChildren().getLast()).getChildren().setAll(listOfRecents);
+
+        // New button for new Navigable View
+        Button newRecentButton = new Button(data.toString());
+
+        // Button styling
+        newRecentButton.setGraphicTextGap(10.0);
+        newRecentButton.setAlignment(Pos.TOP_LEFT);
+        newRecentButton.getStyleClass().setAll("default-sidebar-item");
+        newRecentButton.setPadding(new Insets(5, 5, 5, 10));
+        newRecentButton.setMaxWidth(Double.MAX_VALUE);
+        Button graphic = new Button();
+        graphic.getStyleClass().setAll("icon");
+        graphic.setId("recent-icon");
+        graphic.setPrefSize(10, 10);
+        graphic.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
+        newRecentButton.setGraphic(graphic);
+
+        NavigableView newRecentNavigableView = new NavigableView(data, NavigableView.FxmlView.PROJECT, newRecentButton);
+        newRecentButton.setOnAction(event -> AppController.getInstance().updateView(newRecentNavigableView));
+
+        this.recents.add(0, newRecentNavigableView);
+        if (this.recents.size() > 3) {
+            this.recents.remove(this.recents.size() - 1);
+        }
+        ((VBox) this.recentContainer.getChildren().getLast()).getChildren().setAll(this.recents.stream().map(NavigableView::getNavSource).toList());
+        this.updateView(newRecentNavigableView);
     }
 }

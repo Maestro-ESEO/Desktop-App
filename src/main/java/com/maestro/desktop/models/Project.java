@@ -84,4 +84,6 @@ public class Project {
     public void setUsers(List<User> users) {
         this.users = users;
     }
+
+    public String toString() { return name; }
 }

@@ -17,6 +17,7 @@ public class LoginController {
     private Button loginButton;
 
     public void handleLoginButton(ActionEvent e) {
+        // Create test user with test projects
         User loggedInUser = new User("John Doe", "jdoe@mail.com", "1234");
         loggedInUser.addProject(new Project("Project1"));
         loggedInUser.addProject(new Project("Project2"));
