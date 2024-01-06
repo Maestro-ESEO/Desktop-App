@@ -1,0 +1,40 @@
+/* styles.css */
+.login-pane {
+    /* Set background color or any other styles for the GridPane */
+}
+
+.login-button {
+    border-radius: 70px;
+    background: #F7422B;
+    /*box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);*/
+}
+
+.password-field, .text-field {
+    color: #7D7676;
+    font-family: Poppins, serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.login-text {
+    color: #000;
+    text-align: center;
+    font-family: Poppins, serif;
+    font-size: 96px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.login-hyperlink {
+    color: #7D7676;
+    text-align: center;
+    font-family: Poppins, serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-decoration-line: underline;
+}
