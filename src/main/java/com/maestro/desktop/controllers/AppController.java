@@ -132,7 +132,7 @@ public class AppController {
         newRecentButton.setOnAction(event -> AppController.getInstance().updateView(newRecentNavigableView));
 
         this.recents.add(0, newRecentNavigableView);
-        if (this.recents.size() > 3) {
+        if (this.recents.size() > 5) {
             this.recents.remove(this.recents.size() - 1);
         }
         ((VBox) this.recentContainer.getChildren().getLast()).getChildren().setAll(this.recents.stream().map(NavigableView::getNavSource).toList());
