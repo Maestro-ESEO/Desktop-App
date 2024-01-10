@@ -36,6 +36,8 @@ javafx {
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+    implementation 'org.controlsfx:controlsfx:11.2.0'
+
 }
 
 test {
@@ -53,3 +55,4 @@ jlink {
 jlinkZip {
     group = 'distribution'
 }
+
