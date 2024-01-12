@@ -25,7 +25,7 @@ public class User {
     }
 
     public String getName() {
-        return this.firstName + this.lastName;
+        return this.firstName + " " + this.lastName;
     }
 
     public List<Project> getProjects() {
