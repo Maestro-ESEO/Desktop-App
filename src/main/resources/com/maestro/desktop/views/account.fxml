@@ -39,12 +39,12 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Text>
-            <Text fill="#7d7676" layoutX="200.0" layoutY="398.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email adress" >
+            <Text fill="#7d7676" layoutX="200.0" layoutY="398.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email adress">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Text>
-            <Text fill="#7d7676" layoutX="199.0" layoutY="461.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Position" >
+            <Text fill="#7d7676" layoutX="199.0" layoutY="461.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Position">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -63,7 +63,7 @@
                   <Font name="System Bold" size="46.0" />
                </font>
             </Text>
-            <Label fx:id="firstname" layoutX="199.0" layoutY="277.0" />
+            <Label fx:id="accountFirstname" layoutX="199.0" layoutY="277.0" />
             <Label fx:id="lastname" layoutX="199.0" layoutY="348.0" />
             <Label fx:id="email" layoutX="199.0" layoutY="406.0" />
             <Label fx:id="position" layoutX="199.0" layoutY="473.0" />

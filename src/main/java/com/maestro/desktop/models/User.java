@@ -5,25 +5,35 @@ import java.util.Arrays;
 import java.util.List;
 
 public class User {
-    private String name;
+    private String firstname;
+    private String lastname;
     private String email;
     private String password;
 
     private List<Project> projects;
 
-    public User(String name, String email, String password) {
-        this.name = name;
+    public User(String firstname, String lastname, String email, String password) {
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.email = email;
         this.password = password;
         this.projects = new ArrayList<Project>();
     }
 
-    public String getName() {
-        return name;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstname(String name) {
+        this.firstname = name;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String name) {
+        this.lastname = name;
     }
 
     public String getEmail() {

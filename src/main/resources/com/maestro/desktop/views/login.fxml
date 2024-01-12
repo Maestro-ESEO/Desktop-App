@@ -39,7 +39,7 @@
                   <Font name="System Bold" size="12.0" />
                </font></Text>
             <Button fx:id="loginButton" layoutX="170.0" layoutY="390.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="25.0" prefWidth="101.0" style="-fx-background-color: #F7422B; -fx-border-radius: 70px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);" text="Login" textFill="WHITE" />
-            <Label fx:id="wrongLogin" layoutX="225.0" layoutY="163.0" prefHeight="17.0" prefWidth="0.0" textFill="#f7422b" />
+            <Label fx:id="wrongLogin" layoutX="225.0" layoutY="163.0" textFill="#f7422b" />
             <Hyperlink layoutX="168.0" layoutY="479.0" onAction="#createAccount" text="Create an account" textAlignment="CENTER" textFill="#7d7676" />
             <Text fill="#7d7676" layoutX="210.0" layoutY="458.0" strokeType="OUTSIDE" strokeWidth="0.0" text="OR" />
             <Line endX="29.6666259765625" endY="3.0517578125E-5" layoutX="167.0" layoutY="453.0" startX="-100.0" stroke="#7d7676" />

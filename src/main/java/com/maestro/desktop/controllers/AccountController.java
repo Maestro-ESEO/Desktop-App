@@ -1,5 +1,6 @@
 package com.maestro.desktop.controllers;
 
+import com.maestro.desktop.models.DatabaseConnection;
 import com.maestro.desktop.models.User;
 import com.maestro.desktop.views.AccountView;
 import javafx.fxml.FXML;
@@ -8,13 +9,20 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.maestro.desktop.controllers.DashboardController.user;
+
 public class AccountController {
-    private User user;
+
     private static AccountView view;
 
+    @FXML
+    private Label accountFirstname;
     @FXML
     private TextField editFirstname;
     @FXML
@@ -33,21 +41,19 @@ public class AccountController {
     private Label wrongSave;
 
     public AccountController(){
-        this.user = new User("John Doe","javacoding","123");
         setAccount();
     }
 
-    public AccountController(AccountView view){
+    public AccountController(AccountView view, String email){
         this.view = view;
-        this.user = new User("John Doe","javacoding","123");
         setAccount();
     }
 
     @FXML
     private void setAccount(){
         System.out.println(editFirstname);
-        //firstname.setText("test");
-       // lastname.setText();
+        accountFirstname.setText(user.getFirstname());
+        //lastname.setText();
         //email.setText(this.user.getEmail());
         //position.setText();
 
@@ -66,15 +72,18 @@ public class AccountController {
         Pattern pattern = Pattern.compile(regex);
         // Create a matcher with the given password
         Matcher matcher = pattern.matcher(editPassword.getText());
-        if(editPassword.getText().length() < 8 || matcher.matches()){
+        if(!editPassword.getText().isEmpty() && editPassword.getText().length() < 8 || matcher.matches()){
             wrongSave.setText("Password must be of at least 8 characters and contain a lower case, an upper case, a number and a special\n character."); // not working !!
-        }
-        else if(editPassword.getText().equals(confirmPassword.getText())) {
+        }else if(!editPassword.getText().isEmpty() && !editPassword.getText().equals(confirmPassword.getText())){
+            wrongSave.setText("Passwords must be the same.");
+        }else if(editPassword.getText().isEmpty() && editPassword.getText().equals(confirmPassword.getText())){
             // add data of the new account in database
             view.setAccountEditView();
             //wrongLogin.setText("Your account has been successfully created!"); //not working !!
         }else{
-            wrongSave.setText("Passwords must be the same.");
+            System.out.println("in");
+            // add data of the new account in database
+            view.setAccountEditView();
         }
     }
 

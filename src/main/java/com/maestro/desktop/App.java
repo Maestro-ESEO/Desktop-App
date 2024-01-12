@@ -1,14 +1,18 @@
 package com.maestro.desktop;
 
 // MainApp.java
+import com.maestro.desktop.models.DatabaseConnection;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import com.maestro.desktop.views.LoginView;
 import com.maestro.desktop.controllers.LoginController;
 
+import java.sql.SQLException;
+
 public class App extends Application {
 	@Override
-	public void start(Stage primaryStage) {
+	public void start(Stage primaryStage) throws SQLException {
+		DatabaseConnection.initialize();
 		LoginView view = new LoginView(primaryStage);
 		LoginController controller = new LoginController(view);
 	}

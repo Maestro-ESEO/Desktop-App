@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class LoginView {
 
-    private Stage stage;
+    public static Stage stage;
 
     public LoginView(Stage primaryStage) {
         this.stage = primaryStage;
@@ -86,9 +86,6 @@ public class LoginView {
         return null ; //text;
     }
 
-    public Stage getStage(){
-        return this.stage;
-    }
 
 }
 

@@ -1,6 +1,7 @@
 package com.maestro.desktop.views;
 
 import com.maestro.desktop.controllers.AccountController;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -9,16 +10,18 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.BreakIterator;
+
+import static com.maestro.desktop.controllers.DashboardController.user;
+import static com.maestro.desktop.views.LoginView.stage;
 
 public class AccountView {
 
-    private Stage stage;
     private AccountController accountController;
 
-    public AccountView(Stage stage) {
-        this.stage = stage;
+    public AccountView(String email) {
         setAccountView();
-        this.accountController = new AccountController(this);
+        this.accountController = new AccountController(this, email);
     }
 
     // initialize the UI by loading the FXML file and setting up the stage
@@ -53,9 +56,6 @@ public class AccountView {
             // Load the FXML file
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/maestro/desktop/views/accountEdit.fxml"));
 
-            // Set the controller for the FXML file (if not set in FXML file)
-            //loader.setController(this);
-
             // Load the FXML file and get the root node
             Parent root = loader.load();
 
@@ -76,5 +76,6 @@ public class AccountView {
             e.printStackTrace();
         }
     }
+
 
 }
