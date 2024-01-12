@@ -21,11 +21,11 @@ public class LoginController {
         // Create test user with test projects
         User loggedInUser = new User(0, "John", "Doe", "mail@mail.com", "https://via.placeholder.com/480x480.png/0077ff?text=people+iusto", new Date());
         loggedInUser.addProject(new Project("Project Cow"));
-        loggedInUser.addProject(new Project("Project Rabbit"));
-        loggedInUser.addProject(new Project("Project Duck"));
-        loggedInUser.addProject(new Project("Project Pig"));
-        loggedInUser.addProject(new Project("Project Squirrel"));
-        loggedInUser.addProject(new Project("Project Donkey"));
+//        loggedInUser.addProject(new Project("Project Rabbit"));
+//        loggedInUser.addProject(new Project("Project Duck"));
+//        loggedInUser.addProject(new Project("Project Pig"));
+//        loggedInUser.addProject(new Project("Project Squirrel"));
+//        loggedInUser.addProject(new Project("Project Donkey"));
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/app-view.fxml"));

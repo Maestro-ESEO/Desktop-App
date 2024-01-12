@@ -9,6 +9,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.shape.Circle;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -70,6 +71,8 @@ public class ProjectTileController {
         ImageView iv = new ImageView(new Image("https://via.placeholder.com/480x480.png/0033ee?text=people+et"));
         iv.setFitWidth(24);
         iv.setFitHeight(24);
+        Circle clipShape = new Circle(12, 12, 12);
+        iv.setClip(clipShape);
         btn.setGraphic(iv);
         this.actors.getChildren().setAll(btn);
     }

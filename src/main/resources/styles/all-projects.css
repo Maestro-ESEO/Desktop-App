@@ -50,10 +50,6 @@
     -fx-border-width: 1;
 }
 
-.actor-pfp ImageView {
-    -fx-border-radius: 5em;
-}
-
 .percentage {
     -fx-text-fill: #F7422B;
     -fx-font-size: 8;
