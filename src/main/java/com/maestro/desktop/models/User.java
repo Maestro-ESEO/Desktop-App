@@ -32,6 +32,8 @@ public class User {
         return this.projects;
     }
 
+    public String getProfilePhotoPath() { return this.profilePhotoPath; }
+
     public void addProject(Project project) {
         this.projects.add(project);
     }

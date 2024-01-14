@@ -7,6 +7,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 
@@ -84,12 +85,13 @@
                         </Button>
                      </children>
                   </HBox>
+                  <Region HBox.hgrow="ALWAYS" />
                   <VBox alignment="CENTER_LEFT">
                      <children>
                         <Label fx:id="tasksLeft" styleClass="tasks-left-label" text="0 tasks left" />
                         <HBox alignment="CENTER" spacing="5.0">
                            <children>
-                              <ProgressBar fx:id="progressBar" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="5.0" progress="0.35" />
+                              <ProgressBar fx:id="progressBar" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="80.0" prefHeight="5.0" progress="0.35" />
                               <Label fx:id="percentage" alignment="CENTER_RIGHT" minWidth="-Infinity" styleClass="percentage" text="100%" textAlignment="RIGHT" />
                            </children>
                         </HBox>
