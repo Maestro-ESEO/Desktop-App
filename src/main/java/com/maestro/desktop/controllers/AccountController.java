@@ -8,6 +8,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,9 +25,15 @@ public class AccountController {
     private static AccountView view;
 
     @FXML
-    private Label accountFirstname;
+    private Text accountFirstname;
     @FXML
-    private TextField editFirstname;
+    private Text accountLastname;
+    @FXML
+    private Text accountEmail;
+    @FXML
+    private Text accountPosition;
+    @FXML
+    private static TextField editFirstname;
     @FXML
     private TextField editLastname;
     @FXML
@@ -39,33 +48,38 @@ public class AccountController {
     private Button save;
     @FXML
     private Label wrongSave;
-
-    public AccountController(){
-        setAccount();
-    }
-
-    public AccountController(AccountView view, String email){
-        this.view = view;
-        setAccount();
-    }
-
     @FXML
-    private void setAccount(){
-        System.out.println(editFirstname);
-        accountFirstname.setText(user.getFirstname());
-        //lastname.setText();
-        //email.setText(this.user.getEmail());
-        //position.setText();
+    private ImageView profilePicture;
+    @FXML
+    private Text userFirstname;
+    @FXML
+    private Text userLastname;
+    @FXML
+    private Text userEmail;
+    @FXML
+    private Text userPosition;
 
+    public void initialize(AccountView viewAccount){
+        view = viewAccount;
+        accountFirstname.setText(user.getFirstname());
+        accountLastname.setText(user.getLastname());
+        accountEmail.setText(user.getEmail());
+        profilePicture.setImage(new Image(getClass().getClassLoader().getResourceAsStream("com/maestro/desktop/images/profile.png")));
+        //accountPosition.setText(user.getPosition());
     }
 
     @FXML
     private void editAccount(){
         view.setAccountEditView();
+        userFirstname.setText(user.getFirstname());
+        userLastname.setText(user.getLastname());
+        userEmail.setText(user.getEmail());
+        userPosition.setText(user.getPosition());
     }
 
     @FXML
     private void saveChanges(){
+        System.out.println("in");
         // Define a regular expression pattern to check the password
         String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).+$";
         // Compile the pattern
@@ -73,17 +87,27 @@ public class AccountController {
         // Create a matcher with the given password
         Matcher matcher = pattern.matcher(editPassword.getText());
         if(!editPassword.getText().isEmpty() && editPassword.getText().length() < 8 || matcher.matches()){
+            System.out.println("in 1");
             wrongSave.setText("Password must be of at least 8 characters and contain a lower case, an upper case, a number and a special\n character."); // not working !!
         }else if(!editPassword.getText().isEmpty() && !editPassword.getText().equals(confirmPassword.getText())){
+            System.out.println("in 2");
             wrongSave.setText("Passwords must be the same.");
         }else if(editPassword.getText().isEmpty() && editPassword.getText().equals(confirmPassword.getText())){
+            System.out.println("in 3");
+            if(!user.getFirstname().equals(editFirstname.getText())){
+                DatabaseConnection.editTable("users", "first_name","id", user.getId(), editFirstname.getText());
+            }
             // add data of the new account in database
-            view.setAccountEditView();
+            view.setAccountView();
             //wrongLogin.setText("Your account has been successfully created!"); //not working !!
         }else{
-            System.out.println("in");
+            System.out.println("in 4");
+            if(!user.getFirstname().equals(editFirstname.getText())){
+                DatabaseConnection.editTable("users", "first_name","id", user.getId(), editFirstname.getText());
+            }
+
             // add data of the new account in database
-            view.setAccountEditView();
+            view.setAccountView();
         }
     }
 

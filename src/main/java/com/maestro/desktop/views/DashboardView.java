@@ -18,15 +18,18 @@ public class DashboardView {
 
     private DashboardController dashboardController;
 
+    private String email;
+
     public DashboardView(String email) throws IOException {
+        this.email = email;
         setDashboardView();
-        this.dashboardController = new DashboardController(this, email);
     }
 
     public void setDashboardView() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/maestro/desktop/views/dashboard.fxml"));
         javafx.scene.Parent root = loader.load();
-
+        DashboardController controller = loader.getController();
+        controller.initialize(email);
         Scene scene = new Scene(root, 800, 600);
 
         stage.setScene(scene);

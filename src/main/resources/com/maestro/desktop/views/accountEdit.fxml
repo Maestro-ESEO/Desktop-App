@@ -87,6 +87,10 @@
                   <Font size="8.0" />
                </font>
             </Label>
+            <Text fx:id="userFirstname" fill="#7d7676" layoutX="190.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Text fx:id="userLastname" fill="#7d7676" layoutX="188.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Text fx:id="userEmail" fill="#7d7676" layoutX="201.0" layoutY="275.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Text fx:id="userPosition" fill="#7d7676" layoutX="177.0" layoutY="338.0" strokeType="OUTSIDE" strokeWidth="0.0" />
             </children>
         </AnchorPane>
    </center>

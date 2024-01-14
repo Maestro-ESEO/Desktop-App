@@ -27,14 +27,35 @@ public class DatabaseConnection {
                     Statement statement = connection.createStatement();
                     ResultSet rs = statement.executeQuery(query);
             ){
-                while (rs.next()) {
-                    //System.out.print(rs.getString("first_name"));
-                }
                 return rs;
             }
         }
 
     public static Connection getConnection() {
         return connection;
+    }
+
+
+    public static void editTable(String table, String column, String row, int rowValue, String dataToChange) {
+        PreparedStatement ps;
+        ResultSet rs;
+        String query = "UPDATE " + table + " SET " + column + " = ? WHERE " + row + " = ?";
+
+        try {
+            // Create a prepared statement
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                // Set parameter values
+                preparedStatement.setString(1, dataToChange);
+                preparedStatement.setInt(2, rowValue);
+
+                // Execute the update
+                int rowsAffected = preparedStatement.executeUpdate();
+                System.out.println(rowsAffected + " row(s) updated.");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

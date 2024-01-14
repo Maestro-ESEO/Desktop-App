@@ -5,20 +5,30 @@ import java.util.Arrays;
 import java.util.List;
 
 public class User {
+
+    private int id;
     private String firstname;
     private String lastname;
     private String email;
     private String password;
+    private String picture;
+    private String position;
 
     private List<Project> projects;
 
-    public User(String firstname, String lastname, String email, String password) {
+    public User(int id, String firstname, String lastname, String email, String password, String picture) {
+        this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
         this.projects = new ArrayList<Project>();
+        this.picture = picture;
     }
+
+    public int getId(){ return this.id; }
+
+    public void setId(int id){ this.id = id; }
 
     public String getFirstname() {
         return firstname;
@@ -51,6 +61,10 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getPicture(){ return this.picture; }
+    public String getPosition(){ return this.position; }
+    public void setPosition(String position){ this.position = position; }
 
     public List<Project> getProjects() {
         return projects;
