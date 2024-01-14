@@ -1,84 +1,85 @@
 package com.maestro.desktop.models;
 
+import javafx.scene.Group;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Project {
+    private int id;
     private String name;
     private String description;
     private Date startDate;
-    private Date deadLine;
-    private Date createdTime;
+    private Date endDate;
+    private Date createdAt;
     private User admin;
     private List<User> users;
+    private List<Task> tasks;
 
-    public Project(String name, String description, Date startDate, Date deadLine, User admin, List<User> users) {
+    public Project(int id, String name, String description, Date startDate, Date endDate, Date createdAt, User admin) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.startDate = startDate;
-        this.deadLine = deadLine;
+        this.endDate = endDate;
+        this.createdAt = createdAt;
         this.admin = admin;
-        this.users = users;
+        this.users = new ArrayList<>();
+        this.tasks = new ArrayList<>();
     }
 
-    public Project(String name) {
+    public Project(String name, User admin) {
+        this.id = 0;
         this.name = name;
-        this.description = "";
-        this.users = new ArrayList<User>();
+        this.description = "description";
+        this.startDate = new Date();
+        this.endDate = new Date();
+        this.createdAt = new Date();
+        this.admin = admin;
+        this.users = new ArrayList<>();
+        this.tasks = new ArrayList<>();
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public Date getDeadLine() {
-        return deadLine;
-    }
-
-    public void setDeadLine(Date deadLine) {
-        this.deadLine = deadLine;
-    }
-
-    public Date getCreatedTime() {
-        return createdTime;
-    }
-
-    public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
     public User getAdmin() {
         return admin;
     }
 
-    public void setAdmin(User admin) {
-        this.admin = admin;
-    }
-
     public List<User> getUsers() {
         return users;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public List<User> getActors() {
+        return Stream.concat(this.users.stream(), Stream.of(this.admin))
+                .sorted(Comparator.comparing(User::getName)).toList();
     }
 
     public void setUsers(List<User> users) {

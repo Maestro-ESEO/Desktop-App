@@ -38,6 +38,7 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
     implementation 'mysql:mysql-connector-java:8.0.33'
     implementation 'org.springframework.security:spring-security-crypto:6.1.2'
+    implementation 'org.controlsfx:controlsfx:11.2.0'
 }
 
 test {
@@ -55,3 +56,4 @@ jlink {
 jlinkZip {
     group = 'distribution'
 }
+
