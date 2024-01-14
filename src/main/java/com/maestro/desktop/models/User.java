@@ -2,6 +2,7 @@ package com.maestro.desktop.models;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class User {
@@ -11,9 +12,9 @@ public class User {
     private String lastname;
     private String email;
     private String password;
-    private String picture;
     private String position;
-
+    private String profilePhotoPath;
+    private Date createdAt;
     private List<Project> projects;
 
     public User(int id, String firstname, String lastname, String email, String password, String picture) {
@@ -23,12 +24,17 @@ public class User {
         this.email = email;
         this.password = password;
         this.projects = new ArrayList<Project>();
-        this.picture = picture;
+        this.profilePhotoPath = picture;
+        //this.createdAt = createdAt;
     }
 
-    public int getId(){ return this.id; }
+    public int getId() {
+        return this.id;
+    }
 
-    public void setId(int id){ this.id = id; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getFirstname() {
         return firstname;
@@ -62,9 +68,21 @@ public class User {
         this.password = password;
     }
 
-    public String getPicture(){ return this.picture; }
-    public String getPosition(){ return this.position; }
-    public void setPosition(String position){ this.position = position; }
+    public String getProfilePhotoPath() {
+        return this.profilePhotoPath;
+    }
+
+    public String getPosition() {
+        return this.position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public String getName() {
+        return this.firstname + " " + this.lastname;
+    }
 
     public List<Project> getProjects() {
         return projects;
@@ -73,39 +91,5 @@ public class User {
     public void setProjects(List<Project> projects) {
         this.projects = projects;
     }
-import java.util.Date;
-import java.util.List;
-
-public class User {
-    private int id;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String profilePhotoPath;
-    private Date createdAt;
-    private List<Project> projects;
-
-    public User(int id, String firstName, String lastName, String email, String profilePhotoPath, Date createdAt) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.profilePhotoPath = profilePhotoPath;
-        this.createdAt = createdAt;
-        this.projects = new ArrayList<>();
-    }
-
-    public String getName() {
-        return this.firstName + " " + this.lastName;
-    }
-
-    public List<Project> getProjects() {
-        return this.projects;
-    }
-
-    public String getProfilePhotoPath() { return this.profilePhotoPath; }
-
-    public void addProject(Project project) {
-        this.projects.add(project);
-    }
 }
+

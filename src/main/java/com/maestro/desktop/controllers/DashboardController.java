@@ -77,7 +77,7 @@ public class DashboardController {
                 System.out.println("Lastname: "+user.getLastname());
                 System.out.println("Email: "+user.getEmail());
                 System.out.println("Password: "+user.getPassword());
-                System.out.println("Picture: "+user.getPicture());
+                System.out.println("Picture: "+user.getProfilePhotoPath());
             }else{
                 System.out.println("User not completed");
             }
