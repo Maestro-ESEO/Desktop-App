@@ -25,12 +25,14 @@ public class User {
     }
 
     public String getName() {
-        return this.firstName + this.lastName;
+        return this.firstName + " " + this.lastName;
     }
 
     public List<Project> getProjects() {
         return this.projects;
     }
+
+    public String getProfilePhotoPath() { return this.profilePhotoPath; }
 
     public void addProject(Project project) {
         this.projects.add(project);
