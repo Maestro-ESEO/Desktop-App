@@ -35,7 +35,7 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </Line>
-            <HBox alignment="CENTER_LEFT" spacing="15.0">
+            <HBox alignment="CENTER_LEFT" spacing="8.0">
                <children>
                   <HBox fx:id="actors">
                      <children>
