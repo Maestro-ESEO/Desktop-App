@@ -45,6 +45,10 @@ public class Project {
         this.tasks = new ArrayList<>();
     }
 
+    public int getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }
@@ -84,6 +88,10 @@ public class Project {
 
     public void setUsers(List<User> users) {
         this.users = users;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 
     public String toString() { return name; }
