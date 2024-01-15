@@ -48,7 +48,7 @@ public class DatabaseConnection {
                     rs.getString("profile_photo_path"),
                     this.dateFromString(rs.getString("created_at"))
             );
-            user.setProjects(this.getAllProjects(user));
+            user.setProjects(this.fetchAllProjects(user));
             return user;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -56,10 +56,10 @@ public class DatabaseConnection {
         }
     }
 
-    public List<Project> getAllProjects(User user) {
+    public List<Project> fetchAllProjects(User user) {
         var list = new ArrayList<Project>();
         try {
-            String query = String.format("select p.id, p.name, p.description, p.start_date, p.end_date, p.created_at from projects p, user_project up where p.id = up.project_id and up.user_id = %d", user.getId());
+            String query = String.format("select p.id, p.name, p.description, p.start_date, p.end_date, p.created_at from projects p, user_project up where up.is_admin = 1 and p.id = up.project_id and up.user_id = %d", user.getId());
             Statement statement = this.connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
             while (rs.next()) {
@@ -72,7 +72,7 @@ public class DatabaseConnection {
                         this.dateFromString(rs.getString("created_at")),
                         user
                 );
-                project.setTasks(this.getAllTasks(project));
+                project.setTasks(this.fetchAllTasks(project));
                 list.add(project);
             }
         } catch (SQLException e) {
@@ -81,7 +81,7 @@ public class DatabaseConnection {
         return list;
     }
 
-    public List<Task> getAllTasks(Project project) {
+    public List<Task> fetchAllTasks(Project project) {
         var list = new ArrayList<Task>();
         try {
             String query = String.format("select id, name, description, deadline, status, priority, created_at from tasks where project_id = '%d'", project.getId());
@@ -106,7 +106,55 @@ public class DatabaseConnection {
         return list;
     }
 
+    public void insertProject(Project project) {
+        try {
+            String query = "insert into projects(name, description, start_date, end_date, created_at, updated_at) values (?, ?, ?, ?, ?, NOW())";
+            PreparedStatement prepStatement = this.connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            prepStatement.setString(1, project.getName());
+            prepStatement.setString(2, project.getDescription());
+            prepStatement.setTimestamp(3, new Timestamp(project.getStartDate().getTime()));
+            prepStatement.setTimestamp(4, new Timestamp(project.getEndDate().getTime()));
+            prepStatement.setTimestamp(5, new Timestamp(project.getCreatedAt().getTime()));
+            prepStatement.executeUpdate();
+            ResultSet rs = prepStatement.getGeneratedKeys();
+            if (rs.next()) {
+                project.setId(rs.getInt(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
+        try {
+            String query = "insert into user_project(user_id, project_id, is_admin, created_at, updated_at) values (?, ?, ?, NOW(), NOW())";
+            PreparedStatement preparedStatement  = this.connection.prepareStatement(query);
+            preparedStatement.setInt(1, project.getAdmin().getId());
+            preparedStatement.setInt(2, project.getId());
+            preparedStatement.setInt(3, 1);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        for (User user : project.getUsers()){
+            try {
+                String query = "insert into user_project(user_id, project_id, is_admin, created_at, updated_at) values (?, ?, ?, NOW(), NOW())";
+                PreparedStatement preparedStatement  = this.connection.prepareStatement(query);
+                preparedStatement.setInt(1, user.getId());
+                preparedStatement.setInt(2, project.getId());
+                preparedStatement.setInt(3, 0);
+                preparedStatement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void updateAllProjects(User user) {
+        user.setProjects(this.fetchAllProjects(user));
+    }
+
+    public void updateAllTasks(Project project) {
+        project.setTasks(this.fetchAllTasks(project));
+    }
 
     private Date dateFromString(String str) {
         var df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");

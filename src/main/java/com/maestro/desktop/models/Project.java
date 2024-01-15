@@ -33,20 +33,12 @@ public class Project {
         this.tasks = new ArrayList<>();
     }
 
-    public Project(String name, User admin) {
-        this.id = 0;
-        this.name = name;
-        this.description = "description";
-        this.startDate = new Date();
-        this.endDate = new Date();
-        this.createdAt = new Date();
-        this.admin = admin;
-        this.users = new ArrayList<>();
-        this.tasks = new ArrayList<>();
-    }
-
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
