@@ -97,7 +97,7 @@ public class LoginController {
             if (rs.next()) {
                 String storedPassword = rs.getString("password");
 
-                isPasswordCorrect = verifyPassword(password, storedPassword);
+                isPasswordCorrect = password.equals(storedPassword);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -143,7 +143,6 @@ public class LoginController {
     }
 
     public boolean checkSignup(String firstname, String lastname, String email, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        String hashedPassword = hashPassword(password); // Hash the password
         PreparedStatement ps;
         boolean accountAdded = false;
         String query = "INSERT INTO users(first_name,last_name,email,password) VALUES(?,?,?,?)";
@@ -152,7 +151,7 @@ public class LoginController {
             ps.setString(1, firstname);
             ps.setString(2, lastname);
             ps.setString(3, email);
-            ps.setString(4, hashedPassword);
+            ps.setString(4, password);
             int affectedRows = ps.executeUpdate();
 
             if (affectedRows > 0) {
@@ -171,19 +170,4 @@ public class LoginController {
     private void backToLogin(){
         view.initUI();
     }
-
-    // hash the password when creating an account
-    private static String hashPassword(String rawPassword) {
-        Argon2 argon2 = Argon2Factory.create();
-        String hashedPassword = argon2.hash(10, 65536, 1, rawPassword);
-        return hashedPassword;
-    }
-
-    // check if the password from the database and the one from the login are the same
-    private static boolean verifyPassword(String providedPassword, String storedHash) {
-        Argon2 argon2 = Argon2Factory.create();
-        boolean passwordMatches = argon2.verify(storedHash, providedPassword);
-        return passwordMatches;
-    }
-
 }
