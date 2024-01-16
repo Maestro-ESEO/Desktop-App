@@ -175,5 +175,10 @@ public class User {
         setProjects(projects);
     }
 
+    public int getId() { return this.id; }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
+    }
 }
 

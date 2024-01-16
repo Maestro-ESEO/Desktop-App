@@ -23,6 +23,10 @@ public class NavigableView {
         this.navSource = navSource;
     }
 
+    public void setData(Object data) {
+        this.data = data;
+    }
+
     public Object getData() {
         return data;
     }

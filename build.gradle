@@ -39,9 +39,7 @@ dependencies {
     implementation 'mysql:mysql-connector-java:8.0.33'
     implementation 'org.springframework.security:spring-security-crypto:6.1.2'
     implementation 'org.controlsfx:controlsfx:11.2.0'
-    implementation group: 'de.mkammerer', name: 'argon2-jvm', version: '2.11'
-    implementation 'net.java.dev.jna:jna:5.10.0'
-
+    implementation 'com.mysql:mysql-connector-j:8.1.0'
 }
 
 test {
