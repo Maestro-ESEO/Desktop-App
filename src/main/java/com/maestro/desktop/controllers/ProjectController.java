@@ -5,6 +5,7 @@ import com.maestro.desktop.utils.ComponentFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -20,6 +21,14 @@ public class ProjectController extends NavigationViewController {
     private Label description;
     @FXML
     private HBox actors;
+    @FXML
+    private VBox inRevisionTasks;
+    @FXML
+    private VBox toDoTasks;
+    @FXML
+    private VBox inProgressTasks;
+    @FXML
+    private VBox completedTasks;
 
     @Override
     public void initialize(Object data) {

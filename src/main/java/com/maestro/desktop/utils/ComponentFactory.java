@@ -28,7 +28,7 @@ public class ComponentFactory {
         container.getChildren().clear();
         if (actorList.isEmpty()) {
             System.out.println("No actors found");
-        } else if (actorList.size() < limit) {
+        } else if (actorList.size() <= limit) {
             for(int i=0; i<actorList.size(); i++) {
                 Button btn = new Button();
                 btn.getStyleClass().setAll("actor-pfp");

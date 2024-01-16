@@ -13,7 +13,7 @@
    <children>
       <ScrollPane fitToWidth="true" hbarPolicy="NEVER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <content>
-            <VBox>
+            <VBox spacing="15.0">
                <children>
                   <HBox spacing="20.0">
                      <children>
@@ -50,27 +50,80 @@
                               <Insets />
                            </HBox.margin>
                            <padding>
-                              <Insets bottom="7.0" left="7.0" right="7.0" top="7.0" />
+                              <Insets bottom="7.0" left="10.0" right="10.0" top="7.0" />
                            </padding>
                         </Button>
                      </children>
                   </HBox>
-                  <VBox styleClass="tasks-container">
+                  <VBox spacing="15.0" styleClass="tasks-container">
                      <children>
-                        <Label styleClass="status" text="In Revision" />
+                        <HBox spacing="20.0">
+                           <children>
+                              <Label styleClass="subheader" text="Tasks" />
+                              <Region HBox.hgrow="ALWAYS" />
+                              <Button mnemonicParsing="false" styleClass="action-btn" text="Add New Task">
+                                 <graphic>
+                                    <Button id="add-icon" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="16.0" prefWidth="16.0" />
+                                 </graphic>
+                                 <padding>
+                                    <Insets bottom="5.0" left="7.0" right="7.0" top="5.0" />
+                                 </padding>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <Label id="in-revision" alignment="CENTER" minWidth="125.0" styleClass="status" text="In Revision" />
+                        <VBox fx:id="inRevisionTasks">
+                           <children>
+                              <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="no-tasks" text="Nothing here">
+                                 <padding>
+                                    <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                 </padding>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <Label id="to-do" alignment="CENTER" layoutX="20.0" layoutY="20.0" minWidth="125.0" styleClass="status" text="To Do" />
+                        <VBox fx:id="toDoTasks">
+                           <children>
+                              <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="no-tasks" text="Nothing here">
+                                 <padding>
+                                    <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                 </padding>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <Label id="in-progress" alignment="CENTER" layoutX="20.0" layoutY="53.0" minWidth="125.0" styleClass="status" text="In Progress" />
+                        <VBox fx:id="inProgressTasks">
+                           <children>
+                              <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="no-tasks" text="Nothing here">
+                                 <padding>
+                                    <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                 </padding>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <Label id="completed" alignment="CENTER" layoutX="20.0" layoutY="86.0" minWidth="125.0" styleClass="status" text="Completed" />
+                        <VBox fx:id="completedTasks">
+                           <children>
+                              <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="no-tasks" text="Nothing here">
+                                 <padding>
+                                    <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                                 </padding>
+                              </Label>
+                           </children>
+                        </VBox>
                      </children>
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
                      <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                        <Insets bottom="15.0" left="15.0" right="15.0" top="20.0" />
                      </padding></VBox>
                </children>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
             </VBox>
          </content>
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
       </ScrollPane>
    </children>
 </AnchorPane>
