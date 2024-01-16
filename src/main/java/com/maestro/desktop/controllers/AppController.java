@@ -1,6 +1,8 @@
 package com.maestro.desktop.controllers;
 
+import com.maestro.desktop.models.Project;
 import com.maestro.desktop.models.User;
+import com.maestro.desktop.utils.DatabaseConnection;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +13,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -95,6 +99,7 @@ public class AppController {
             if (source == dashboardButton) {
                 updateView(this.dashboard);
             } else if (source == allProjectsButton){
+                allProjects.setData(this.user.getProjects());
                 updateView(allProjects);
             } else {
                 throw new Error("Button not recognized");
@@ -137,5 +142,24 @@ public class AppController {
         }
         ((VBox) this.recentContainer.getChildren().getLast()).getChildren().setAll(this.recents.stream().map(NavigableView::getNavSource).toList());
         this.updateView(newRecentNavigableView);
+    }
+
+    public void createNewProject(ActionEvent event) {
+        Project project = new Project(
+                420,
+                "Test",
+                "Delete Later",
+                new Date(),
+                new Date(),
+                new Date(),
+                this.user
+        );
+        try {
+            DatabaseConnection.getInstance().insertProject(project);
+            DatabaseConnection.getInstance().updateAllProjects(this.user);
+            this.navigateWithData(project);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

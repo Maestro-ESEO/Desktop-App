@@ -37,4 +37,10 @@ public class User {
     public void addProject(Project project) {
         this.projects.add(project);
     }
+
+    public int getId() { return this.id; }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
+    }
 }

@@ -63,6 +63,7 @@
                               <Button id="projects-icon" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="16.0" prefWidth="16.0" styleClass="icon" />
                            </graphic>
                         </Button>
+                        <Button mnemonicParsing="false" onAction="#createNewProject" text="+ New Project" />
                         <Region prefHeight="200.0" prefWidth="201.0" VBox.vgrow="ALWAYS" />
                         <VBox fx:id="recentContainer" prefHeight="200.0" prefWidth="100.0">
                            <children>
