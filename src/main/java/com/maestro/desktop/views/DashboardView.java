@@ -25,6 +25,7 @@ public class DashboardView {
         setDashboardView();
     }
 
+    // display the dashboard on the window
     public void setDashboardView() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/maestro/desktop/views/dashboard.fxml"));
         javafx.scene.Parent root = loader.load();

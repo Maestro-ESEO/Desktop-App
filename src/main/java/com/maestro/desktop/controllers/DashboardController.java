@@ -16,6 +16,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import static com.maestro.desktop.models.User.setUser;
+
 public class DashboardController {
     @FXML
     private javafx.scene.control.Button yourButton; // Make sure this matches the fx:id in your FXML
@@ -24,18 +26,17 @@ public class DashboardController {
     @FXML
     private Button accountButton;
 
-
-    public static User user;
     private DashboardView view;
+    private User user;
 
 
     public DashboardController(){
     }
 
-    public void initialize(String email){
-        setUser(email);
-        dashboardFirstname.setText(user.getFirstname());
-        DatabaseConnection.editTable("users", "profile_photo_path","id", 24, "test");
+    public void initialize(Object user){
+        System.out.println("test");
+        this.user = (User) user;
+        dashboardFirstname.setText(this.user.getFirstname());
     }
 
     @FXML
@@ -53,39 +54,5 @@ public class DashboardController {
         // Play the timeline
         timeline.play();
     }
-
-    @FXML
-    private void accessAccount(){
-        AccountView account = new AccountView(user.getEmail());
-    }
-
-    private void setUser(String email){
-        PreparedStatement ps;
-        ResultSet rs;
-        String query = "SELECT * FROM `users` WHERE `email` = ?";
-        try {
-            ps = DatabaseConnection.getConnection().prepareStatement(query);
-            ps.setString(1, email);
-
-            rs = ps.executeQuery();
-
-            if (rs.next()) {
-                // Assuming your password column in the database is named "password"
-                user = new User(rs.getInt("id"),rs.getString("first_name"),rs.getString("last_name"), rs.getString("email"), rs.getString("password"), rs.getString("profile_photo_path"));
-                System.out.println("Id: "+user.getId());
-                System.out.println("Firstname: "+user.getFirstname());
-                System.out.println("Lastname: "+user.getLastname());
-                System.out.println("Email: "+user.getEmail());
-                System.out.println("Password: "+user.getPassword());
-                System.out.println("Picture: "+user.getProfilePhotoPath());
-            }else{
-                System.out.println("User not completed");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
-
 
 }

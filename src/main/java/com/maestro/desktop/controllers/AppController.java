@@ -27,6 +27,8 @@ public class AppController {
 
     private NavigableView allProjects;
 
+    private NavigableView account;
+
     @FXML
     private AnchorPane currentView;
 
@@ -46,15 +48,16 @@ public class AppController {
         return INSTANCE;
     }
 
-    public void initialize(User user) {
-        this.user = user;
+    public void initialize(String emailUser) {
+        this.user = User.setUser(emailUser);
         this.profileBtn.setText(this.user.getName());
         AppController.INSTANCE = this;
         this.dashboard = new NavigableView(null, NavigableView.FxmlView.DASHBOARD, dashboardButton);
         this.allProjects = new NavigableView(this.user.getProjects(), NavigableView.FxmlView.ALL_PROJECTS, allProjectsButton);
+        this.account = new NavigableView(this.user, NavigableView.FxmlView.ACCOUNT, profileBtn);
         recents = new ArrayList<>();
         this.recentContainer.setVisible(false);
-        updateView(dashboard);
+        //updateView(dashboard);
     }
 
     public void updateView(NavigableView nav) {
@@ -68,7 +71,9 @@ public class AppController {
             }
         }
         try {
+            System.out.println(nav.getFxml());
             FXMLLoader loader = new FXMLLoader(getClass().getResource(nav.getFxml()));
+            System.out.println(loader);
             AnchorPane view = (AnchorPane) loader.load();
             AnchorPane.setTopAnchor(view, 0.0);
             AnchorPane.setBottomAnchor(view, 0.0);
@@ -94,8 +99,10 @@ public class AppController {
         if (source instanceof Button) {
             if (source == dashboardButton) {
                 updateView(this.dashboard);
-            } else if (source == allProjectsButton){
+            } else if (source == allProjectsButton) {
                 updateView(allProjects);
+            } else if (source == profileBtn) {
+                updateView(account);
             } else {
                 throw new Error("Button not recognized");
             }

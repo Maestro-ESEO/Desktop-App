@@ -21,14 +21,13 @@ public class Project {
     private List<User> users;
     private List<Task> tasks;
 
-    public Project(int id, String name, String description, Date startDate, Date endDate, Date createdAt, User admin) {
+    public Project(int id, String name, String description, Date startDate, Date endDate, Date createdAt) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
         this.createdAt = createdAt;
-        this.admin = admin;
         this.users = new ArrayList<>();
         this.tasks = new ArrayList<>();
     }

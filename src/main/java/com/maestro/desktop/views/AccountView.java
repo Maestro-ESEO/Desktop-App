@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.BreakIterator;
 
-import static com.maestro.desktop.controllers.DashboardController.user;
 import static com.maestro.desktop.views.LoginView.stage;
 
 public class AccountView {
@@ -53,6 +52,7 @@ public class AccountView {
         }
     }
 
+    // display the account page in the window
     public void setAccountEditView() {
         try {
             // Load the FXML file

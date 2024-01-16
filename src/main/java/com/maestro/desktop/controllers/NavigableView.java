@@ -4,7 +4,9 @@ import javafx.scene.Node;
 
 public class NavigableView {
     public enum FxmlView {
-        DASHBOARD("/views/dashboard-view.fxml"),
+        DASHBOARD("/com/maestro/desktop/views/dashboard.fxml"),
+        ACCOUNT("/com/maestro/desktop/views/account.fxml"),
+        ACCOUNT_EDIT("/com/maestro/desktop/views/accountEdit.fxml"),
         ALL_PROJECTS("/views/all-projects-view.fxml"),
         PROJECT("/views/project-view.fxml");
 

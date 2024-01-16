@@ -18,11 +18,10 @@ import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.maestro.desktop.controllers.DashboardController.user;
+public class AccountController extends NavigationViewController{
 
-public class AccountController {
+    private User user;
 
-    private static AccountView view;
 
     @FXML
     private Text accountFirstname;
@@ -59,18 +58,19 @@ public class AccountController {
     @FXML
     private Text userPosition;
 
-    public void initialize(AccountView viewAccount){
-        view = viewAccount;
-        accountFirstname.setText(user.getFirstname());
-        accountLastname.setText(user.getLastname());
-        accountEmail.setText(user.getEmail());
+    @Override
+    public void initialize(Object user){
+        this.user = (User) user;
+        accountFirstname.setText(this.user.getFirstname());
+        accountLastname.setText(this.user.getLastname());
+        accountEmail.setText(this.user.getEmail());
         profilePicture.setImage(new Image(getClass().getClassLoader().getResourceAsStream("com/maestro/desktop/images/profile.png")));
         //accountPosition.setText(user.getPosition());
     }
 
     @FXML
     private void editAccount(){
-        view.setAccountEditView();
+        //view.setAccountEditView();
         userFirstname.setText(user.getFirstname());
         userLastname.setText(user.getLastname());
         userEmail.setText(user.getEmail());
@@ -98,7 +98,7 @@ public class AccountController {
                 DatabaseConnection.editTable("users", "first_name","id", user.getId(), editFirstname.getText());
             }
             // add data of the new account in database
-            view.setAccountView();
+            //view.setAccountView();
             //wrongLogin.setText("Your account has been successfully created!"); //not working !!
         }else{
             System.out.println("in 4");
@@ -107,7 +107,7 @@ public class AccountController {
             }
 
             // add data of the new account in database
-            view.setAccountView();
+            //view.setAccountView();
         }
     }
 

@@ -2,8 +2,11 @@ package com.maestro.desktop.controllers;
 
 import com.maestro.desktop.models.DatabaseConnection;
 import com.maestro.desktop.views.AccountView;
+import com.maestro.desktop.views.AppView;
 import com.maestro.desktop.views.DashboardView;
 import com.maestro.desktop.views.LoginView;
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
@@ -73,7 +76,7 @@ public class LoginController {
         }
         else if(check) {
             wrongLogin.setText("Success!");
-            DashboardView dashboard = new DashboardView(emailLogin);
+            AppView appView = new AppView(email.getText());
         }
         else {
             wrongLogin.setText("Wrong username or password!");
@@ -94,14 +97,10 @@ public class LoginController {
             if (rs.next()) {
                 String storedPassword = rs.getString("password");
 
-                isPasswordCorrect = decrypt(storedPassword, password);
+                isPasswordCorrect = verifyPassword(password, storedPassword);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        } catch (InvalidKeySpecException e) {
-            throw new RuntimeException(e);
         }
         return isPasswordCorrect;
     }
@@ -144,7 +143,7 @@ public class LoginController {
     }
 
     public boolean checkSignup(String firstname, String lastname, String email, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        String hashedPassword = hash(password); // Hash the password
+        String hashedPassword = hashPassword(password); // Hash the password
         PreparedStatement ps;
         boolean accountAdded = false;
         String query = "INSERT INTO users(first_name,last_name,email,password) VALUES(?,?,?,?)";
@@ -174,88 +173,17 @@ public class LoginController {
     }
 
     // hash the password when creating an account
-    public String hash(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        String generatedSecuredPasswordHash = generateStrongPasswordHash(password);
-        System.out.println(generatedSecuredPasswordHash);
-        return generatedSecuredPasswordHash;
+    private static String hashPassword(String rawPassword) {
+        Argon2 argon2 = Argon2Factory.create();
+        String hashedPassword = argon2.hash(10, 65536, 1, rawPassword);
+        return hashedPassword;
     }
 
-    // use to hash the password
-    private static String generateStrongPasswordHash(String password)
-            throws NoSuchAlgorithmException, InvalidKeySpecException {
-        int iterations = 1000;
-        char[] chars = password.toCharArray();
-        byte[] salt = getSalt();
-
-        PBEKeySpec spec = new PBEKeySpec(chars, salt, iterations, 64 * 8);
-        SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-
-        byte[] hash = skf.generateSecret(spec).getEncoded();
-        return iterations + ":" + toHex(salt) + ":" + toHex(hash);
-    }
-
-    // use to hash the password
-    private static byte[] getSalt() throws NoSuchAlgorithmException
-    {
-        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
-        byte[] salt = new byte[16];
-        sr.nextBytes(salt);
-        return salt;
-    }
-
-    // use to hash the password
-    private static String toHex(byte[] array) throws NoSuchAlgorithmException
-    {
-        BigInteger bi = new BigInteger(1, array);
-        String hex = bi.toString(16);
-
-        int paddingLength = (array.length * 2) - hex.length();
-        if(paddingLength > 0)
-        {
-            return String.format("%0"  +paddingLength + "d", 0) + hex;
-        }else{
-            return hex;
-        }
-    }
-
-    // decrypt the password to login
-    public boolean decrypt(String hashedPassword, String loginPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        boolean matched = validatePassword(loginPassword, hashedPassword);
-        return matched;
-    }
-
-    // use to decrypt the password
-    private static boolean validatePassword(String originalPassword, String storedPassword)
-            throws NoSuchAlgorithmException, InvalidKeySpecException
-    {
-        String[] parts = storedPassword.split(":");
-        int iterations = Integer.parseInt(parts[0]);
-
-        byte[] salt = fromHex(parts[1]);
-        byte[] hash = fromHex(parts[2]);
-
-        PBEKeySpec spec = new PBEKeySpec(originalPassword.toCharArray(),
-                salt, iterations, hash.length * 8);
-        SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-        byte[] testHash = skf.generateSecret(spec).getEncoded();
-
-        int diff = hash.length ^ testHash.length;
-        for(int i = 0; i < hash.length && i < testHash.length; i++)
-        {
-            diff |= hash[i] ^ testHash[i];
-        }
-        return diff == 0;
-    }
-
-    // use to decrypt the password
-    private static byte[] fromHex(String hex) throws NoSuchAlgorithmException
-    {
-        byte[] bytes = new byte[hex.length() / 2];
-        for(int i = 0; i < bytes.length ;i++)
-        {
-            bytes[i] = (byte)Integer.parseInt(hex.substring(2 * i, 2 * i + 2), 16);
-        }
-        return bytes;
+    // check if the password from the database and the one from the login are the same
+    private static boolean verifyPassword(String providedPassword, String storedHash) {
+        Argon2 argon2 = Argon2Factory.create();
+        boolean passwordMatches = argon2.verify(storedHash, providedPassword);
+        return passwordMatches;
     }
 
 }
