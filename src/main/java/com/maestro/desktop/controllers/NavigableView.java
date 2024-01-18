@@ -6,7 +6,8 @@ public class NavigableView {
     public enum FxmlView {
         DASHBOARD("/views/dashboard-view.fxml"),
         ALL_PROJECTS("/views/all-projects-view.fxml"),
-        PROJECT("/views/project-view.fxml");
+        PROJECT("/views/project-view.fxml"),
+        TASK("/views/task-view.fxml");
 
         private final String path;
         FxmlView(String path) { this.path = path; }
@@ -21,6 +22,12 @@ public class NavigableView {
         this.navSource = navSource;
     }
 
+    public NavigableView(Object data, Node navSource) {
+        this.data = data;
+        this.navSource = navSource;
+        this.fxml = null;
+    }
+
     public void setData(Object data) { this.data = data; }
 
     public Object getData() {
@@ -30,6 +37,8 @@ public class NavigableView {
     public String getFxml() {
         return fxml;
     }
+
+    public void setFxml(FxmlView fxml) { this.fxml = fxml.path; }
 
     public Node getNavSource() {
         return navSource;

@@ -1,10 +1,15 @@
 package com.maestro.desktop.controllers;
 
+import com.maestro.desktop.App;
 import com.maestro.desktop.models.Project;
 import com.maestro.desktop.models.Task;
 import com.maestro.desktop.utils.ComponentFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -53,6 +58,7 @@ public class ProjectController extends NavigationViewController {
             this.inRevisionTasks.getChildren().clear();
             for (Task task : inRevisionList) {
                 HBox taskItem = ComponentFactory.getInstance().createTaskItem(task);
+                taskItem.setOnMouseClicked(event -> AppController.getInstance().navigateWithData(task));
                 this.inRevisionTasks.getChildren().add(taskItem);
             }
         }
@@ -61,6 +67,7 @@ public class ProjectController extends NavigationViewController {
             this.toDoTasks.getChildren().clear();
             for (Task task : toDoList) {
                 HBox taskItem = ComponentFactory.getInstance().createTaskItem(task);
+                taskItem.setOnMouseClicked(event -> AppController.getInstance().navigateWithData(task));
                 this.toDoTasks.getChildren().add(taskItem);
             }
         }
@@ -69,6 +76,7 @@ public class ProjectController extends NavigationViewController {
             this.inProgressTasks.getChildren().clear();
             for (Task task : inProgressList) {
                 HBox taskItem = ComponentFactory.getInstance().createTaskItem(task);
+                taskItem.setOnMouseClicked(event -> AppController.getInstance().navigateWithData(task));
                 this.inProgressTasks.getChildren().add(taskItem);
             }
         }
@@ -77,9 +85,14 @@ public class ProjectController extends NavigationViewController {
             this.completedTasks.getChildren().clear();
             for (Task task : completedList) {
                 HBox taskItem = ComponentFactory.getInstance().createTaskItem(task);
+                taskItem.setOnMouseClicked(event -> AppController.getInstance().navigateWithData(task));
                 this.completedTasks.getChildren().add(taskItem);
             }
         }
+    }
+
+    public void openTask() {
+        AppController.getInstance().navigateWithData(this);
     }
 
 

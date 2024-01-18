@@ -164,7 +164,6 @@ public class DatabaseConnection {
             Date date = df.parse(str);
             return date;
         } catch (ParseException | NullPointerException e) {
-            e.printStackTrace();
             return new Date(0);
         }
     }

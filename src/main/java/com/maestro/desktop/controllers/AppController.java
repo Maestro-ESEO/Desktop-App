@@ -1,6 +1,7 @@
 package com.maestro.desktop.controllers;
 
 import com.maestro.desktop.models.Project;
+import com.maestro.desktop.models.Task;
 import com.maestro.desktop.models.User;
 import com.maestro.desktop.utils.DatabaseConnection;
 import javafx.event.ActionEvent;
@@ -134,8 +135,16 @@ public class AppController {
         graphic.setMinSize(Button.USE_PREF_SIZE, Button.USE_PREF_SIZE);
         newRecentButton.setGraphic(graphic);
 
-        NavigableView newRecentNavigableView = new NavigableView(data, NavigableView.FxmlView.PROJECT, newRecentButton);
+        NavigableView newRecentNavigableView = new NavigableView(data, newRecentButton);
+        if (data instanceof Project) {
+            newRecentNavigableView.setFxml(NavigableView.FxmlView.PROJECT);
+        } else if (data instanceof Task) {
+            newRecentNavigableView.setFxml(NavigableView.FxmlView.TASK);
+        } else {
+            return;
+        }
         newRecentButton.setOnAction(event -> AppController.getInstance().updateView(newRecentNavigableView));
+
 
         this.recents.add(0, newRecentNavigableView);
         if (this.recents.size() > 5) {

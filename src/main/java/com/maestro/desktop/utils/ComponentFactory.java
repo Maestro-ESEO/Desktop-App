@@ -134,47 +134,8 @@ public class ComponentFactory {
 
             item.getChildren().addAll(acceptBtn, rejectBtn);
         }
-//        this.setupDragAndDrop(item);
+        item.setUserData(task);
 
         return item;
     }
-
-//    private void setupDragAndDrop(HBox hbox) {
-//        hbox.setOnDragDetected(event -> {
-//            Dragboard dragboard = hbox.startDragAndDrop(TransferMode.MOVE);
-//
-//            ClipboardContent content = new ClipboardContent();
-//            content.putString(String.valueOf(((Task)(hbox.getUserData())).getId()));
-//            dragboard.setContent(content);
-//
-//            event.consume();
-//        });
-//
-//        hbox.setOnDragOver(event -> {
-//            if (event.getGestureSource() != hbox && event.getDragboard().hasString()) {
-//                event.acceptTransferModes(TransferMode.MOVE);
-//            }
-//
-//            event.consume();
-//        });
-//
-//        hbox.setOnDragDropped(event -> {
-//            Dragboard dragboard = event.getDragboard();
-//            boolean success = false;
-//
-//            if (dragboard.hasString()) {
-//                Label label = new Label(dragboard.getString());
-//                HBox newHBox = new HBox(label);
-//                newHBox.setPrefSize(100, 50);
-//
-//                ((VBox) hbox.getParent()).getChildren().add(newHBox);
-//                success = true;
-//            }
-//
-//            event.setDropCompleted(success);
-//            event.consume();
-//        });
-//
-//        hbox.setOnDragDone(DragEvent::consume);
-//    }
 }
