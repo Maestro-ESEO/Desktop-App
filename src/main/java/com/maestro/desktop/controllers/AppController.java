@@ -62,6 +62,7 @@ public class AppController {
     }
 
     public void updateView(NavigableView nav) {
+//        DatabaseConnection.getInstance().updateView(nav);
         if (nav.getNavSource() != null && nav.getNavSource() instanceof Button) {
             for (NavigableView sidebarItem : Stream.concat(recents.stream(), Stream.of(dashboard, allProjects)).toList()) {
                 if (sidebarItem.getNavSource() == nav.getNavSource()) {

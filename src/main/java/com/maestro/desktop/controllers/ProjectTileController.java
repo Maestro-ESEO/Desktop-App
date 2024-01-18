@@ -2,22 +2,13 @@ package com.maestro.desktop.controllers;
 
 import com.maestro.desktop.models.Project;
 import com.maestro.desktop.models.Task;
-import com.maestro.desktop.models.User;
 import com.maestro.desktop.utils.ComponentFactory;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.scene.shape.Circle;
 
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.Locale;
 
 public class ProjectTileController {
@@ -53,7 +44,7 @@ public class ProjectTileController {
         if (this.project.getTasks().isEmpty()) {
             return "No tasks yet";
         }
-        long tasksLeft = this.project.getTasks().stream().filter(task -> task.getStatus() != Task.Status.DONE).count();
+        long tasksLeft = this.project.getTasks().stream().filter(task -> task.getStatus() != Task.Status.COMPLETED).count();
         if (tasksLeft == 0) {
             return "All tasks done";
         } else {
@@ -66,7 +57,7 @@ public class ProjectTileController {
         if (totalTasks == 0) {
             return 0;
         }
-        long tasksLeft = this.project.getTasks().stream().filter(task -> task.getStatus() == Task.Status.DONE).count();
+        long tasksLeft = this.project.getTasks().stream().filter(task -> task.getStatus() == Task.Status.COMPLETED).count();
         return (int) (100 * tasksLeft / totalTasks);
     }
 }

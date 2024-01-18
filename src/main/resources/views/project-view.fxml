@@ -23,7 +23,7 @@
                               <Label fx:id="description" maxHeight="94.0" minHeight="-Infinity" prefWidth="1397.0" styleClass="description" text="DescDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescription" wrapText="true" />
                               <HBox spacing="15.0">
                                  <children>
-                                    <HBox fx:id="actors" />
+                                    <HBox fx:id="actors" alignment="CENTER_LEFT" />
                                     <HBox alignment="CENTER" fillHeight="false" maxWidth="-Infinity" spacing="5.0" styleClass="due-date">
                                        <children>
                                           <Button id="calendar-icon" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" pickOnBounds="false" prefHeight="16.0" prefWidth="16.0">
@@ -72,7 +72,7 @@
                            </children>
                         </HBox>
                         <Label id="in-revision" alignment="CENTER" minWidth="125.0" styleClass="status" text="In Revision" />
-                        <VBox fx:id="inRevisionTasks">
+                        <VBox fx:id="inRevisionTasks" spacing="10.0">
                            <children>
                               <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="no-tasks" text="Nothing here">
                                  <padding>
@@ -80,6 +80,9 @@
                                  </padding>
                               </Label>
                            </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
                         </VBox>
                         <Label id="to-do" alignment="CENTER" layoutX="20.0" layoutY="20.0" minWidth="125.0" styleClass="status" text="To Do" />
                         <VBox fx:id="toDoTasks">
@@ -90,6 +93,9 @@
                                  </padding>
                               </Label>
                            </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
                         </VBox>
                         <Label id="in-progress" alignment="CENTER" layoutX="20.0" layoutY="53.0" minWidth="125.0" styleClass="status" text="In Progress" />
                         <VBox fx:id="inProgressTasks">
@@ -100,6 +106,9 @@
                                  </padding>
                               </Label>
                            </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
                         </VBox>
                         <Label id="completed" alignment="CENTER" layoutX="20.0" layoutY="86.0" minWidth="125.0" styleClass="status" text="Completed" />
                         <VBox fx:id="completedTasks">

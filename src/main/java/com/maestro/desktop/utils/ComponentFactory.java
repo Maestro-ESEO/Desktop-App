@@ -1,5 +1,6 @@
 package com.maestro.desktop.utils;
 
+import com.maestro.desktop.models.Task;
 import com.maestro.desktop.models.User;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -8,11 +9,17 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import javafx.scene.input.*;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class ComponentFactory {
     private static ComponentFactory instance;
@@ -78,4 +85,96 @@ public class ComponentFactory {
             container.getChildren().add(btn);
         }
     }
+
+    public HBox createTaskItem(Task task) {
+        if (task == null) {
+            return null;
+        }
+        Label itemTitle = new Label(task.getName());
+        itemTitle.getStyleClass().setAll("item-title");
+
+        Line sep = new Line(0, 0, 0, 20);
+        sep.getStyleClass().setAll("line");
+        Line sep2 = new Line(0, 0, 0, 20);
+        sep2.getStyleClass().setAll("line");
+
+        Button calendarIcon = new Button();
+        calendarIcon.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+        calendarIcon.setPrefSize(16, 16);
+        calendarIcon.setId("calendar-icon");
+        var df = new SimpleDateFormat("MMM. d, yyyy", Locale.ENGLISH);
+        Label deadlineText = new Label(task.getDeadline()!= null ? df.format(task.getDeadline()) : "Not specified");
+        deadlineText.getStyleClass().setAll("item-due-date");
+        HBox deadline = new HBox(5, calendarIcon, deadlineText);
+        deadline.setAlignment(Pos.CENTER_LEFT);
+
+        HBox taskActors = new HBox();
+        this.displayActors(taskActors, 4, task.getActors());
+
+        Region filler = new Region();
+        filler.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+        HBox.setHgrow(filler, Priority.ALWAYS);
+
+        HBox item = new HBox(15, itemTitle, sep, deadline, sep2, taskActors, filler);
+        item.setPadding(new Insets(10, 15, 10, 15));
+        item.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+        item.setAlignment(Pos.CENTER_LEFT);
+        item.getStyleClass().setAll("task-item");
+
+        if (task.getStatus() == Task.Status.IN_REVISION) {
+            Button acceptBtn = new Button();
+            acceptBtn.setId("accept-icon");
+            acceptBtn.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+            acceptBtn.setPrefSize(20, 20);
+
+            Button rejectBtn = new Button();
+            rejectBtn.setId("refuse-icon");
+            rejectBtn.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+            rejectBtn.setPrefSize(20, 20);
+
+            item.getChildren().addAll(acceptBtn, rejectBtn);
+        }
+//        this.setupDragAndDrop(item);
+
+        return item;
+    }
+
+//    private void setupDragAndDrop(HBox hbox) {
+//        hbox.setOnDragDetected(event -> {
+//            Dragboard dragboard = hbox.startDragAndDrop(TransferMode.MOVE);
+//
+//            ClipboardContent content = new ClipboardContent();
+//            content.putString(String.valueOf(((Task)(hbox.getUserData())).getId()));
+//            dragboard.setContent(content);
+//
+//            event.consume();
+//        });
+//
+//        hbox.setOnDragOver(event -> {
+//            if (event.getGestureSource() != hbox && event.getDragboard().hasString()) {
+//                event.acceptTransferModes(TransferMode.MOVE);
+//            }
+//
+//            event.consume();
+//        });
+//
+//        hbox.setOnDragDropped(event -> {
+//            Dragboard dragboard = event.getDragboard();
+//            boolean success = false;
+//
+//            if (dragboard.hasString()) {
+//                Label label = new Label(dragboard.getString());
+//                HBox newHBox = new HBox(label);
+//                newHBox.setPrefSize(100, 50);
+//
+//                ((VBox) hbox.getParent()).getChildren().add(newHBox);
+//                success = true;
+//            }
+//
+//            event.setDropCompleted(success);
+//            event.consume();
+//        });
+//
+//        hbox.setOnDragDone(DragEvent::consume);
+//    }
 }

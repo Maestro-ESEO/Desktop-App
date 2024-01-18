@@ -32,7 +32,7 @@ public class Project {
         this.users = new ArrayList<>();
         this.tasks = new ArrayList<>();
     }
-
+    
     public int getId() {
         return id;
     }
