@@ -10,6 +10,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.TilePane;
@@ -48,45 +49,33 @@ public class DashboardController extends NavigationViewController{
         this.user = (User) user;
         dashboardFirstname.setText(this.user.getFirstname());
         nbProject.setText(Integer.toString(this.user.getProjects().size()));
-        /*String sql = "INSERT INTO user_task (user_id, task_id, created_at, updated_at) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement preparedStatement = DatabaseConnection.getConnection().prepareStatement(sql)) {
-            preparedStatement.setInt(1, 23);
-            preparedStatement.setInt(2, 43);
-            preparedStatement.setDate(3, Date.valueOf(LocalDate.now()));
-            preparedStatement.setDate(4, Date.valueOf(LocalDate.now()));
-
-            int rowsAffected = preparedStatement.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Row added successfully!");
-            } else {
-                System.out.println("Failed to add a row.");
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }*/
-        System.out.println("Project amount: "+this.user.getProjects().size());
+        nbTask.setText(Integer.toString(this.user.getNumberOfTasks()));
+        // set space between the tile
+        taskContainer.setVgap(10);
+        // center the tile
+        taskContainer.setAlignment(Pos.CENTER);
+        // for each project of the logged in user
         for (Project project : this.user.getProjects()) {
             List<Task> tasks = project.getTasks();
-            System.out.println("Tasks amount: "+tasks.size());
             for (Task task : tasks) {
+                // check if the task is in revision status
                 if(task.getStatus() == Task.Status.IN_REVISION) {
-                    //try {
-                        var loader = new FXMLLoader(getClass().getResource("views/components/taskInRevision-tile.fxml"));
-                        //Button btn = loader.load();
-                        //TaskTileController controller = loader.getController();
-                        //controller.initialize(task);
+                    try {
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/components/taskInRevision-tile.fxml"));
+                        Button btn = loader.load();
+                        TaskTileController controller = loader.getController();
+                        controller.initialize(task);
+                        // Set the alignment of the button within the TilePane
+                        TilePane.setAlignment(btn, Pos.CENTER);
                         //btn.setOnAction(event -> AppController.getInstance().navigateWithData(project));
-                        //this.taskContainer.getChildren().add(btn);
-                    /*} catch (IOException e) {
+                        this.taskContainer.getChildren().add(btn);
+                    } catch (IOException e) {
                         e.printStackTrace();
-                    }*/
+                    }
                 }
             }
         }
     }
 
-    @FXML
-    public void testTask(){
-        System.out.println("success!");
-    }
+
 }

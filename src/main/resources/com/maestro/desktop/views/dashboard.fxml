@@ -28,7 +28,7 @@
       </HBox>
       <AnchorPane layoutX="66.0" layoutY="349.0" prefHeight="200.0" prefWidth="467.0" style="-fx-background-color: D9D9D9; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);">
          <children>
-            <VBox prefHeight="200.0" prefWidth="467.0">
+            <VBox prefHeight="227.0" prefWidth="467.0">
                <children>
                   <Region prefHeight="15.0" prefWidth="467.0" VBox.vgrow="ALWAYS" />
                   <HBox prefHeight="18.0" prefWidth="467.0">
@@ -44,6 +44,7 @@
                   </HBox>
                   <Region prefHeight="17.0" prefWidth="467.0" VBox.vgrow="ALWAYS" />
                   <TilePane fx:id="taskContainer" prefHeight="172.0" prefWidth="467.0" VBox.vgrow="ALWAYS" />
+                  <Region prefHeight="15.0" prefWidth="467.0" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
          </children>

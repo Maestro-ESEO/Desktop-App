@@ -38,6 +38,11 @@ public class TaskTileController {
         this.displayActors();
     }
 
+    @FXML
+    public void testTask(){
+        System.out.println("success!");
+    }
+
     private void displayActors() {
         /*this.actors.getChildren().clear();
         var actorList = this.task.getActors();

@@ -143,5 +143,13 @@ public class User {
         return counter;
     }
 
+    public int getNumberOfTasks(){
+        int counter = 0;
+        for(Project project : this.projects){
+            counter+= project.getNumberOfTasks();
+        }
+        return counter;
+    }
+
 }
 
