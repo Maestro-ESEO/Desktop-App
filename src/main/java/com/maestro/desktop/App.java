@@ -4,7 +4,6 @@ package com.maestro.desktop;
 import com.maestro.desktop.models.DatabaseConnection;
 import com.maestro.desktop.models.Project;
 import com.maestro.desktop.models.User;
-import com.maestro.desktop.utils.DatabaseConnection;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import com.maestro.desktop.views.LoginView;

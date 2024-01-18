@@ -2,6 +2,7 @@ package com.maestro.desktop.views;
 
 import com.maestro.desktop.controllers.AccountController;
 import com.maestro.desktop.controllers.DashboardController;
+import com.maestro.desktop.models.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,19 +19,20 @@ public class DashboardView {
 
     private DashboardController dashboardController;
 
-    private String email;
+    private User user;
 
-    public DashboardView(String email) throws IOException {
-        this.email = email;
+    public DashboardView(User user) throws IOException {
+        this.user = user;
         setDashboardView();
     }
 
     // display the dashboard on the window
     public void setDashboardView() throws IOException {
+        System.out.println("in view");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/maestro/desktop/views/dashboard.fxml"));
         javafx.scene.Parent root = loader.load();
         DashboardController controller = loader.getController();
-        controller.initialize(email);
+        controller.initialize(this.user);
         Scene scene = new Scene(root, 800, 600);
 
         stage.setScene(scene);

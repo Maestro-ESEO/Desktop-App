@@ -5,11 +5,8 @@ import com.maestro.desktop.views.AccountView;
 import com.maestro.desktop.views.AppView;
 import com.maestro.desktop.views.DashboardView;
 import com.maestro.desktop.views.LoginView;
-import de.mkammerer.argon2.Argon2;
-import de.mkammerer.argon2.Argon2Factory;
 import com.maestro.desktop.models.Project;
 import com.maestro.desktop.models.User;
-import com.maestro.desktop.utils.DatabaseConnection;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
@@ -83,7 +80,7 @@ public class LoginController {
         }
         else if(check) {
             wrongLogin.setText("Success!");
-            AppView appView = new AppView(email.getText());
+            AppView appView = new AppView(email.getText(), password.getText());
         }
         else {
             wrongLogin.setText("Wrong username or password!");

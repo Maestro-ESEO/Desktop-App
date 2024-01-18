@@ -21,13 +21,14 @@ public class Project {
     private List<User> users;
     private List<Task> tasks;
 
-    public Project(int id, String name, String description, Date startDate, Date endDate, Date createdAt) {
+    public Project(int id, String name, String description, Date startDate, Date endDate, Date createdAt, User admin) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
         this.createdAt = createdAt;
+        this.admin = admin;
         this.users = new ArrayList<>();
         this.tasks = new ArrayList<>();
     }
@@ -86,4 +87,38 @@ public class Project {
     }
 
     public String toString() { return name; }
+
+    public int getTasksToDo(){
+        int counter = 0;
+        for(Task task : this.tasks){
+            if(task.getStatus() == Task.Status.TO_DO){
+                counter++;
+            }
+        }
+        return counter;
+    }
+
+    public int getTasksInProgress(){
+        int counter = 0;
+        for(Task task : this.tasks){
+            if(task.getStatus() == Task.Status.IN_PROGRESS){
+                counter++;
+            }
+        }
+        return counter;
+    }
+
+    public int getTasksDone(){
+        int counter = 0;
+        for(Task task : this.tasks){
+            if(task.getStatus() == Task.Status.DONE){
+                counter++;
+            }
+        }
+        return counter;
+    }
+
+    public int getNumberOfTasks(){
+        return this.tasks.size();
+    }
 }

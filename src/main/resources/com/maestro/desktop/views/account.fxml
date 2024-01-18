@@ -89,13 +89,10 @@
                   <Insets left="10.0" />
                </VBox.margin>
             </Text>
-            <Text fx:id="accountFirstname1" fill="#7d7676" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="250.0">
+            <Text fx:id="projectsInProgress" fill="#7d7676" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="250.0">
                <VBox.margin>
                   <Insets left="10.0" right="10.0" />
                </VBox.margin>
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
             </Text>
             <Region prefHeight="22.0" prefWidth="250.0" />
             <Text fill="#7d7676" strokeType="OUTSIDE" strokeWidth="0.0" text="Tasks to do">
@@ -106,7 +103,7 @@
                   <Insets left="10.0" />
                </VBox.margin>
             </Text>
-            <Text fx:id="accountLastname1" fill="#7d7676" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="250.0">
+            <Text fx:id="tasksToDo" fill="#7d7676" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="250.0">
                <VBox.margin>
                   <Insets left="10.0" right="10.0" />
                </VBox.margin>
@@ -123,7 +120,7 @@
                   <Insets left="10.0" />
                </VBox.margin>
             </Text>
-            <Text fx:id="accountEmail1" fill="#7d7676" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="250.0">
+            <Text fx:id="tasksInProgress" fill="#7d7676" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="250.0">
                <VBox.margin>
                   <Insets left="10.0" right="10.0" />
                </VBox.margin>
@@ -140,13 +137,10 @@
                   <Insets left="10.0" />
                </VBox.margin>
             </Text>
-            <Text fx:id="accountPosition1" fill="#7d7676" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="250.0">
+            <Text fx:id="tasksDone" fill="#7d7676" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="250.0">
                <VBox.margin>
                   <Insets left="10.0" right="10.0" />
                </VBox.margin>
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
             </Text>
             <Region prefHeight="30.0" prefWidth="250.0" VBox.vgrow="ALWAYS" />
             <Region prefHeight="12.0" prefWidth="522.0" />
@@ -155,7 +149,7 @@
       <HBox layoutY="515.0" prefHeight="77.0" prefWidth="600.0">
          <children>
             <Region prefHeight="77.0" prefWidth="239.0" HBox.hgrow="ALWAYS" />
-            <Button id="editAccount" fx:id="save" mnemonicParsing="false" onAction="#editAccount" prefHeight="31.0" prefWidth="88.0" style="-fx-background-color: #F7422B; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);" text="Edit" textFill="WHITE">
+            <Button id="editAccount" fx:id="editAccount" mnemonicParsing="false" onAction="#changeViewAccount" prefHeight="31.0" prefWidth="88.0" style="-fx-background-color: #F7422B; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);" text="Edit" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>

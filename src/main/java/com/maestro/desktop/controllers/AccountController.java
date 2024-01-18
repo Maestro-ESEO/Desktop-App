@@ -1,26 +1,33 @@
 package com.maestro.desktop.controllers;
 
-import com.maestro.desktop.models.DatabaseConnection;
+import com.maestro.desktop.utils.DatabaseConnection;
 import com.maestro.desktop.models.User;
 import com.maestro.desktop.views.AccountView;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class AccountController extends NavigationViewController{
 
     private User user;
+
+    private NavigableView editAccountView;
 
 
     @FXML
@@ -57,6 +64,16 @@ public class AccountController extends NavigationViewController{
     private Text userEmail;
     @FXML
     private Text userPosition;
+    @FXML
+    private Text projectsInProgress;
+    @FXML
+    private Text tasksToDo;
+    @FXML
+    private Text tasksInProgress;
+    @FXML
+    private Text tasksDone;
+    @FXML
+    private Button editAccount;
 
     @Override
     public void initialize(Object user){
@@ -65,7 +82,11 @@ public class AccountController extends NavigationViewController{
         accountLastname.setText(this.user.getLastname());
         accountEmail.setText(this.user.getEmail());
         profilePicture.setImage(new Image(getClass().getClassLoader().getResourceAsStream("com/maestro/desktop/images/profile.png")));
-        //accountPosition.setText(user.getPosition());
+        accountPosition.setText(this.user.getPosition());
+        projectsInProgress.setText(Integer.toString(this.user.getProjects().size()));
+        tasksToDo.setText(Integer.toString(this.user.getTasksToDo()));
+        tasksInProgress.setText(Integer.toString(this.user.getTasksInProgress()));
+        tasksDone.setText(Integer.toString(this.user.getTasksDone()));
     }
 
     @FXML
@@ -75,10 +96,11 @@ public class AccountController extends NavigationViewController{
         userLastname.setText(user.getLastname());
         userEmail.setText(user.getEmail());
         userPosition.setText(user.getPosition());
+        projectsInProgress.setText(Integer.toString(user.getProjects().size()));
     }
 
     @FXML
-    private void saveChanges(){
+    private void saveChanges() throws SQLException {
         System.out.println("in");
         // Define a regular expression pattern to check the password
         String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).+$";
@@ -95,7 +117,7 @@ public class AccountController extends NavigationViewController{
         }else if(editPassword.getText().isEmpty() && editPassword.getText().equals(confirmPassword.getText())){
             System.out.println("in 3");
             if(!user.getFirstname().equals(editFirstname.getText())){
-                DatabaseConnection.editTable("users", "first_name","id", user.getId(), editFirstname.getText());
+                DatabaseConnection.getInstance().editTable("users", "first_name","id", user.getId(), editFirstname.getText());
             }
             // add data of the new account in database
             //view.setAccountView();
@@ -103,12 +125,16 @@ public class AccountController extends NavigationViewController{
         }else{
             System.out.println("in 4");
             if(!user.getFirstname().equals(editFirstname.getText())){
-                DatabaseConnection.editTable("users", "first_name","id", user.getId(), editFirstname.getText());
+                DatabaseConnection.getInstance().editTable("users", "first_name","id", user.getId(), editFirstname.getText());
             }
-
             // add data of the new account in database
             //view.setAccountView();
         }
+    }
+
+    @FXML
+    private void changeViewAccount(){
+
     }
 
 }

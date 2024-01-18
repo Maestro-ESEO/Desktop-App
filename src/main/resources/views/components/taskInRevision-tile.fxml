@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<Button mnemonicParsing="false" onAction="#testTask" prefHeight="48.0" prefWidth="369.0" styleClass="tiles" stylesheets="@../../styles/all-projects.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.maestro.desktop.controllers.TaskTileController">
+    <graphic>
+      <HBox prefHeight="75.0" prefWidth="351.0">
+         <children>
+              <VBox prefHeight="45.0" prefWidth="171.0" HBox.hgrow="ALWAYS">
+                  <children>
+                      <Label fx:id="projectTitle" styleClass="project-title" text="Project 1 - Task 2" />
+                      <Label fx:id="description" layoutX="10.0" layoutY="10.0" prefHeight="42.0" prefWidth="173.0" styleClass="description" text="Lorem ipsum dolor sit amet, consectetur adipiscing elit." wrapText="true" />
+                      <HBox alignment="CENTER_LEFT" spacing="8.0">
+                          <children>
+                              <Region HBox.hgrow="ALWAYS" />
+                          </children>
+                      </HBox>
+                  </children>
+                  <padding>
+                      <Insets bottom="5.0" left="3.0" right="3.0" top="5.0" />
+                  </padding>
+              </VBox>
+            <Region prefHeight="45.0" prefWidth="5.0" HBox.hgrow="ALWAYS" />
+            <VBox>
+               <children>
+                  <Region prefHeight="15.0" prefWidth="144.0" VBox.vgrow="ALWAYS" />
+                        <HBox fx:id="actors" prefHeight="24.0" prefWidth="89.0">
+                            <children>
+                                <Button mnemonicParsing="false" styleClass="actor-pfp">
+                                    <graphic>
+                                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" />
+                                    </graphic>
+                                    <HBox.margin>
+                                        <Insets />
+                                    </HBox.margin>
+                                </Button>
+                                <Button layoutX="24.0" layoutY="10.0" mnemonicParsing="false" styleClass="actor-pfp">
+                                    <graphic>
+                                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../../images/default-pfp.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                    <HBox.margin>
+                                        <Insets left="-5.0" />
+                                    </HBox.margin>
+                                </Button>
+                                <Button layoutX="48.0" layoutY="10.0" mnemonicParsing="false" styleClass="actor-pfp">
+                                    <graphic>
+                                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../../images/default-pfp.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                    <HBox.margin>
+                                        <Insets left="-5.0" />
+                                    </HBox.margin>
+                                </Button>
+                                <Button layoutX="58.0" layoutY="10.0" mnemonicParsing="false" styleClass="actor-pfp">
+                                    <graphic>
+                                        <Label alignment="CENTER" contentDisplay="CENTER" minWidth="-Infinity" prefHeight="24.0" prefWidth="24.0" text="+1" />
+                                    </graphic>
+                                    <HBox.margin>
+                                        <Insets left="-5.0" />
+                                    </HBox.margin>
+                                </Button>
+                            </children>
+                        </HBox>
+                  <Region prefHeight="15.0" prefWidth="144.0" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+            <VBox>
+               <children>
+                  <Region prefHeight="18.0" prefWidth="2.0" VBox.vgrow="ALWAYS" />
+                  <Button fx:id="validate" mnemonicParsing="false" prefHeight="25.0" prefWidth="83.0" style="-fx-background-color: #F7422B; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);" text="Validate" textFill="WHITE" />
+                  <Region prefHeight="18.0" prefWidth="0.0" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+            <Region prefHeight="45.0" prefWidth="30.0" HBox.hgrow="ALWAYS" />
+         </children>
+      </HBox>
+    </graphic>
+</Button>

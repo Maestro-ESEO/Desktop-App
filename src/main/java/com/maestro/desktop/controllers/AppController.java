@@ -3,6 +3,7 @@ package com.maestro.desktop.controllers;
 import com.maestro.desktop.models.Project;
 import com.maestro.desktop.models.User;
 import com.maestro.desktop.utils.DatabaseConnection;
+import com.maestro.desktop.views.LoginView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
+
+import static com.maestro.desktop.views.LoginView.stage;
 
 
 public class AppController {
@@ -48,20 +51,29 @@ public class AppController {
     @FXML
     private Button profileBtn;
 
+    @FXML
+    private Button logout;
+
     public static AppController getInstance() {
         return INSTANCE;
     }
 
-    public void initialize(String emailUser) {
-        this.user = User.setUser(emailUser);
+    public void initialize(User user) throws SQLException {
+        this.user = user;
+        System.out.println("Id: "+this.user.getId());
+        System.out.println("Firstname: "+this.user.getFirstname());
+        System.out.println("Lastname: "+this.user.getLastname());
+        System.out.println("Email: "+this.user.getEmail());
+        System.out.println("Password: "+this.user.getPassword());
+        System.out.println("Picture: "+this.user.getProfilePhotoPath());
         this.profileBtn.setText(this.user.getName());
         AppController.INSTANCE = this;
-        this.dashboard = new NavigableView(null, NavigableView.FxmlView.DASHBOARD, dashboardButton);
+        this.dashboard = new NavigableView(this.user, NavigableView.FxmlView.DASHBOARD, dashboardButton);
         this.allProjects = new NavigableView(this.user.getProjects(), NavigableView.FxmlView.ALL_PROJECTS, allProjectsButton);
         this.account = new NavigableView(this.user, NavigableView.FxmlView.ACCOUNT, profileBtn);
         recents = new ArrayList<>();
         this.recentContainer.setVisible(false);
-        //updateView(dashboard);
+        updateView(dashboard);
     }
 
     public void updateView(NavigableView nav) {
@@ -95,6 +107,9 @@ public class AppController {
     }
 
     public void logout() {
+        this.user = null;
+        LoginView view = new LoginView(stage);
+        LoginController controller = new LoginController(view);
         System.out.println("Logging out");
     }
 
@@ -102,13 +117,16 @@ public class AppController {
         Object source = e.getSource();
         if (source instanceof Button) {
             if (source == dashboardButton) {
-                updateView(this.dashboard);
-            } else if (source == allProjectsButton){
+                updateView(dashboard);
+            } else if (source == allProjectsButton) {
                 allProjects.setData(this.user.getProjects());
+                System.out.println("projects: " + this.user.getProjects());
                 updateView(allProjects);
             } else if (source == profileBtn) {
                 updateView(account);
-            } else {
+            } else if (source == logout) {
+                logout();
+            }else {
                 throw new Error("Button not recognized");
             }
         }
@@ -164,9 +182,11 @@ public class AppController {
         try {
             DatabaseConnection.getInstance().insertProject(project);
             DatabaseConnection.getInstance().updateAllProjects(this.user);
+            System.out.println("Projects updated: "+this.user.getProjects());
             this.navigateWithData(project);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 }

@@ -1,21 +1,118 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.maestro.desktop.controllers.DashboardController">
    <children>
-      <Text layoutX="28.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" text="WELCOME">
+      <Text layoutX="52.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" text="WELCOME">
          <font>
             <Font name="System Bold" size="36.0" />
          </font>
       </Text>
-      <Text fx:id="dashboardFirstname" layoutX="269.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0">
+      <Text fx:id="dashboardFirstname" layoutX="237.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="name">
          <font>
             <Font name="System Bold" size="36.0" />
          </font>
       </Text>
+      <AnchorPane layoutX="66.0" layoutY="349.0" prefHeight="200.0" prefWidth="467.0" style="-fx-background-color: D9D9D9; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);">
+         <children>
+            <VBox prefHeight="200.0" prefWidth="467.0">
+               <children>
+                  <Region prefHeight="15.0" prefWidth="467.0" VBox.vgrow="ALWAYS" />
+                  <HBox prefHeight="18.0" prefWidth="467.0">
+                     <children>
+                        <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        <Text fill="#7d7676" strokeType="OUTSIDE" strokeWidth="0.0" text="Tasks in revision">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Text>
+                        <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+                  <Region prefHeight="17.0" prefWidth="467.0" VBox.vgrow="ALWAYS" />
+                  <TilePane fx:id="taskContainer" prefHeight="172.0" prefWidth="467.0" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+      <HBox layoutY="118.0" prefHeight="200.0" prefWidth="600.0">
+         <children>
+            <Region prefHeight="200.0" prefWidth="25.0" HBox.hgrow="ALWAYS" />
+            <VBox prefHeight="200.0" prefWidth="150.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0); -fx-background-color: #D9D9D9;" HBox.hgrow="ALWAYS">
+               <children>
+                  <Region prefHeight="60.0" prefWidth="192.0" VBox.vgrow="ALWAYS" />
+                  <HBox prefHeight="45.0" prefWidth="203.0">
+                     <children>
+                        <Region prefHeight="57.0" prefWidth="10.0" HBox.hgrow="ALWAYS" />
+                        <Text fill="#7d7676" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of project in progress">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Text>
+                        <Region prefHeight="200.0" prefWidth="10.0" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+                  <Region prefHeight="60.0" prefWidth="211.0" VBox.vgrow="ALWAYS" />
+                  <HBox>
+                     <children>
+                        <Region prefHeight="16.0" prefWidth="55.0" HBox.hgrow="ALWAYS" />
+                        <Text fx:id="nbProject" fill="#7d7676" strokeType="OUTSIDE" strokeWidth="0.0" text="x">
+                           <font>
+                              <Font size="64.0" />
+                           </font>
+                        </Text>
+                        <Region prefHeight="16.0" prefWidth="55.0" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Region prefHeight="17.0" prefWidth="50.0" HBox.hgrow="ALWAYS" />
+                        <Text fill="#7d7676" strokeType="OUTSIDE" strokeWidth="0.0" text="PROJECTS" />
+                        <Region prefHeight="17.0" prefWidth="50.0" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+                  <Region prefHeight="100.0" prefWidth="60.0" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+            <Region prefHeight="200.0" prefWidth="30.0" HBox.hgrow="ALWAYS" />
+            <VBox layoutX="75.0" layoutY="10.0" prefHeight="200.0" prefWidth="150.0" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0); -fx-background-color: #D9D9D9;" HBox.hgrow="ALWAYS">
+               <children>
+                  <Region prefHeight="60.0" prefWidth="192.0" VBox.vgrow="ALWAYS" />
+                  <HBox prefHeight="45.0" prefWidth="203.0">
+                     <children>
+                        <Region prefHeight="57.0" prefWidth="10.0" HBox.hgrow="ALWAYS" />
+                        <Text fill="#7d7676" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of tasks in progress">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Text>
+                        <Region prefHeight="200.0" prefWidth="10.0" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+                  <Region prefHeight="60.0" prefWidth="211.0" VBox.vgrow="ALWAYS" />
+                  <HBox>
+                     <children>
+                        <Region prefHeight="16.0" prefWidth="55.0" HBox.hgrow="ALWAYS" />
+                        <Text fx:id="nbTask" fill="#7d7676" strokeType="OUTSIDE" strokeWidth="0.0" text="x">
+                           <font>
+                              <Font size="64.0" />
+                           </font>
+                        </Text>
+                        <Region prefHeight="16.0" prefWidth="55.0" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+                  <Region prefHeight="100.0" prefWidth="60.0" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+            <Region prefHeight="200.0" prefWidth="25.0" HBox.hgrow="ALWAYS" />
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

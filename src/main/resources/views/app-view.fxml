@@ -79,7 +79,7 @@
                         <Region prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                         <Region layoutX="10.0" layoutY="385.0" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                         <Region layoutX="10.0" layoutY="412.0" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                        <Button alignment="TOP_LEFT" graphicTextGap="10.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#logout" styleClass="default-sidebar-item" text="Logout">
+                        <Button fx:id="logout" alignment="TOP_LEFT" graphicTextGap="10.0" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#changeView" styleClass="default-sidebar-item" text="Logout">
                            <padding>
                               <Insets bottom="5.0" left="10.0" right="5.0" top="5.0" />
                            </padding>
