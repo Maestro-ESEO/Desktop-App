@@ -1,15 +1,11 @@
 package com.maestro.desktop;
 
-import com.maestro.desktop.models.Project;
-import com.maestro.desktop.models.User;
-import com.maestro.desktop.utils.DatabaseConnection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 public class App extends Application {
 

@@ -41,7 +41,7 @@ public class DatabaseConnection {
     }
 
     public User login(String email, String password) throws SQLException {
-        String query = String.format("select id, first_name, last_name, email, profile_photo_path, created_at from users where email = '%s' and password = '%s'", email, password);
+        String query = String.format("select id, first_name, last_name, email, profile_photo_path, created_at, updated_at from users where email = '%s' and password = '%s'", email, password);
         Statement stmt = this.connection.createStatement();
         ResultSet rs = stmt.executeQuery(query);
         rs.next();
@@ -51,7 +51,8 @@ public class DatabaseConnection {
                 rs.getString("last_name"),
                 rs.getString("email"),
                 rs.getString("profile_photo_path"),
-                this.dateFromString(rs.getString("created_at"))
+                this.dateFromString(rs.getString("created_at")),
+                this.dateFromString(rs.getString("updated_at"))
         );
         user.setProjects(this.fetchAllProjects(user));
         return user;
@@ -59,7 +60,7 @@ public class DatabaseConnection {
 
     public List<Project> fetchAllProjects(User user) throws SQLException {
         var list = new ArrayList<Project>();
-        String query = String.format("select p.id, p.name, p.description, p.start_date, p.end_date, p.created_at from projects p, user_project up where up.is_admin = 1 and p.id = up.project_id and up.user_id = %d", user.getId());
+        String query = String.format("select p.id, p.name, p.description, p.start_date, p.end_date, p.created_at, p.updated_at from projects p, user_project up where up.is_admin = 1 and p.id = up.project_id and up.user_id = %d", user.getId());
         Statement statement = this.connection.createStatement();
         ResultSet rs = statement.executeQuery(query);
         while (rs.next()) {
@@ -70,6 +71,7 @@ public class DatabaseConnection {
                     this.dateFromString(rs.getString("start_date")),
                     this.dateFromString(rs.getString("end_date")),
                     this.dateFromString(rs.getString("created_at")),
+                    this.dateFromString(rs.getString("updated_at")),
                     user
             );
             project.setTasks(this.fetchAllTasks(project));
@@ -80,7 +82,7 @@ public class DatabaseConnection {
 
     public List<Task> fetchAllTasks(Project project) throws SQLException {
         var list = new ArrayList<Task>();
-        String query = String.format("select id, name, description, deadline, status, priority, created_at from tasks where project_id = '%d'", project.getId());
+        String query = String.format("select id, name, description, deadline, status, priority, created_at, updated_at from tasks where project_id = '%d'", project.getId());
         Statement statement = this.connection.createStatement();
         ResultSet rs = statement.executeQuery(query);
         while (rs.next()) {
@@ -92,7 +94,8 @@ public class DatabaseConnection {
                     Task.Status.fromValue(rs.getInt("status")),
                     Task.Priority.fromValue(rs.getInt("priority")),
                     project,
-                    this.dateFromString(rs.getString("created_at"))
+                    this.dateFromString(rs.getString("created_at")),
+                    this.dateFromString(rs.getString("updated_at"))
             );
             task.setActors(this.fetchTaskActors(task));
             list.add(task);
@@ -102,7 +105,7 @@ public class DatabaseConnection {
 
     public List<User> fetchTaskActors(Task task) throws SQLException {
         var list = new ArrayList<User>();
-        String query = String.format("select u.id, u.first_name, u.last_name, u.email, u.profile_photo_path, u.created_at from users u, user_task ut where ut.task_id = '%d' and ut.user_id = u.id", task.getId());
+        String query = String.format("select u.id, u.first_name, u.last_name, u.email, u.profile_photo_path, u.created_at, u.updated_at from users u, user_task ut where ut.task_id = '%d' and ut.user_id = u.id", task.getId());
         Statement statement = this.connection.createStatement();
         ResultSet rs = statement.executeQuery(query);
         while (rs.next()) {
@@ -112,7 +115,8 @@ public class DatabaseConnection {
                     rs.getString("last_name"),
                     rs.getString("email"),
                     rs.getString("profile_photo_path"),
-                    this.dateFromString(rs.getString("created_at"))
+                    this.dateFromString(rs.getString("created_at")),
+                    this.dateFromString(rs.getString("updated_at"))
             );
             list.add(user);
         }
@@ -150,12 +154,51 @@ public class DatabaseConnection {
         }
     }
 
+    public void insertTask(Task task) throws SQLException {
+        String query = "insert into tasks(name, description, deadline, status, priority, project_id, created_at, updated_at) values (?, ?, ?, ?, ?, ?, NOW(), NOW())";
+        PreparedStatement prepStatement = this.connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        prepStatement.setString(1, task.getName());
+        prepStatement.setString(2, task.getDescription());
+        prepStatement.setTimestamp(3, new Timestamp(task.getDeadline().getTime()));
+        prepStatement.setInt(4, task.getStatus().getValue());
+        prepStatement.setInt(5, task.getPriority().getValue());
+        prepStatement.setInt(6, task.getParentProject().getId());
+        prepStatement.executeUpdate();
+        ResultSet rs = prepStatement.getGeneratedKeys();
+        if (rs.next()) {
+            task.setId(rs.getInt(1));
+        }
+
+        for (User user : task.getActors()){
+            String query3 = "insert into user-task(user_id, task_id, created_at, updated_at) values (?, ?, NOW(), NOW())";
+            PreparedStatement preparedStatement  = this.connection.prepareStatement(query3);
+            preparedStatement.setInt(1, user.getId());
+            preparedStatement.setInt(2, task.getId());
+            preparedStatement.executeUpdate();
+        }
+    }
+
     public void updateAllProjects(User user) throws SQLException {
         user.setProjects(this.fetchAllProjects(user));
     }
 
     public void updateAllTasks(Project project) throws SQLException {
         project.setTasks(this.fetchAllTasks(project));
+    }
+
+    public void checkProjectUpdate(Project project) throws SQLException{
+        String query = "select p.name, p.description, p.start_date, p.end_date, p.updated_at from projects p where p.id = ? and p.updated_at != ?";
+        PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+        preparedStatement.setInt(1, project.getId());
+        preparedStatement.setTimestamp(2, new Timestamp(project.getUpdatedAt().getTime()));
+        ResultSet rs = preparedStatement.executeQuery();
+        if (rs.next()) {
+            project.setName(rs.getString("name"));
+            project.setDescription(rs.getString("description"));
+            project.setStartDate(this.dateFromString(rs.getString("start_date")));
+            project.setEndDate(this.dateFromString(rs.getString("end_date")));
+            project.setUpdatedAt(this.dateFromString(rs.getString("updated_at")));
+        }
     }
 
     private Date dateFromString(String str) {

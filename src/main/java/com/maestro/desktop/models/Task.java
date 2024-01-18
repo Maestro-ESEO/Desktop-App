@@ -19,6 +19,14 @@ public class Task {
             this.value = value;
         }
 
+        public String getName() {
+            return name;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
         public static Status fromValue(int value) {
             for (Status status : Status.values()) {
                 if (status.value == value) {
@@ -39,6 +47,14 @@ public class Task {
             this.value = value;
         }
 
+        public String getName() {
+            return name;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
         public static Priority fromValue(int value) {
             for (Priority priority : Priority.values()) {
                 if (priority.value == value) {
@@ -56,9 +72,11 @@ public class Task {
     private Priority priority;
     private Project parentProject;
     private Date createdAt;
+
+    private Date updatedAt;
     private List<User> actors;
 
-    public Task(int id, String name, String description, Date deadline, Status status, Priority priority, Project parentProject, Date createdAt) {
+    public Task(int id, String name, String description, Date deadline, Status status, Priority priority, Project parentProject, Date createdAt, Date updatedAt) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -67,10 +85,15 @@ public class Task {
         this.priority = priority;
         this.parentProject = parentProject;
         this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.actors = new ArrayList<>();
     }
 
     public int getId() { return id; }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

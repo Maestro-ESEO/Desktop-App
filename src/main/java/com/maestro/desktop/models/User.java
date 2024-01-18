@@ -12,15 +12,17 @@ public class User {
     private String email;
     private String profilePhotoPath;
     private Date createdAt;
+    private Date updatedAt;
     private List<Project> projects;
 
-    public User(int id, String firstName, String lastName, String email, String profilePhotoPath, Date createdAt) {
+    public User(int id, String firstName, String lastName, String email, String profilePhotoPath, Date createdAt, Date updatedAt) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.profilePhotoPath = profilePhotoPath;
         this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.projects = new ArrayList<>();
     }
 

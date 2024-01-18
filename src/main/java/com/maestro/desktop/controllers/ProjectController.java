@@ -4,18 +4,27 @@ import com.maestro.desktop.App;
 import com.maestro.desktop.models.Project;
 import com.maestro.desktop.models.Task;
 import com.maestro.desktop.utils.ComponentFactory;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 public class ProjectController extends NavigationViewController {
     private Project project;
@@ -91,9 +100,20 @@ public class ProjectController extends NavigationViewController {
         }
     }
 
-    public void openTask() {
-        AppController.getInstance().navigateWithData(this);
+    public void addTask(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/dialogs/new-task-dialog.fxml"));
+            DialogPane pane = loader.load();
+            NewTaskDialogController controller = loader.getController();
+            Stage stage = new Stage();
+            stage.initOwner(((Node) event.getSource()).getScene().getWindow());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            controller.initialize(stage, this.project);
+            stage.setScene(new Scene(pane));
+            stage.setTitle("New Task");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-
-
 }
