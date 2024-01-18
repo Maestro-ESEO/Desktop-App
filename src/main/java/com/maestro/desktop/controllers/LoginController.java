@@ -25,6 +25,9 @@ public class LoginController {
 
         String email = "alejandrin82@example.org";
         String password = "$2y$12$wOrGe.J.E4KNsEcYai1Nfe8dKM7TcWAB/7Qr2Ec1N7e/yPGIehgXS";
+
+//        email = "test";
+//        password = "yF5PZvy?";
         try {
             this.loggedInUser = DatabaseConnection.getInstance().login(email, password);
         } catch (SQLException error) {

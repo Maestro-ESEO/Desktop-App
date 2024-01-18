@@ -9,7 +9,7 @@ public class Task {
         TO_DO("To do", 0),
         IN_PROGRESS("In Progress", 1),
         IN_REVISION("In Revision", 2),
-        DONE("Done", 3);
+        COMPLETED("Done", 3);
 
         private final int value;
         private final String name;
@@ -56,6 +56,7 @@ public class Task {
     private Priority priority;
     private Project parentProject;
     private Date createdAt;
+    private List<User> actors;
 
     public Task(int id, String name, String description, Date deadline, Status status, Priority priority, Project parentProject, Date createdAt) {
         this.id = id;
@@ -66,7 +67,10 @@ public class Task {
         this.priority = priority;
         this.parentProject = parentProject;
         this.createdAt = createdAt;
+        this.actors = new ArrayList<>();
     }
+
+    public int getId() { return id; }
 
     public String getName() {
         return name;
@@ -90,6 +94,12 @@ public class Task {
 
     public Project getParentProject() {
         return parentProject;
+    }
+
+    public List<User> getActors() { return actors; }
+
+    public void setActors(List<User> actors) {
+        this.actors = actors;
     }
 
     @Override
