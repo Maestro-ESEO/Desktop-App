@@ -81,7 +81,12 @@ public class AccountController extends NavigationViewController{
         accountFirstname.setText(this.user.getFirstname());
         accountLastname.setText(this.user.getLastname());
         accountEmail.setText(this.user.getEmail());
-        profilePicture.setImage(new Image(getClass().getClassLoader().getResourceAsStream("com/maestro/desktop/images/profile.png")));
+        if(this.user.getProfilePhotoPath() == null) {
+            profilePicture.setImage(new Image(getClass().getClassLoader().getResourceAsStream("images/default-pfp.png")));
+        }else{
+            profilePicture.setImage(new Image(this.user.getProfilePhotoPath(), true));
+        }
+        System.out.println("picture: "+this.user.getProfilePhotoPath());
         accountPosition.setText(this.user.getPosition());
         projectsInProgress.setText(Integer.toString(this.user.getProjects().size()));
         tasksToDo.setText(Integer.toString(this.user.getTasksToDo()));

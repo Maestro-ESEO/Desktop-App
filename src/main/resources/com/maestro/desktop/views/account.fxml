@@ -17,7 +17,11 @@
          <children>
             <StackPane prefHeight="119.0" prefWidth="282.0" style="-fx-background-radius: 300;">
                <children>
-                  <ImageView fx:id="profilePicture" fitHeight="89.0" fitWidth="109.0" pickOnBounds="true" preserveRatio="true" />
+                  <Button mnemonicParsing="false" opacity="0.0" styleClass="actor-pfp">
+                     <graphic>
+                        <ImageView fx:id="profilePicture" fitHeight="76.0" fitWidth="151.0" pickOnBounds="true" preserveRatio="true" />
+                     </graphic>
+                  </Button>
                </children>
             </StackPane>
             <Text fill="#7d7676" strokeType="OUTSIDE" strokeWidth="0.0" text="First name">
@@ -107,9 +111,6 @@
                <VBox.margin>
                   <Insets left="10.0" right="10.0" />
                </VBox.margin>
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
             </Text>
             <Region prefHeight="22.0" prefWidth="250.0" />
             <Text fill="#7d7676" strokeType="OUTSIDE" strokeWidth="0.0" text="Tasks in progress">
@@ -124,9 +125,6 @@
                <VBox.margin>
                   <Insets left="10.0" right="10.0" />
                </VBox.margin>
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
             </Text>
             <Region prefHeight="22.0" prefWidth="250.0" />
             <Text fill="#7d7676" strokeType="OUTSIDE" strokeWidth="0.0" text="Tasks done">
