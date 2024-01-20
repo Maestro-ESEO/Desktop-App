@@ -67,7 +67,8 @@ public class DashboardController extends NavigationViewController{
                         controller.initialize(task);
                         // Set the alignment of the button within the TilePane
                         TilePane.setAlignment(btn, Pos.CENTER);
-                        //btn.setOnAction(event -> AppController.getInstance().navigateWithData(project));
+                        // set the button to display the page of the related project
+                        btn.setOnAction(event -> AppController.getInstance().navigateWithData(project));
                         this.taskContainer.getChildren().add(btn);
                     } catch (IOException e) {
                         e.printStackTrace();

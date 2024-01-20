@@ -44,7 +44,7 @@ public class TaskTileController {
     }
 
     private void displayActors() {
-        /*this.actors.getChildren().clear();
+        this.actors.getChildren().clear();
         var actorList = this.task.getActors();
         if (actorList.isEmpty()) {
             System.out.println("No actors found");
@@ -96,7 +96,7 @@ public class TaskTileController {
             label.setMinWidth(Region.USE_PREF_SIZE);
             btn.setGraphic(label);
             this.actors.getChildren().add(btn);
-        }*/
+        }
     }
 
 }

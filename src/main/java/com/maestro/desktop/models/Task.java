@@ -56,6 +56,7 @@ public class Task {
     private Priority priority;
     private Project parentProject;
     private Date createdAt;
+    private List<User> actors;
 
     public Task(int id, String name, String description, Date deadline, Status status, Priority priority, Project parentProject, Date createdAt) {
         this.id = id;
@@ -66,6 +67,7 @@ public class Task {
         this.priority = priority;
         this.parentProject = parentProject;
         this.createdAt = createdAt;
+        this.actors = new ArrayList<>();
     }
 
     public String getName() {
@@ -95,5 +97,11 @@ public class Task {
     @Override
     public String toString() {
         return this.name;
+    }
+
+    public List<User> getActors() { return actors; }
+
+    public void setActors(List<User> actors) {
+        this.actors = actors;
     }
 }
