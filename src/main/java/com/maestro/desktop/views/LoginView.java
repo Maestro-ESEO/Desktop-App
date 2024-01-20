@@ -36,6 +36,7 @@ public class LoginView {
             stage.setMinWidth(800);
             stage.setMinHeight(600);
             stage.setScene(new Scene(root));
+            // Display the logo as a favicon
             stage.getIcons().add(new Image(getClass().getResourceAsStream("/com/maestro/desktop/images/logo.png")));
 
             Scene scene = stage.getScene();

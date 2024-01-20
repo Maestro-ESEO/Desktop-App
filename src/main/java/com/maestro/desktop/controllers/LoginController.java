@@ -131,6 +131,10 @@ public class LoginController {
         if(firstname.trim().isEmpty() || lastname.trim().isEmpty() || email.trim().isEmpty() || password.trim().isEmpty() || checkPassword.trim().isEmpty()){
             wrongSignup.setText("You must complete every field.");
         }
+        // test if the email is not already in the database
+        else if(checkEmailInDatabase(email)){
+            wrongSignup.setText("Email already used.");
+        }
         // test if the password has every required elements
         else if(password.length() < 8 || matcher.matches()){
             wrongSignup.setText("Password must be of at least 8 characters and contain a lower case, an upper\n case, a number and a special character."); // not working !!
@@ -185,6 +189,24 @@ public class LoginController {
 
         // Return true if the email matches the pattern, otherwise false
         return matcher.matches();
+    }
+
+    private boolean checkEmailInDatabase(String email){
+        boolean emailExists = false;
+        String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
+
+        try (PreparedStatement preparedStatement = DatabaseConnection.getConnection().prepareStatement(sql)) {
+            preparedStatement.setString(1, email);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    // If the count is greater than 0, the email exists
+                    emailExists = resultSet.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return emailExists;
     }
 
     @FXML

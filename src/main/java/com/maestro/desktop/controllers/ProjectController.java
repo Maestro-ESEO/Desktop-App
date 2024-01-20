@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -111,6 +112,7 @@ public class ProjectController extends NavigationViewController {
             controller.initialize(stage, this.project);
             stage.setScene(new Scene(pane));
             stage.setTitle("New Task");
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/com/maestro/desktop/images/logo.png")));
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

@@ -29,21 +29,17 @@ public class DashboardController extends NavigationViewController{
     @FXML
     private Text dashboardFirstname;
     @FXML
-    private Button accountButton;
-    @FXML
     private TilePane taskContainer;
     @FXML
     private Text nbProject;
     @FXML
     private Text nbTask;
 
-    private List<Project> projectList;
-
-    private DashboardView view;
     private User user;
 
     @Override
     public void initialize(Object user) {
+        int counter = 0;
         this.user = (User) user;
         dashboardFirstname.setText(this.user.getFirstname());
         nbProject.setText(Integer.toString(this.user.getProjects().size()));
@@ -56,8 +52,8 @@ public class DashboardController extends NavigationViewController{
         for (Project project : this.user.getProjects()) {
             List<Task> tasks = project.getTasks();
             for (Task task : tasks) {
-                // check if the task is in revision status
-                if(task.getStatus() == Task.Status.IN_REVISION) {
+                // check if the task is in revision status and if there is less than 3 tasks displayed
+                if(task.getStatus() == Task.Status.IN_REVISION && counter < 3) {
                     try {
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/components/taskInRevision-tile.fxml"));
                         Button btn = loader.load();
@@ -66,8 +62,9 @@ public class DashboardController extends NavigationViewController{
                         // Set the alignment of the button within the TilePane
                         TilePane.setAlignment(btn, Pos.CENTER);
                         // set the button to display the page of the related project
-                        btn.setOnAction(event -> AppController.getInstance().navigateWithData(project));
+                        btn.setOnAction(event -> AppController.getInstance().navigateWithData(task));
                         this.taskContainer.getChildren().add(btn);
+                        counter++;
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

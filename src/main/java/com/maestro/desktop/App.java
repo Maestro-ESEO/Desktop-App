@@ -10,6 +10,7 @@ import com.maestro.desktop.views.LoginView;
 import com.maestro.desktop.controllers.LoginController;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class App extends Application {
 	@Override

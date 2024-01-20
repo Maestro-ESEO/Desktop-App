@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<Button mnemonicParsing="false" onAction="#testTask" prefHeight="48.0" prefWidth="369.0" styleClass="tiles" stylesheets="@../../styles/all-projects.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.maestro.desktop.controllers.TaskTileController">
+<Button mnemonicParsing="false" prefHeight="48.0" prefWidth="369.0" styleClass="tiles" stylesheets="@../../styles/all-projects.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.maestro.desktop.controllers.TaskTileController">
     <graphic>
       <HBox prefHeight="75.0" prefWidth="351.0">
          <children>
@@ -81,7 +81,7 @@
             <VBox>
                <children>
                   <Region prefHeight="18.0" prefWidth="2.0" VBox.vgrow="ALWAYS" />
-                  <Button fx:id="validate" mnemonicParsing="false" prefHeight="25.0" prefWidth="83.0" style="-fx-background-color: #F7422B; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);" text="Validate" textFill="WHITE" />
+                  <Button fx:id="validate" mnemonicParsing="false" prefHeight="25.0" prefWidth="83.0" style="-fx-background-color: #F7422B; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);" styleClass="action-btn" text="Validate" textFill="WHITE" />
                   <Region prefHeight="18.0" prefWidth="0.0" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
