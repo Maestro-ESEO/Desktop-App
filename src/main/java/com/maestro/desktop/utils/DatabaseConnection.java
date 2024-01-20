@@ -115,7 +115,62 @@ public class DatabaseConnection {
                     this.dateFromString(rs.getString("created_at"))
             );
             list.add(user);
+    public User setUser(String email) {
+        User userCreation = null;
+        PreparedStatement ps;
+        ResultSet rs;
+        String query = "SELECT * FROM `users` WHERE `email` = ?";
+        try {
+            ps = com.maestro.desktop.models.DatabaseConnection.getConnection().prepareStatement(query);
+            ps.setString(1, email);
+
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                // Assuming your password column in the database is named "password"
+                userCreation = new User(rs.getInt("id"), rs.getString("first_name"), rs.getString("last_name"), rs.getString("email"), rs.getString("password"), rs.getString("profile_photo_path"));
+                userCreation.setProjects(DatabaseConnection.getInstance().fetchAllProjects(userCreation));
+                System.out.println("Id: " + userCreation.getId());
+                System.out.println("Firstname: " + userCreation.getFirstname());
+                System.out.println("Lastname: " + userCreation.getLastname());
+                System.out.println("Email: " + userCreation.getEmail());
+                System.out.println("Password: " + userCreation.getPassword());
+                System.out.println("Picture: " + userCreation.getProfilePhotoPath());
+            } else {
+                System.out.println("User not completed");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return userCreation;
+    }
+
+    public List<Project> fetchAllProjects(User user) {
+        System.out.println("fetch projects");
+        var list = new ArrayList<Project>();
+        try {
+            String query = String.format("select p.id, p.name, p.description, p.start_date, p.end_date, p.created_at from projects p, user_project up where up.is_admin = 1 and p.id = up.project_id and up.user_id = %d", user.getId());
+            Statement statement = this.connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+            while (rs.next()) {
+                System.out.println("+");
+                var project = new Project(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        this.dateFromString(rs.getString("start_date")),
+                        this.dateFromString(rs.getString("end_date")),
+                        this.dateFromString(rs.getString("created_at")),
+                        user
+                );
+                project.setTasks(this.fetchAllTasks(project));
+                System.out.println("Project id: "+project.getId());
+                list.add(project);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("list size: "+list.size());
         return list;
     }
 
@@ -150,7 +205,30 @@ public class DatabaseConnection {
         }
     }
 
-    public void updateAllProjects(User user) throws SQLException {
+    public User login(String email, String password) {
+        try {
+            String query = String.format("select id, first_name, last_name, email, profile_photo_path, created_at from users where email = '%s' and password = '%s'", email, password);
+            Statement stmt = this.connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            rs.next();
+            User user = new User(
+                    rs.getInt("id"),
+                    rs.getString("first_name"),
+                    rs.getString("last_name"),
+                    rs.getString("email"),
+                    rs.getString("profile_photo_path"),
+                    this.dateFromString(rs.getString("created_at"))
+            );
+            user.setProjects(this.fetchAllProjects(user));
+            System.out.println("list size: "+user.getProjects().size());
+            return user;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void updateAllProjects(User user) {
         user.setProjects(this.fetchAllProjects(user));
     }
 
@@ -159,12 +237,41 @@ public class DatabaseConnection {
     }
 
     private Date dateFromString(String str) {
-        var df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        System.out.println("str: "+str);
+        if(str!= null) {
+            var df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            try {
+                Date date = df.parse(str);
+                return date;
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return new Date(0);
+            }
+        }
+        return null;
+    }
+
+
+    public void editTable(String table, String column, String row, int rowValue, String dataToChange) {
+        PreparedStatement ps;
+        ResultSet rs;
+        String query = "UPDATE " + table + " SET " + column + " = ? WHERE " + row + " = ?";
+
         try {
-            Date date = df.parse(str);
-            return date;
-        } catch (ParseException | NullPointerException e) {
-            return new Date(0);
+            // Create a prepared statement
+            try (PreparedStatement preparedStatement = this.connection.prepareStatement(query)) {
+                // Set parameter values
+                preparedStatement.setString(1, dataToChange);
+                preparedStatement.setInt(2, rowValue);
+
+                // Execute the update
+                int rowsAffected = preparedStatement.executeUpdate();
+                System.out.println(rowsAffected + " row(s) updated.");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

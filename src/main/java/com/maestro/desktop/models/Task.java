@@ -106,4 +106,10 @@ public class Task {
     public String toString() {
         return this.name;
     }
+
+    public List<User> getActors() { return actors; }
+
+    public void setActors(List<User> actors) {
+        this.actors = actors;
+    }
 }

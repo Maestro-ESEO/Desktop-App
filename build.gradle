@@ -36,6 +36,8 @@ javafx {
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+    implementation 'mysql:mysql-connector-java:8.0.33'
+    implementation 'org.springframework.security:spring-security-crypto:6.1.2'
     implementation 'org.controlsfx:controlsfx:11.2.0'
     implementation 'com.mysql:mysql-connector-j:8.1.0'
 }

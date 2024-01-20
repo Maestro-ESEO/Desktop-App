@@ -1,53 +1,177 @@
 package com.maestro.desktop.controllers;
 
+import com.maestro.desktop.models.DatabaseConnection;
+import com.maestro.desktop.views.AccountView;
+import com.maestro.desktop.views.AppView;
+import com.maestro.desktop.views.DashboardView;
+import com.maestro.desktop.views.LoginView;
 import com.maestro.desktop.models.Project;
 import com.maestro.desktop.models.User;
-import com.maestro.desktop.utils.DatabaseConnection;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static com.maestro.desktop.models.DatabaseConnection.executeQuery;
+import static com.maestro.desktop.models.DatabaseConnection.getConnection;
+
+// LoginController.java
 public class LoginController {
+    private static LoginView view;
+
     @FXML
     private Button loginButton;
-    private User loggedInUser;
+    @FXML
+    private TextField email;
+    @FXML
+    private PasswordField password;
+    @FXML
+    private Label wrongLogin;
+    @FXML
+    private TextField createFirstname;
+    @FXML
+    private TextField createLastname;
+    @FXML
+    private TextField createEmail;
+    @FXML
+    private PasswordField createPassword;
+    @FXML
+    private PasswordField confirmPassword;
+    @FXML
+    private Label wrongSignup;
 
-    public void handleLoginButton(ActionEvent e) {
+    public LoginController(){
+    }
 
-        String email = "alejandrin82@example.org";
-        String password = "$2y$12$wOrGe.J.E4KNsEcYai1Nfe8dKM7TcWAB/7Qr2Ec1N7e/yPGIehgXS";
+    public LoginController(LoginView view) {
+        this.view = view;
+        this.view.initUI();
+    }
 
-//        email = "test";
-//        password = "yF5PZvy?";
-        try {
-            this.loggedInUser = DatabaseConnection.getInstance().login(email, password);
-        } catch (SQLException error) {
-            error.printStackTrace();
+    @FXML
+    public void handleLogin() throws IOException {
+        String emailLogin = email.getText();
+        String passwordLogin = password.getText();
+        boolean check = checkLogin(emailLogin, passwordLogin);
+        System.out.println("Email found?: " + check);
+        if(email.getText().isEmpty() && password.getText().isEmpty()) {
+            wrongLogin.setText("Please enter your data.");
         }
-
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/app-view.fxml"));
-            Parent load = loader.load();
-            AppController appController = loader.getController();
-            appController.initialize(this.loggedInUser);
-            Stage appStage = new Stage();
-            appStage.setScene(new Scene(load));
-            appStage.setTitle("Maestro");
-            appStage.show();
-            Stage loginStage = (Stage) loginButton.getScene().getWindow();
-            loginStage.close();
-
-        } catch (IOException error) {
-            error.printStackTrace();
+        else if(check) {
+            wrongLogin.setText("Success!");
+            AppView appView = new AppView(email.getText(), password.getText());
         }
+        else {
+            wrongLogin.setText("Wrong username or password!");
+        }
+    }
+
+    public boolean checkLogin(String email, String password) {
+        PreparedStatement ps;
+        ResultSet rs;
+        boolean isPasswordCorrect = false;
+        String query = "SELECT * FROM `users` WHERE `email` = ?";
+        try {
+            ps = DatabaseConnection.getConnection().prepareStatement(query);
+            ps.setString(1, email);
+
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                String storedPassword = rs.getString("password");
+
+                isPasswordCorrect = password.equals(storedPassword);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return isPasswordCorrect;
+    }
+
+    @FXML
+    public void createAccount(){
+        view.setCreateAccountView();
+    }
+
+    @FXML
+    public void signUp() throws NoSuchAlgorithmException, InvalidKeySpecException {
+        String email = createEmail.getText();
+        String password = createPassword.getText();
+        String checkPassword = confirmPassword.getText();
+        String lastname = createLastname.getText();
+        String firstname = createFirstname.getText();
+        // Define a regular expression pattern to check the password
+        String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).+$";
+        // Compile the pattern
+        Pattern pattern = Pattern.compile(regex);
+        // Create a matcher with the given password
+        Matcher matcher = pattern.matcher(createPassword.getText());
+        // test if a field is left empty
+        if(firstname.trim().isEmpty() || lastname.trim().isEmpty() || email.trim().isEmpty() || password.trim().isEmpty() || checkPassword.trim().isEmpty()){
+            wrongSignup.setText("You must complete every field.");
+        }
+        // test if the password has every required elements
+        else if(password.length() < 8 || matcher.matches()){
+            wrongSignup.setText("Password must be of at least 8 characters and contain a lower case, an upper\n case, a number and a special character."); // not working !!
+        }
+        // test if the first password equals the second one
+        else if(password.equals(checkPassword)) {
+            checkSignup(firstname, lastname, email, password);
+            // add data of the new account in database
+            view.initUI();
+            wrongLogin.setText("Your account has been successfully created!"); //not working !!
+        }else{
+            wrongSignup.setText("Passwords must be the same.");
+        }
+    }
+
+    public boolean checkSignup(String firstname, String lastname, String email, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        PreparedStatement ps;
+        boolean accountAdded = false;
+        String query = "INSERT INTO users(first_name,last_name,email,password) VALUES(?,?,?,?)";
+        try {
+            ps = DatabaseConnection.getConnection().prepareStatement(query);
+            ps.setString(1, firstname);
+            ps.setString(2, lastname);
+            ps.setString(3, email);
+            ps.setString(4, password);
+            int affectedRows = ps.executeUpdate();
+
+            if (affectedRows > 0) {
+                System.out.println("User added successfully!");
+                accountAdded = true;
+            } else {
+                System.out.println("Failed to add user.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return accountAdded;
+    }
+
+    @FXML
+    private void backToLogin(){
+        view.initUI();
     }
 }
