@@ -9,7 +9,7 @@ public class NavigableView {
         ACCOUNT_EDIT("/com/maestro/desktop/views/accountEdit.fxml"),
         ALL_PROJECTS("/views/all-projects-view.fxml"),
         PROJECT("/views/project-view.fxml"),
-        TASK("/views/task-view.fxml");
+        TASK("/views/task-view.fxml"),
         LOGIN("/com/maestro/desktop/views/login.fxml"),
         EDIT_ACCOUNT("/com/maestro/desktop/views/accountEdit.fxml");
 

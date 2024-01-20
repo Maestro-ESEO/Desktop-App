@@ -115,6 +115,9 @@ public class DatabaseConnection {
                     this.dateFromString(rs.getString("created_at"))
             );
             list.add(user);
+        }
+        return list;
+    }
     public User setUser(String email) {
         User userCreation = null;
         PreparedStatement ps;
@@ -145,7 +148,7 @@ public class DatabaseConnection {
         return userCreation;
     }
 
-    public List<Project> fetchAllProjects(User user) {
+    /*public List<Project> fetchAllProjects(User user) {
         System.out.println("fetch projects");
         var list = new ArrayList<Project>();
         try {
@@ -172,7 +175,7 @@ public class DatabaseConnection {
         }
         System.out.println("list size: "+list.size());
         return list;
-    }
+    }*/
 
     public void insertProject(Project project) throws SQLException {
         String query = "insert into projects(name, description, start_date, end_date, created_at, updated_at) values (?, ?, ?, ?, ?, NOW())";
@@ -205,30 +208,7 @@ public class DatabaseConnection {
         }
     }
 
-    public User login(String email, String password) {
-        try {
-            String query = String.format("select id, first_name, last_name, email, profile_photo_path, created_at from users where email = '%s' and password = '%s'", email, password);
-            Statement stmt = this.connection.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
-            rs.next();
-            User user = new User(
-                    rs.getInt("id"),
-                    rs.getString("first_name"),
-                    rs.getString("last_name"),
-                    rs.getString("email"),
-                    rs.getString("profile_photo_path"),
-                    this.dateFromString(rs.getString("created_at"))
-            );
-            user.setProjects(this.fetchAllProjects(user));
-            System.out.println("list size: "+user.getProjects().size());
-            return user;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public void updateAllProjects(User user) {
+    public void updateAllProjects(User user) throws SQLException {
         user.setProjects(this.fetchAllProjects(user));
     }
 

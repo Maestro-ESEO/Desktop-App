@@ -111,7 +111,7 @@ public class Project {
     public int getTasksDone(){
         int counter = 0;
         for(Task task : this.tasks){
-            if(task.getStatus() == Task.Status.DONE){
+            if(task.getStatus() == Task.Status.COMPLETED){
                 counter++;
             }
         }

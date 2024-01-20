@@ -27,8 +27,6 @@ import java.util.List;
 
 public class DashboardController extends NavigationViewController{
     @FXML
-    private javafx.scene.control.Button yourButton; // Make sure this matches the fx:id in your FXML
-    @FXML
     private Text dashboardFirstname;
     @FXML
     private Button accountButton;

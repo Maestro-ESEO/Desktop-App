@@ -149,25 +149,42 @@ public class LoginController {
     public boolean checkSignup(String firstname, String lastname, String email, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
         PreparedStatement ps;
         boolean accountAdded = false;
-        String query = "INSERT INTO users(first_name,last_name,email,password) VALUES(?,?,?,?)";
-        try {
-            ps = DatabaseConnection.getConnection().prepareStatement(query);
-            ps.setString(1, firstname);
-            ps.setString(2, lastname);
-            ps.setString(3, email);
-            ps.setString(4, password);
-            int affectedRows = ps.executeUpdate();
+        // Check if the email is valid
+        if(isValidEmail(email)) {
+            String query = "INSERT INTO users(first_name,last_name,email,password) VALUES(?,?,?,?)";
+            try {
+                ps = DatabaseConnection.getConnection().prepareStatement(query);
+                ps.setString(1, firstname);
+                ps.setString(2, lastname);
+                ps.setString(3, email);
+                ps.setString(4, password);
+                int affectedRows = ps.executeUpdate();
 
-            if (affectedRows > 0) {
-                System.out.println("User added successfully!");
-                accountAdded = true;
-            } else {
-                System.out.println("Failed to add user.");
+                if (affectedRows > 0) {
+                    System.out.println("User added successfully!");
+                    accountAdded = true;
+                } else {
+                    System.out.println("Failed to add user.");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return accountAdded;
+    }
+
+    public static boolean isValidEmail(String email) {
+        // Define a regular expression for a simple email validation
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+
+        // Create a Pattern object
+        Pattern pattern = Pattern.compile(emailRegex);
+
+        // Create a matcher object
+        Matcher matcher = pattern.matcher(email);
+
+        // Return true if the email matches the pattern, otherwise false
+        return matcher.matches();
     }
 
     @FXML
