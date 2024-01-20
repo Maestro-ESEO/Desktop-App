@@ -1,5 +1,6 @@
 package com.maestro.desktop.utils;
 
+import com.maestro.desktop.controllers.AppController;
 import com.maestro.desktop.models.Task;
 import com.maestro.desktop.models.User;
 import javafx.geometry.Insets;
@@ -38,6 +39,8 @@ public class ComponentFactory {
         } else if (actorList.size() <= limit) {
             for(int i=0; i<actorList.size(); i++) {
                 Button btn = new Button();
+                btn.setMouseTransparent(true);
+                btn.setOnAction(event -> btn.getParent().fireEvent(event));
                 btn.getStyleClass().setAll("actor-pfp");
                 ImageView iv = new ImageView();
                 iv.setUserData(actorList.get(i).getProfilePhotoPath());
@@ -57,6 +60,7 @@ public class ComponentFactory {
         } else {
             for(int i=0; i<3; i++) {
                 Button btn = new Button();
+                btn.setMouseTransparent(true);
                 btn.getStyleClass().setAll("actor-pfp");
                 ImageView iv = new ImageView();
                 iv.setUserData(actorList.get(i).getProfilePhotoPath());
@@ -74,6 +78,7 @@ public class ComponentFactory {
                 }).start();
             }
             Button btn = new Button();
+            btn.setMouseTransparent(true);
             btn.getStyleClass().setAll("actor-pfp");
             HBox.setMargin(btn, new Insets(0, 0, 0, -5));
             Label label = new Label("+" + (actorList.size()-3));
@@ -99,6 +104,7 @@ public class ComponentFactory {
         sep2.getStyleClass().setAll("line");
 
         Button calendarIcon = new Button();
+        calendarIcon.setMouseTransparent(true);
         calendarIcon.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         calendarIcon.setPrefSize(16, 16);
         calendarIcon.setId("calendar-icon");
@@ -126,11 +132,29 @@ public class ComponentFactory {
             acceptBtn.setId("accept-icon");
             acceptBtn.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
             acceptBtn.setPrefSize(20, 20);
+            acceptBtn.setOnAction(event -> {
+                try {
+                    DatabaseConnection.getInstance().updateTaskStatus(task, Task.Status.COMPLETED);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                task.setStatus(Task.Status.COMPLETED);
+                AppController.getInstance().navigateWithData(task.getParentProject());
+            });
 
             Button rejectBtn = new Button();
             rejectBtn.setId("refuse-icon");
             rejectBtn.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
             rejectBtn.setPrefSize(20, 20);
+            rejectBtn.setOnAction(event -> {
+                try {
+                    DatabaseConnection.getInstance().updateTaskStatus(task, Task.Status.IN_PROGRESS);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+                task.setStatus(Task.Status.IN_PROGRESS);
+                AppController.getInstance().navigateWithData(task.getParentProject());
+            });
 
             item.getChildren().addAll(acceptBtn, rejectBtn);
         }

@@ -1,5 +1,6 @@
 package com.maestro.desktop.utils;
 
+import com.maestro.desktop.controllers.AppController;
 import com.maestro.desktop.controllers.NavigableView;
 import com.maestro.desktop.controllers.ProjectController;
 import com.maestro.desktop.models.Project;
@@ -184,6 +185,14 @@ public class DatabaseConnection {
 
     public void updateAllTasks(Project project) throws SQLException {
         project.setTasks(this.fetchAllTasks(project));
+    }
+
+    public void updateTaskStatus(Task task, Task.Status status) throws SQLException{
+        String query = "update tasks set status = ? where id = ?";
+        PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+        preparedStatement.setInt(1, status.getValue());
+        preparedStatement.setInt(2, task.getId());
+        preparedStatement.executeUpdate();
     }
 
     public void checkProjectUpdate(Project project) throws SQLException{

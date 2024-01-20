@@ -121,3 +121,7 @@
 .line {
     -fx-stroke: #818181;
 }
+
+ScrollPane {
+    -fx-focus-color: transparent; 
+}

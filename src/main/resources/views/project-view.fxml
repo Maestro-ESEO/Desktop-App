@@ -85,7 +85,7 @@
                            </VBox.margin>
                         </VBox>
                         <Label id="to-do" alignment="CENTER" layoutX="20.0" layoutY="20.0" minWidth="125.0" styleClass="status" text="To Do" />
-                        <VBox fx:id="toDoTasks">
+                        <VBox fx:id="toDoTasks" spacing="10.0">
                            <children>
                               <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="no-tasks" text="Nothing here">
                                  <padding>
@@ -98,7 +98,7 @@
                            </VBox.margin>
                         </VBox>
                         <Label id="in-progress" alignment="CENTER" layoutX="20.0" layoutY="53.0" minWidth="125.0" styleClass="status" text="In Progress" />
-                        <VBox fx:id="inProgressTasks">
+                        <VBox fx:id="inProgressTasks" spacing="10.0">
                            <children>
                               <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="no-tasks" text="Nothing here">
                                  <padding>
@@ -111,7 +111,7 @@
                            </VBox.margin>
                         </VBox>
                         <Label id="completed" alignment="CENTER" layoutX="20.0" layoutY="86.0" minWidth="125.0" styleClass="status" text="Completed" />
-                        <VBox fx:id="completedTasks">
+                        <VBox fx:id="completedTasks" spacing="10.0">
                            <children>
                               <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="no-tasks" text="Nothing here">
                                  <padding>
