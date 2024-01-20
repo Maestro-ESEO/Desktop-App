@@ -17,17 +17,19 @@ public class Project {
     private Date startDate;
     private Date endDate;
     private Date createdAt;
+    private Date updatedAt;
     private User admin;
     private List<User> users;
     private List<Task> tasks;
 
-    public Project(int id, String name, String description, Date startDate, Date endDate, Date createdAt, User admin) {
+    public Project(int id, String name, String description, Date startDate, Date endDate, Date createdAt, Date updatedAt, User admin) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
         this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.admin = admin;
         this.users = new ArrayList<>();
         this.tasks = new ArrayList<>();
@@ -61,6 +63,8 @@ public class Project {
         return createdAt;
     }
 
+    public Date getUpdatedAt() { return  updatedAt; }
+
     public User getAdmin() {
         return admin;
     }
@@ -84,6 +88,34 @@ public class Project {
 
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public void setAdmin(User admin) {
+        this.admin = admin;
     }
 
     public String toString() { return name; }

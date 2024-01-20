@@ -61,7 +61,7 @@
                            <children>
                               <Label styleClass="subheader" text="Tasks" />
                               <Region HBox.hgrow="ALWAYS" />
-                              <Button mnemonicParsing="false" styleClass="action-btn" text="Add New Task">
+                              <Button mnemonicParsing="false" onAction="#addTask" styleClass="action-btn" text="Add New Task">
                                  <graphic>
                                     <Button id="add-icon" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="16.0" prefWidth="16.0" />
                                  </graphic>

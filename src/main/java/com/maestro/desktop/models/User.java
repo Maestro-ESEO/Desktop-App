@@ -19,6 +19,7 @@ public class User {
     private String position;
     private String profilePhotoPath;
     private Date createdAt;
+    private Date updatedAt;
     private List<Project> projects;
     private User admin;
 
@@ -45,13 +46,14 @@ public class User {
         this.admin = admin;
     }
 
-    public User(int id, String firstName, String lastName, String email, String profilePhotoPath, Date createdAt) {
+    public User(int id, String firstName, String lastName, String email, String profilePhotoPath, Date createdAt, Date updatedAt) {
         this.id = id;
         this.firstname = firstName;
         this.lastname = lastName;
         this.email = email;
         this.profilePhotoPath = profilePhotoPath;
         this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.projects = new ArrayList<>();
     }
 
