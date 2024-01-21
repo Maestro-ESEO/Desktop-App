@@ -51,6 +51,10 @@ public class AppController {
         return INSTANCE;
     }
 
+    public User getUser() { return this.user; }
+
+    public NavigableView getAllProjects() { return allProjects; }
+
     public void initialize(User user) {
         this.user = user;
         this.profileBtn.setText(this.user.getName());
@@ -113,7 +117,12 @@ public class AppController {
 
         // Check if already in recent Navigable Views
         for (NavigableView nav : recents) {
-            if (nav.getData() == data) {
+            if ((data instanceof Project
+                    && nav.getData() instanceof Project
+                    && ((Project) data).getId() == ((Project) nav.getData()).getId())
+                    || (data instanceof Task
+                    && nav.getData() instanceof Task
+                    && ((Task) data).getId() == ((Task) nav.getData()).getId()) ) {
                 AppController.getInstance().updateView(nav);
                 return;
             }

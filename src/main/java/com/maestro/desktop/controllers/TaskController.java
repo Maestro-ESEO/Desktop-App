@@ -1,17 +1,19 @@
 package com.maestro.desktop.controllers;
 
+import com.maestro.desktop.models.Comment;
 import com.maestro.desktop.models.Task;
 import com.maestro.desktop.utils.ComponentFactory;
 import com.maestro.desktop.utils.DatabaseConnection;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.Locale;
 
 public class TaskController extends NavigationViewController{
@@ -29,6 +31,12 @@ public class TaskController extends NavigationViewController{
     private MenuButton status;
     @FXML
     private Button accessProject;
+    @FXML
+    private VBox commentContainer;
+    @FXML
+    private TextArea commentTextArea;
+    @FXML
+    private Button publishCommentBtn;
 
     public void initialize(Object data){
         this.task = (Task) data;
@@ -56,5 +64,36 @@ public class TaskController extends NavigationViewController{
         }
         this.accessProject.setText(this.task.getParentProject().getName());
         this.accessProject.setOnAction(event -> AppController.getInstance().navigateWithData(this.task.getParentProject()));
+        this.commentContainer.getChildren().clear();
+        for (Comment comment : this.task.getComments()) {
+            this.commentContainer.getChildren().add(ComponentFactory.getInstance().createCommentItem(comment));
+        }
+        this.publishCommentBtn.setDisable(true);
+        this.commentTextArea.textProperty().addListener((observable, oldValue, newValue) -> { this.publishCommentBtn.setDisable(this.commentTextArea.getText().isBlank()); });
+
+    }
+
+    public void publishComment(ActionEvent event) {
+        if (this.commentTextArea.getText().isBlank()) {
+            return;
+        }
+        var comment = new Comment(
+                -1,
+                this.commentTextArea.getText(),
+                AppController.getInstance().getUser(),
+                new Date(),
+                new Date()
+        );
+        try {
+            System.out.println(comment.getId());
+            DatabaseConnection.getInstance().insertComment(comment, this.task.getId());
+            System.out.println(comment.getId());
+            this.commentTextArea.clear();
+            this.task.getComments().add(this.task.getComments().stream().filter(obj -> obj.getCreatedAt().compareTo(comment.getCreatedAt()) <= 0)
+                    .findFirst().map(obj -> this.task.getComments().indexOf(obj)).orElse(this.task.getComments().size()), comment);
+           AppController.getInstance().navigateWithData(this.task);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

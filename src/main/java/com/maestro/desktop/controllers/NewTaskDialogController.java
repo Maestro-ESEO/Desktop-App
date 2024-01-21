@@ -35,7 +35,6 @@ public class NewTaskDialogController {
         this.stage = stage;
         this.deadline.setValue(new Date(this.parentProject.getEndDate().getTime()).toLocalDate());
         this.createButton.setDisable(true);
-        this.name.setOnAction(event -> { this.createButton.setDisable(this.name.getText().isBlank()); });
         this.name.textProperty().addListener((observable, oldValue, newValue) -> { this.createButton.setDisable(this.name.getText().isBlank()); });
         this.createButton.setOnAction(event -> this.createTask());
         this.cancelButton.setOnAction(event -> this.stage.close());

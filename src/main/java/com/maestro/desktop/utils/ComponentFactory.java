@@ -1,6 +1,7 @@
 package com.maestro.desktop.utils;
 
 import com.maestro.desktop.controllers.AppController;
+import com.maestro.desktop.models.Comment;
 import com.maestro.desktop.models.Task;
 import com.maestro.desktop.models.User;
 import javafx.geometry.Insets;
@@ -159,6 +160,43 @@ public class ComponentFactory {
             item.getChildren().addAll(acceptBtn, rejectBtn);
         }
         item.setUserData(task);
+
+        return item;
+    }
+
+    public VBox createCommentItem(Comment comment) {
+        if (comment == null) {
+            return null;
+        }
+        ImageView iv = new ImageView();
+        iv.setUserData(comment.getAuthor().getProfilePhotoPath());
+        iv.setFitWidth(32);
+        iv.setFitHeight(32);
+        Circle clipShape = new Circle(16, 16, 16);
+        iv.setClip(clipShape);
+
+        Label author = new Label(comment.getAuthor().getName());
+        author.getStyleClass().setAll("comment-author");
+        var df = new SimpleDateFormat("MMM. d, yyyy", Locale.ENGLISH);
+        Label publishedDate = new Label(comment.getCreatedAt()!= null ? df.format(comment.getCreatedAt()) : "No date specified");
+        publishedDate.getStyleClass().setAll("published-date");
+        VBox vBox = new VBox(1, author, publishedDate);
+
+        HBox hbox = new HBox(10, iv, vBox);
+        Label content = new Label(comment.getContent());
+        content.setWrapText(true);
+        content.setMinHeight(Region.USE_PREF_SIZE);
+        content.setMaxSize(Integer.MAX_VALUE, Integer.MAX_VALUE);
+
+        VBox item = new VBox(15, hbox, content);
+        item.setPadding(new Insets(15, 15, 15, 15));
+        item.setPrefSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+        item.setMaxWidth(500);
+        item.getStyleClass().setAll("new-comment");
+
+        new Thread(() -> {
+            iv.setImage(new Image((String) iv.getUserData()));
+        }).start();
 
         return item;
     }

@@ -3,6 +3,7 @@ package com.maestro.desktop.utils;
 import com.maestro.desktop.controllers.AppController;
 import com.maestro.desktop.controllers.NavigableView;
 import com.maestro.desktop.controllers.ProjectController;
+import com.maestro.desktop.models.Comment;
 import com.maestro.desktop.models.Project;
 import com.maestro.desktop.models.Task;
 import com.maestro.desktop.models.User;
@@ -99,6 +100,7 @@ public class DatabaseConnection {
                     this.dateFromString(rs.getString("updated_at"))
             );
             task.setActors(this.fetchTaskActors(task));
+            task.setComments(this.fetchTaskComments(task));
             list.add(task);
         }
         return list;
@@ -122,6 +124,46 @@ public class DatabaseConnection {
             list.add(user);
         }
         return list;
+    }
+
+    public List<Comment> fetchTaskComments(Task task) throws SQLException{
+        var list = new ArrayList<Comment>();
+        String query = "select * from comments where task_id = ? order by created_at desc";
+        PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+        preparedStatement.setInt(1, task.getId());
+        ResultSet rs = preparedStatement.executeQuery();
+        while (rs.next()) {
+            var comment = new Comment(
+                    rs.getInt("id"),
+                    rs.getString("content"),
+                    this.fetchUserFromID(rs.getInt("user_id")),
+                    this.dateFromString(rs.getString("created_at")),
+                    this.dateFromString(rs.getString("updated_at"))
+            );
+            list.add(comment);
+        }
+        return list;
+    }
+
+    public User fetchUserFromID(int id) throws SQLException{
+        String query = "select u.id, u.first_name, u.last_name, u.email, u.profile_photo_path, u.created_at, u.updated_at from users u where u.id = ?";
+        PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+        preparedStatement.setInt(1, id);
+        ResultSet rs = preparedStatement.executeQuery();
+        if(rs.next()) {
+            var user = new User(
+                    rs.getInt("id"),
+                    rs.getString("first_name"),
+                    rs.getString("last_name"),
+                    rs.getString("email"),
+                    rs.getString("profile_photo_path"),
+                    this.dateFromString(rs.getString("created_at")),
+                    this.dateFromString(rs.getString("updated_at"))
+            );
+            return user;
+        } else {
+            return null;
+        }
     }
 
     public void insertProject(Project project) throws SQLException {
@@ -176,6 +218,19 @@ public class DatabaseConnection {
             preparedStatement.setInt(1, user.getId());
             preparedStatement.setInt(2, task.getId());
             preparedStatement.executeUpdate();
+        }
+    }
+
+    public void insertComment(Comment comment, int taskID) throws SQLException{
+        String query = "insert into comments(content, user_id, task_id, created_at, updated_at) values (?, ?, ?, NOW(), NOW())";
+        PreparedStatement prepStatement = this.connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        prepStatement.setString(1, comment.getContent());
+        prepStatement.setInt(2, AppController.getInstance().getUser().getId());
+        prepStatement.setInt(3, taskID);
+        prepStatement.executeUpdate();
+        ResultSet rs = prepStatement.getGeneratedKeys();
+        if (rs.next()) {
+            comment.setId(rs.getInt(1));
         }
     }
 
