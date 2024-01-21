@@ -15,6 +15,11 @@
          <content>
             <VBox spacing="15.0">
                <children>
+                  <Button fx:id="accessProjects" graphicTextGap="10.0" mnemonicParsing="false" styleClass="back-button" text="Projects">
+                     <graphic>
+                        <Button id="left-chevron-icon" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="10.0" prefWidth="6.0" />
+                     </graphic>
+                  </Button>
                   <HBox spacing="20.0">
                      <children>
                         <VBox spacing="10.0">

@@ -39,6 +39,8 @@ public class ProjectController extends NavigationViewController {
     private VBox inProgressTasks;
     @FXML
     private VBox completedTasks;
+    @FXML
+    private Button accessProjects;
 
     @Override
     public void initialize(Object data) {
@@ -49,6 +51,7 @@ public class ProjectController extends NavigationViewController {
         this.date.setText(this.project.getEndDate() != null ? df.format(this.project.getEndDate()) : "Not specified");
         ComponentFactory.getInstance().displayActors(this.actors, 10, this.project.getActors());
         this.displayTasks();
+        this.accessProjects.setOnAction(event -> AppController.getInstance().updateView(AppController.getInstance().getAllProjects()));
     }
 
     public void displayTasks() {
