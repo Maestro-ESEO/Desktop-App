@@ -6,6 +6,7 @@ import com.maestro.desktop.utils.ComponentFactory;
 import com.maestro.desktop.utils.DatabaseConnection;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -28,6 +29,8 @@ public class TaskController extends NavigationViewController{
     @FXML
     private HBox actors;
     @FXML
+    private Label priority;
+    @FXML
     private MenuButton status;
     @FXML
     private Button accessProject;
@@ -45,6 +48,8 @@ public class TaskController extends NavigationViewController{
         var df = new SimpleDateFormat("MMM. d, yyyy", Locale.ENGLISH);
         this.date.setText(this.task.getDeadline() != null ? df.format(this.task.getDeadline()) : "Not specified");
         ComponentFactory.getInstance().displayActors(this.actors, 10, this.task.getActors());
+        this.priority.setText(task.getPriority().getName());
+        this.priority.setId(task.getPriority().name());
         this.status.getItems().clear();
         this.status.setId(this.task.getStatus().name());
         this.status.setText(this.task.getStatus().getName());

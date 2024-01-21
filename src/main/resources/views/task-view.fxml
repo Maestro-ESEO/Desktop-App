@@ -31,7 +31,7 @@
                            <children>
                               <Label fx:id="title" styleClass="header" text="Task #" />
                               <Label fx:id="description" maxHeight="94.0" minHeight="-Infinity" prefWidth="1397.0" styleClass="description" text="DescDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescription" wrapText="true" />
-                              <HBox spacing="15.0">
+                              <HBox alignment="CENTER_LEFT" spacing="15.0">
                                  <children>
                                     <HBox fx:id="actors" alignment="CENTER_LEFT" />
                                     <HBox alignment="CENTER" fillHeight="false" maxWidth="-Infinity" spacing="5.0" styleClass="due-date">
@@ -53,6 +53,10 @@
                                         <MenuItem mnemonicParsing="false" text="Action 2" />
                                       </items>
                                     </MenuButton>
+                                    <Label fx:id="priority" alignment="CENTER" text="Low">
+                                       <padding>
+                                          <Insets bottom="4.0" left="7.0" right="7.0" top="4.0" />
+                                       </padding></Label>
                                  </children>
                               </HBox>
                            </children>

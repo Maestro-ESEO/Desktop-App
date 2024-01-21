@@ -38,7 +38,7 @@ public class ComponentFactory {
         if (actorList.isEmpty()) {
             System.out.println("No actors found");
         } else if (actorList.size() <= limit) {
-            for(int i=0; i<actorList.size(); i++) {
+            for (int i = 0; i < actorList.size(); i++) {
                 Button btn = new Button();
                 btn.setMouseTransparent(true);
                 btn.setOnAction(event -> btn.getParent().fireEvent(event));
@@ -50,7 +50,7 @@ public class ComponentFactory {
                 Circle clipShape = new Circle(12, 12, 12);
                 iv.setClip(clipShape);
                 btn.setGraphic(iv);
-                if (i!=0) {
+                if (i != 0) {
                     HBox.setMargin(btn, new Insets(0, 0, 0, -5));
                 }
                 container.getChildren().add(btn);
@@ -59,7 +59,7 @@ public class ComponentFactory {
                 }).start();
             }
         } else {
-            for(int i=0; i<3; i++) {
+            for (int i = 0; i < 3; i++) {
                 Button btn = new Button();
                 btn.setMouseTransparent(true);
                 btn.getStyleClass().setAll("actor-pfp");
@@ -70,7 +70,7 @@ public class ComponentFactory {
                 Circle clipShape = new Circle(12, 12, 12);
                 iv.setClip(clipShape);
                 btn.setGraphic(iv);
-                if (i!=0) {
+                if (i != 0) {
                     HBox.setMargin(btn, new Insets(0, 0, 0, -5));
                 }
                 container.getChildren().add(btn);
@@ -82,7 +82,7 @@ public class ComponentFactory {
             btn.setMouseTransparent(true);
             btn.getStyleClass().setAll("actor-pfp");
             HBox.setMargin(btn, new Insets(0, 0, 0, -5));
-            Label label = new Label("+" + (actorList.size()-3));
+            Label label = new Label("+" + (actorList.size() - 3));
             label.setAlignment(Pos.CENTER);
             label.setPrefWidth(24);
             label.setPrefHeight(24);
@@ -103,6 +103,8 @@ public class ComponentFactory {
         sep.getStyleClass().setAll("line");
         Line sep2 = new Line(0, 0, 0, 20);
         sep2.getStyleClass().setAll("line");
+        Line sep3 = new Line(0, 0, 0, 20);
+        sep3.getStyleClass().setAll("line");
 
         Button calendarIcon = new Button();
         calendarIcon.setMouseTransparent(true);
@@ -110,7 +112,7 @@ public class ComponentFactory {
         calendarIcon.setPrefSize(16, 16);
         calendarIcon.setId("calendar-icon");
         var df = new SimpleDateFormat("MMM. d, yyyy", Locale.ENGLISH);
-        Label deadlineText = new Label(task.getDeadline()!= null ? df.format(task.getDeadline()) : "Not specified");
+        Label deadlineText = new Label(task.getDeadline() != null ? df.format(task.getDeadline()) : "Not specified");
         deadlineText.getStyleClass().setAll("item-due-date");
         HBox deadline = new HBox(5, calendarIcon, deadlineText);
         deadline.setAlignment(Pos.CENTER_LEFT);
@@ -118,11 +120,15 @@ public class ComponentFactory {
         HBox taskActors = new HBox();
         this.displayActors(taskActors, 4, task.getActors());
 
+        Label priority = new Label(task.getPriority().getName());
+        priority.setId(task.getPriority().name());
+        priority.setPadding(new Insets(2, 7, 2, 7));
+
         Region filler = new Region();
         filler.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
         HBox.setHgrow(filler, Priority.ALWAYS);
 
-        HBox item = new HBox(15, itemTitle, sep, deadline, sep2, taskActors, filler);
+        HBox item = new HBox(15, itemTitle, sep, deadline, sep2, priority, sep3, taskActors, filler);
         item.setPadding(new Insets(10, 15, 10, 15));
         item.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
         item.setAlignment(Pos.CENTER_LEFT);
@@ -178,7 +184,7 @@ public class ComponentFactory {
         Label author = new Label(comment.getAuthor().getName());
         author.getStyleClass().setAll("comment-author");
         var df = new SimpleDateFormat("MMM. d, yyyy", Locale.ENGLISH);
-        Label publishedDate = new Label(comment.getCreatedAt()!= null ? df.format(comment.getCreatedAt()) : "No date specified");
+        Label publishedDate = new Label(comment.getCreatedAt() != null ? df.format(comment.getCreatedAt()) : "No date specified");
         publishedDate.getStyleClass().setAll("published-date");
         VBox vBox = new VBox(1, author, publishedDate);
 

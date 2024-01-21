@@ -39,20 +39,28 @@ public class NewTaskDialogController {
         this.createButton.setOnAction(event -> this.createTask());
         this.cancelButton.setOnAction(event -> this.stage.close());
         this.status.getItems().clear();
+        this.status.setUserData(Task.Status.TO_DO);
+        this.status.setText(((Task.Status) this.status.getUserData()).getName());
+        this.status.setId(((Task.Status) this.status.getUserData()).name());
         for (Task.Status status : Task.Status.values()) {
             var menuItem = new MenuItem(status.getName());
             menuItem.setOnAction(event -> {
                 this.status.setText(menuItem.getText());
                 this.status.setUserData(status);
+                this.status.setId(((Task.Status) this.status.getUserData()).name());
             });
             this.status.getItems().add(menuItem);
         }
         this.priority.getItems().clear();
+        this.priority.setUserData(Task.Priority.LOW);
+        this.priority.setText(((Task.Priority) this.priority.getUserData()).getName());
+        this.priority.setId(((Task.Priority) this.priority.getUserData()).name());
         for (Task.Priority priority : Task.Priority.values()) {
             var menuItem = new MenuItem(priority.getName());
             menuItem.setOnAction(event -> {
                 this.priority.setText(menuItem.getText());
                 this.priority.setUserData(priority);
+                this.priority.setId(((Task.Priority) this.priority.getUserData()).name());
             });
             this.priority.getItems().add(menuItem);
         }

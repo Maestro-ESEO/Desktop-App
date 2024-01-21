@@ -94,6 +94,30 @@
     -fx-border-color: #52b62e;
 }
 
+#HIGH {
+    -fx-text-fill: #e03232;
+    -fx-background-color: rgba(224, 50, 50, 0.25);
+    -fx-border-color: #e03232;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+#MEDIUM {
+    -fx-text-fill: #e07232;
+    -fx-background-color: rgba(224, 114, 50, 0.25);
+    -fx-border-color: #e07232;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+#LOW {
+    -fx-text-fill: #e0b432;
+    -fx-background-color: rgba(224, 189, 50, 0.25);
+    -fx-border-color: #e0b432;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
 .no-tasks{
     -no-tasks-color: #aeaeae;
     -fx-border-color: -no-tasks-color;
@@ -123,7 +147,7 @@
 }
 
 .line {
-    -fx-stroke: #818181;
+    -fx-stroke: #bdbdbd;
 }
 
 .back-button {

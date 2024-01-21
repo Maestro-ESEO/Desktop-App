@@ -250,20 +250,20 @@ public class DatabaseConnection {
         preparedStatement.executeUpdate();
     }
 
-    public void checkProjectUpdate(Project project) throws SQLException{
-        String query = "select p.name, p.description, p.start_date, p.end_date, p.updated_at from projects p where p.id = ? and p.updated_at != ?";
-        PreparedStatement preparedStatement = this.connection.prepareStatement(query);
-        preparedStatement.setInt(1, project.getId());
-        preparedStatement.setTimestamp(2, new Timestamp(project.getUpdatedAt().getTime()));
-        ResultSet rs = preparedStatement.executeQuery();
-        if (rs.next()) {
-            project.setName(rs.getString("name"));
-            project.setDescription(rs.getString("description"));
-            project.setStartDate(this.dateFromString(rs.getString("start_date")));
-            project.setEndDate(this.dateFromString(rs.getString("end_date")));
-            project.setUpdatedAt(this.dateFromString(rs.getString("updated_at")));
-        }
-    }
+//    public void checkProjectUpdate(Project project) throws SQLException{
+//        String query = "select p.name, p.description, p.start_date, p.end_date, p.updated_at from projects p where p.id = ? and p.updated_at != ?";
+//        PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+//        preparedStatement.setInt(1, project.getId());
+//        preparedStatement.setTimestamp(2, new Timestamp(project.getUpdatedAt().getTime()));
+//        ResultSet rs = preparedStatement.executeQuery();
+//        if (rs.next()) {
+//            project.setName(rs.getString("name"));
+//            project.setDescription(rs.getString("description"));
+//            project.setStartDate(this.dateFromString(rs.getString("start_date")));
+//            project.setEndDate(this.dateFromString(rs.getString("end_date")));
+//            project.setUpdatedAt(this.dateFromString(rs.getString("updated_at")));
+//        }
+//    }
 
     private Date dateFromString(String str) {
         var df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");

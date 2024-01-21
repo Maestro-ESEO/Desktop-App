@@ -1,0 +1,107 @@
+#valid-btn {
+    -fx-background-color: #F7422B;
+    -fx-background-radius: 10;
+    -fx-text-fill: #fff;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(three-pass-box, rgba(123, 123, 123, 0.5), 4, 0, -2, 2);
+}
+
+#cancel-btn {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 10;
+    -fx-text-fill: #000;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(three-pass-box, rgba(123, 123, 123, 0.5), 4, 0, -2, 2);
+
+}
+
+#delete-btn {
+    -fx-background-color: #F7422B;
+    -fx-background-radius: 10;
+    -fx-text-fill: #fff;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(three-pass-box, rgba(123, 123, 123, 0.5), 4, 0, -2, 2);
+}
+
+.status, .priority {
+    -fx-background-color: #d1d1d1;
+}
+
+#IN_REVISION {
+    -fx-text-fill: #C64FE4;
+    -fx-background-color: rgba(198, 79, 228, 0.25);
+    -fx-border-color: #C64FE4;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+#TO_DO {
+    -fx-text-fill: #4f6ae4;
+    -fx-background-color: rgba(79, 106, 228, 0.25);
+    -fx-border-color: #4f6ae4;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+#IN_PROGRESS {
+    -fx-text-fill: #e07232;
+    -fx-background-color: rgba(224, 114, 50, 0.25);
+    -fx-border-color: #e07232;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+#COMPLETED {
+    -fx-text-fill: #52b62e;
+    -fx-background-color: rgba(82, 182, 46, 0.25);
+    -fx-border-color: #52b62e;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+#HIGH {
+    -fx-text-fill: #e03232;
+    -fx-background-color: rgba(224, 50, 50, 0.25);
+    -fx-border-color: #e03232;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+#MEDIUM {
+    -fx-text-fill: #e07232;
+    -fx-background-color: rgba(224, 114, 50, 0.25);
+    -fx-border-color: #e07232;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+#LOW {
+    -fx-text-fill: #e0b432;
+    -fx-background-color: rgba(224, 189, 50, 0.25);
+    -fx-border-color: #e0b432;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+.text-area .content{
+    -fx-background-color: #e0e0e0;
+    -fx-background-radius: 5;
+}
+
+.text-area {
+    -fx-background-color: transparent;
+    -fx-background-radius: 5;
+}
+
+.text-field, .date-picker, .date-picker .arrow-button {
+    -fx-background-color: #e0e0e0;
+    -fx-background-radius: 5;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: #c0c0c0;
+}
+
+.date-picker {
+    -fx-border-color: transparent;
+}
