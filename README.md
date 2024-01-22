@@ -18,10 +18,6 @@ Before you start, ensure that you have the following installed on your system:
 - Java 21
 - MySQL database
 
-## Configuration
-
-The Project Management Desktop App offers configuration options to customize settings. Please refer to the [Configuration](#configuration) section in the main README for details.
-
 ## Database Connection
 
 To connect to a local database, follow those steps.
