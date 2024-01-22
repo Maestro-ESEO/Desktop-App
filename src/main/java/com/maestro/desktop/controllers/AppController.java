@@ -76,7 +76,11 @@ public class AppController {
         this.profileBtn.setText(this.user.getName());
         Circle clipShape = new Circle(15, 15, 15);
         this.profileBtn.getGraphic().setClip(clipShape);
-        ((ImageView) this.profileBtn.getGraphic()).setImage(new Image(this.user.getProfilePhotoPath()));
+        if(this.user.getProfilePhotoPath() != null) {
+            ((ImageView) this.profileBtn.getGraphic()).setImage(new Image(this.user.getProfilePhotoPath()));
+        }else{
+            ((ImageView) this.profileBtn.getGraphic()).setImage(new Image("/com/maestro/desktop/images/profile.png"));
+        }
         AppController.INSTANCE = this;
         this.dashboard = new NavigableView(this.user, NavigableView.FxmlView.DASHBOARD, dashboardButton);
         this.allProjects = new NavigableView(this.user.getProjects(), NavigableView.FxmlView.ALL_PROJECTS, allProjectsButton);
@@ -123,6 +127,7 @@ public class AppController {
      */
     public void logout() {
         this.user = null;
+        stage.close();
         LoginView view = new LoginView(stage);
         LoginController controller = new LoginController(view);
         System.out.println("Logging out");

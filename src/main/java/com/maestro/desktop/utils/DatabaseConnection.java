@@ -80,6 +80,9 @@ public class DatabaseConnection {
                 this.dateFromString(rs.getString("created_at")),
                 this.dateFromString(rs.getString("updated_at"))
         );
+        if(user.getProfilePhotoPath() == null){
+            user.setProfilePhotoPath("/com/maestro/desktop/images/profile.png");
+        }
         user.setProjects(this.fetchAllProjects(user));
         return user;
     }
@@ -414,6 +417,11 @@ public class DatabaseConnection {
 
     public void deleteProject(Project project) throws SQLException {
         String query = "delete from projects where id = ?";
+        PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+        preparedStatement.setInt(1, project.getId());
+        preparedStatement.executeUpdate();
+    }
+
     public void checkProjectUpdate(Project project) throws SQLException {
         String query = "select p.name, p.description, p.start_date, p.end_date, p.updated_at from projects p where p.id = ? and p.updated_at != ?";
         PreparedStatement preparedStatement = this.connection.prepareStatement(query);
@@ -511,7 +519,6 @@ public class DatabaseConnection {
                 .map(Object::toString)
                 .collect(Collectors.joining(", "));
     }
-}
 
     /**
      * checkLogin - Check in the database if the given email is found and if the given password matches the email.
@@ -598,6 +605,4 @@ public class DatabaseConnection {
         }
         return emailExists;
     }
-
-
 }

@@ -33,6 +33,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static com.maestro.desktop.views.LoginView.stage;
+
 /**
  * LoginController - Controller's methods related to the login page and the creation of account page.
  */
@@ -131,7 +133,7 @@ public class LoginController {
             wrongSignup.setText("Email already used.");
         }
         // test if the password has every required elements
-        else if(password.length() < 8 || matcher.matches()){
+        else if(password.length() < 8 && matcher.matches()){
             wrongSignup.setText("Password must be of at least 8 characters and contain a lower case, an upper\n case, a number and a special character."); // not working !!
         }
         // test if the first password equals the second one
@@ -139,7 +141,6 @@ public class LoginController {
             DatabaseConnection.getInstance().addSignUpData(firstname, lastname, email, password);
             // add data of the new account in database
             view.initUI();
-            wrongLogin.setText("Your account has been successfully created!"); //not working !!
         }else{
             wrongSignup.setText("Passwords must be the same.");
         }
@@ -167,6 +168,7 @@ public class LoginController {
      */
     @FXML
     private void backToLogin(){
+        stage.close();
         view.initUI();
     }
 }

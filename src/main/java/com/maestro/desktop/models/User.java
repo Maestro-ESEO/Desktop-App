@@ -104,6 +104,9 @@ public class User {
         return this.profilePhotoPath;
     }
 
+    public void setProfilePhotoPath(String path) {
+        this.profilePhotoPath = path;
+    }
     public String getPosition() {
         return this.position;
     }

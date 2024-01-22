@@ -42,7 +42,7 @@
                                     <Font name="System Bold" size="12.0" />
                                 </font>
                             </Text>
-                            <Text fill="#7d7676" layoutX="106.0" layoutY="337.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Position">
+                            <Text fill="#7d7676" layoutX="106.0" layoutY="337.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Profile picture URL">
                                 <font>
                                     <Font name="System Bold" size="12.0" />
                                 </font>
