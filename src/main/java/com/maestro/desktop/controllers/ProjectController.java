@@ -1,6 +1,5 @@
 package com.maestro.desktop.controllers;
 
-import com.maestro.desktop.App;
 import com.maestro.desktop.models.Project;
 import com.maestro.desktop.models.Task;
 import com.maestro.desktop.utils.ComponentFactory;
@@ -10,12 +9,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.input.DataFormat;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -49,6 +42,8 @@ public class ProjectController extends NavigationViewController {
     private VBox inProgressTasks;
     @FXML
     private VBox completedTasks;
+    @FXML
+    private Button accessProjects;
 
     /**
      * initialize - Sets the project and displays the items of the page.
@@ -63,6 +58,7 @@ public class ProjectController extends NavigationViewController {
         this.date.setText(this.project.getEndDate() != null ? df.format(this.project.getEndDate()) : "Not specified");
         ComponentFactory.getInstance().displayActors(this.actors, 10, this.project.getActors());
         this.displayTasks();
+        this.accessProjects.setOnAction(event -> AppController.getInstance().updateView(AppController.getInstance().getAllProjects()));
     }
 
     /**
@@ -126,7 +122,28 @@ public class ProjectController extends NavigationViewController {
             controller.initialize(stage, this.project);
             stage.setScene(new Scene(pane));
             stage.setTitle("New Task");
+            stage.setResizable(false);
             stage.getIcons().add(new Image(getClass().getResourceAsStream("/com/maestro/desktop/images/logo.png")));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void editProject(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/dialogs/edit-project-dialog.fxml"));
+            DialogPane pane = loader.load();
+            EditProjectDialogController controller = loader.getController();
+            Stage stage = new Stage();
+            stage.initOwner(((Node) event.getSource()).getScene().getWindow());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            controller.initialize(stage, this.project);
+            stage.setScene(new Scene(pane));
+            stage.setTitle("Edit Project");
+            stage.setResizable(false);
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/com/maestro/desktop/images/logo.png")));
+
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

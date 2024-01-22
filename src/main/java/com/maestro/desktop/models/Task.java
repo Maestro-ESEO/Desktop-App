@@ -75,6 +75,7 @@ public class Task {
 
     private Date updatedAt;
     private List<User> actors;
+    private List<Comment> comments;
 
     public Task(int id, String name, String description, Date deadline, Status status, Priority priority, Project parentProject, Date createdAt, Date updatedAt) {
         this.id = id;
@@ -87,6 +88,7 @@ public class Task {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.actors = new ArrayList<>();
+        this.comments = new ArrayList<>();
     }
 
     public int getId() { return id; }
@@ -111,6 +113,10 @@ public class Task {
         return status;
     }
 
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     public Priority getPriority() {
         return priority;
     }
@@ -123,6 +129,34 @@ public class Task {
 
     public void setActors(List<User> actors) {
         this.actors = actors;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setDeadline(Date deadline) {
+        this.deadline = deadline;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     @Override

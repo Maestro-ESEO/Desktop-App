@@ -15,6 +15,11 @@
          <content>
             <VBox spacing="15.0">
                <children>
+                  <Button fx:id="accessProjects" graphicTextGap="10.0" mnemonicParsing="false" styleClass="back-button" text="Projects">
+                     <graphic>
+                        <Button id="left-chevron-icon" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="10.0" prefWidth="6.0" />
+                     </graphic>
+                  </Button>
                   <HBox spacing="20.0">
                      <children>
                         <VBox spacing="10.0">
@@ -42,7 +47,7 @@
                            </children>
                         </VBox>
                         <Region HBox.hgrow="ALWAYS" />
-                        <Button minWidth="-Infinity" mnemonicParsing="false" styleClass="action-btn" text="Edit Project">
+                        <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#editProject" styleClass="action-btn" text="Edit Project">
                            <graphic>
                               <Button id="edit-icon" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="16.0" prefWidth="16.0" />
                            </graphic>
@@ -85,7 +90,7 @@
                            </VBox.margin>
                         </VBox>
                         <Label id="to-do" alignment="CENTER" layoutX="20.0" layoutY="20.0" minWidth="125.0" styleClass="status" text="To Do" />
-                        <VBox fx:id="toDoTasks">
+                        <VBox fx:id="toDoTasks" spacing="10.0">
                            <children>
                               <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="no-tasks" text="Nothing here">
                                  <padding>
@@ -98,7 +103,7 @@
                            </VBox.margin>
                         </VBox>
                         <Label id="in-progress" alignment="CENTER" layoutX="20.0" layoutY="53.0" minWidth="125.0" styleClass="status" text="In Progress" />
-                        <VBox fx:id="inProgressTasks">
+                        <VBox fx:id="inProgressTasks" spacing="10.0">
                            <children>
                               <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="no-tasks" text="Nothing here">
                                  <padding>
@@ -111,7 +116,7 @@
                            </VBox.margin>
                         </VBox>
                         <Label id="completed" alignment="CENTER" layoutX="20.0" layoutY="86.0" minWidth="125.0" styleClass="status" text="Completed" />
-                        <VBox fx:id="completedTasks">
+                        <VBox fx:id="completedTasks" spacing="10.0">
                            <children>
                               <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="no-tasks" text="Nothing here">
                                  <padding>

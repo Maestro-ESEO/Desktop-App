@@ -1,11 +1,15 @@
 package com.maestro.desktop.utils;
 
+import com.maestro.desktop.controllers.AppController;
 import com.maestro.desktop.controllers.NavigableView;
 import com.maestro.desktop.controllers.ProjectController;
+import com.maestro.desktop.models.Comment;
 import com.maestro.desktop.models.Project;
 import com.maestro.desktop.models.Task;
 import com.maestro.desktop.models.User;
 
+import java.time.Instant;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Date;
 import java.sql.*;
@@ -13,6 +17,7 @@ import java.sql.DriverManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DatabaseConnection {
     private static DatabaseConnection instance;
@@ -78,6 +83,7 @@ public class DatabaseConnection {
                     user
             );
             project.setTasks(this.fetchAllTasks(project));
+            project.setUsers(this.fetchProjectUsers(project));
             list.add(project);
         }
         return list;
@@ -101,6 +107,7 @@ public class DatabaseConnection {
                     this.dateFromString(rs.getString("updated_at"))
             );
             task.setActors(this.fetchTaskActors(task));
+            task.setComments(this.fetchTaskComments(task));
             list.add(task);
         }
         return list;
@@ -125,6 +132,86 @@ public class DatabaseConnection {
         }
         return list;
     }
+    public List<Comment> fetchTaskComments(Task task) throws SQLException{
+        var list = new ArrayList<Comment>();
+        String query = "select * from comments where task_id = ? order by created_at desc";
+        PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+        preparedStatement.setInt(1, task.getId());
+        ResultSet rs = preparedStatement.executeQuery();
+        while (rs.next()) {
+            var comment = new Comment(
+                    rs.getInt("id"),
+                    rs.getString("content"),
+                    this.fetchUserFromID(rs.getInt("user_id")),
+                    this.dateFromString(rs.getString("created_at")),
+                    this.dateFromString(rs.getString("updated_at"))
+            );
+            list.add(comment);
+        }
+        return list;
+    }
+
+    public User fetchUserFromID(int id) throws SQLException{
+        String query = "select u.id, u.first_name, u.last_name, u.email, u.profile_photo_path, u.created_at, u.updated_at from users u where u.id = ?";
+        PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+        preparedStatement.setInt(1, id);
+        ResultSet rs = preparedStatement.executeQuery();
+        if(rs.next()) {
+            var user = new User(
+                    rs.getInt("id"),
+                    rs.getString("first_name"),
+                    rs.getString("last_name"),
+                    rs.getString("email"),
+                    rs.getString("profile_photo_path"),
+                    this.dateFromString(rs.getString("created_at")),
+                    this.dateFromString(rs.getString("updated_at"))
+            );
+            return user;
+        } else {
+            return null;
+        }
+    }
+    public User fetchUserFromEmail(String email) throws SQLException{
+        String query = "select u.id, u.first_name, u.last_name, u.email, u.profile_photo_path, u.created_at, u.updated_at from users u where u.email = ?";
+        PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+        preparedStatement.setString(1, email);
+        ResultSet rs = preparedStatement.executeQuery();
+        if(rs.next()) {
+            var user = new User(
+                    rs.getInt("id"),
+                    rs.getString("first_name"),
+                    rs.getString("last_name"),
+                    rs.getString("email"),
+                    rs.getString("profile_photo_path"),
+                    this.dateFromString(rs.getString("created_at")),
+                    this.dateFromString(rs.getString("updated_at"))
+            );
+            return user;
+        } else {
+            return null;
+        }
+    }
+
+    public List<User> fetchProjectUsers(Project project) throws SQLException{
+        var list = new ArrayList<User>();
+        String query = "select u.id, u.first_name, u.last_name, u.email, u.profile_photo_path, u.created_at, u.updated_at from users u, user_project up where up.project_id = ? and up.user_id = u.id and up.is_admin = 0";
+        PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+        preparedStatement.setInt(1, project.getId());
+        ResultSet rs = preparedStatement.executeQuery();
+        while (rs.next()) {
+            var user = new User(
+                    rs.getInt("id"),
+                    rs.getString("first_name"),
+                    rs.getString("last_name"),
+                    rs.getString("email"),
+                    rs.getString("profile_photo_path"),
+                    this.dateFromString(rs.getString("created_at")),
+                    this.dateFromString(rs.getString("updated_at"))
+            );
+            list.add(user);
+        }
+        return list;
+    }
     public User updateUser(int userId) {
         User userCreation = null;
         PreparedStatement ps;
@@ -135,7 +222,6 @@ public class DatabaseConnection {
             ps.setInt(1, userId);
 
             rs = ps.executeQuery();
-
             if (rs.next()) {
                 // Assuming your password column in the database is named "password"
                 userCreation = new User(rs.getInt("id"), rs.getString("first_name"), rs.getString("last_name"), rs.getString("email"), rs.getString("password"), rs.getString("profile_photo_path"));
@@ -154,6 +240,7 @@ public class DatabaseConnection {
         }
         return userCreation;
     }
+  
     public void insertProject(Project project) throws SQLException {
         String query = "insert into projects(name, description, start_date, end_date, created_at, updated_at) values (?, ?, ?, ?, ?, NOW())";
         PreparedStatement prepStatement = this.connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -201,11 +288,24 @@ public class DatabaseConnection {
         }
 
         for (User user : task.getActors()){
-            String query3 = "insert into user-task(user_id, task_id, created_at, updated_at) values (?, ?, NOW(), NOW())";
+            String query3 = "insert into user_task(user_id, task_id, created_at, updated_at) values (?, ?, NOW(), NOW())";
             PreparedStatement preparedStatement  = this.connection.prepareStatement(query3);
             preparedStatement.setInt(1, user.getId());
             preparedStatement.setInt(2, task.getId());
             preparedStatement.executeUpdate();
+        }
+    }
+
+    public void insertComment(Comment comment, int taskID) throws SQLException{
+        String query = "insert into comments(content, user_id, task_id, created_at, updated_at) values (?, ?, ?, NOW(), NOW())";
+        PreparedStatement prepStatement = this.connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        prepStatement.setString(1, comment.getContent());
+        prepStatement.setInt(2, AppController.getInstance().getUser().getId());
+        prepStatement.setInt(3, taskID);
+        prepStatement.executeUpdate();
+        ResultSet rs = prepStatement.getGeneratedKeys();
+        if (rs.next()) {
+            comment.setId(rs.getInt(1));
         }
     }
 
@@ -217,20 +317,92 @@ public class DatabaseConnection {
         project.setTasks(this.fetchAllTasks(project));
     }
 
-    public void checkProjectUpdate(Project project) throws SQLException{
-        String query = "select p.name, p.description, p.start_date, p.end_date, p.updated_at from projects p where p.id = ? and p.updated_at != ?";
+    public void updateTaskStatus(Task task, Task.Status status) throws SQLException{
+        String query = "update tasks set status = ? where id = ?";
         PreparedStatement preparedStatement = this.connection.prepareStatement(query);
-        preparedStatement.setInt(1, project.getId());
-        preparedStatement.setTimestamp(2, new Timestamp(project.getUpdatedAt().getTime()));
-        ResultSet rs = preparedStatement.executeQuery();
-        if (rs.next()) {
-            project.setName(rs.getString("name"));
-            project.setDescription(rs.getString("description"));
-            project.setStartDate(this.dateFromString(rs.getString("start_date")));
-            project.setEndDate(this.dateFromString(rs.getString("end_date")));
-            project.setUpdatedAt(this.dateFromString(rs.getString("updated_at")));
+        preparedStatement.setInt(1, status.getValue());
+        preparedStatement.setInt(2, task.getId());
+        preparedStatement.executeUpdate();
+    }
+
+    public void updateProject(Project project, List<User> newCollaborators) throws SQLException{
+        String query = "update projects set name = ?, description = ?, start_date = ?, end_date = ?, updated_at = NOW() where id = ?";
+        PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+        preparedStatement.setString(1, project.getName());
+        preparedStatement.setString(2, project.getDescription());
+        preparedStatement.setTimestamp(3, new Timestamp(project.getStartDate().getTime()));
+        preparedStatement.setTimestamp(4, new Timestamp(project.getEndDate().getTime()));
+        preparedStatement.setInt(5, project.getId());
+        preparedStatement.executeUpdate();
+
+        String query2 = "delete from user_project where id in (select id from (select * from user_project where project_id = ? and is_admin = 0 and user_id not in ("+this.getIdsFromList(project.getUsers().stream().map(User::getId).toList())+")) as to_delete)";
+        PreparedStatement preparedStatement2 = this.connection.prepareStatement(query2);
+        preparedStatement2.setInt(1, project.getId());
+        preparedStatement2.executeUpdate();
+
+        for (User user : newCollaborators){
+            String query3 = "insert into user_project(user_id, project_id, is_admin, created_at, updated_at) values (?, ?, ?, NOW(), NOW())";
+            PreparedStatement preparedStatement3  = this.connection.prepareStatement(query3);
+            preparedStatement3.setInt(1, user.getId());
+            preparedStatement3.setInt(2, project.getId());
+            preparedStatement3.setInt(3, 0);
+            preparedStatement3.executeUpdate();
         }
     }
+
+    public void deleteProject(Project project) throws SQLException {
+        String query = "delete from projects where id = ?";
+        PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+        preparedStatement.setInt(1, project.getId());
+        preparedStatement.executeUpdate();
+    }
+
+    public void updateTask(Task task, List<User> newActors) throws SQLException {
+        String query = "update tasks set name = ?, description = ?, deadline = ?, status = ?, priority = ?, updated_at = NOW() where id = ?";
+        PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+        preparedStatement.setString(1, task.getName());
+        preparedStatement.setString(2, task.getDescription());
+        preparedStatement.setTimestamp(3, new Timestamp(task.getDeadline().getTime()));
+        preparedStatement.setInt(4, task.getStatus().getValue());
+        preparedStatement.setInt(5, task.getPriority().getValue());
+        preparedStatement.setInt(6, task.getId());
+        preparedStatement.executeUpdate();
+
+        String query2 = "delete from user_task where id in (select id from (select * from user_task where task_id = ? and user_id not in ("+this.getIdsFromList(task.getActors().stream().map(User::getId).toList())+")) as to_delete)";
+        PreparedStatement preparedStatement2 = this.connection.prepareStatement(query2);
+        preparedStatement2.setInt(1, task.getId());
+        preparedStatement2.executeUpdate();
+
+        for (User user : newActors){
+            String query3 = "insert into user_task(user_id, task_id, created_at, updated_at) values (?, ?, NOW(), NOW())";
+            PreparedStatement preparedStatement3  = this.connection.prepareStatement(query3);
+            preparedStatement3.setInt(1, user.getId());
+            preparedStatement3.setInt(2, task.getId());
+            preparedStatement3.executeUpdate();
+        }
+    }
+
+    public void deleteTask(Task task) throws SQLException {
+        String query = "delete from tasks where id = ?";
+        PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+        preparedStatement.setInt(1, task.getId());
+        preparedStatement.executeUpdate();
+    }
+
+//    public void checkProjectUpdate(Project project) throws SQLException{
+//        String query = "select p.name, p.description, p.start_date, p.end_date, p.updated_at from projects p where p.id = ? and p.updated_at != ?";
+//        PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+//        preparedStatement.setInt(1, project.getId());
+//        preparedStatement.setTimestamp(2, new Timestamp(project.getUpdatedAt().getTime()));
+//        ResultSet rs = preparedStatement.executeQuery();
+//        if (rs.next()) {
+//            project.setName(rs.getString("name"));
+//            project.setDescription(rs.getString("description"));
+//            project.setStartDate(this.dateFromString(rs.getString("start_date")));
+//            project.setEndDate(this.dateFromString(rs.getString("end_date")));
+//            project.setUpdatedAt(this.dateFromString(rs.getString("updated_at")));
+//        }
+//    }
 
     private Date dateFromString(String str) {
         System.out.println("str: "+str);
@@ -269,5 +441,11 @@ public class DatabaseConnection {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private String getIdsFromList(List<Integer> ints) {
+        return ints.isEmpty() ? "-1" : ints.stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(", "));
     }
 }

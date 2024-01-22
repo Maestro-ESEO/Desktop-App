@@ -121,6 +121,9 @@ public class User {
         this.projects = projects;
     }
 
+
+    public void removeProject(Project project) { this.projects.remove(project); }
+
     public int getTasksToDo(){
         int counter = 0;
         for(Project project : this.projects){
@@ -152,6 +155,5 @@ public class User {
         }
         return counter;
     }
-
 }
 

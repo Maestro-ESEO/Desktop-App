@@ -10,9 +10,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.DialogPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -52,6 +61,10 @@ public class AppController {
         return INSTANCE;
     }
 
+    public User getUser() { return this.user; }
+
+    public NavigableView getAllProjects() { return allProjects; }
+
     /**
      * initialize - Sets the user and displays the items from the sidebar.
      * @param user - User logged in.
@@ -66,6 +79,9 @@ public class AppController {
         System.out.println("Password: "+this.user.getPassword());
         System.out.println("Picture: "+this.user.getProfilePhotoPath());
         this.profileBtn.setText(this.user.getName());
+        Circle clipShape = new Circle(15, 15, 15);
+        this.profileBtn.getGraphic().setClip(clipShape);
+        ((ImageView) this.profileBtn.getGraphic()).setImage(new Image(this.user.getProfilePhotoPath()));
         AppController.INSTANCE = this;
         this.dashboard = new NavigableView(this.user, NavigableView.FxmlView.DASHBOARD, dashboardButton);
         this.allProjects = new NavigableView(this.user.getProjects(), NavigableView.FxmlView.ALL_PROJECTS, allProjectsButton);
@@ -149,7 +165,12 @@ public class AppController {
 
         // Check if already in recent Navigable Views
         for (NavigableView nav : recents) {
-            if (nav.getData() == data) {
+            if ((data instanceof Project
+                    && nav.getData() instanceof Project
+                    && ((Project) data).getId() == ((Project) nav.getData()).getId())
+                    || (data instanceof Task
+                    && nav.getData() instanceof Task
+                    && ((Task) data).getId() == ((Task) nav.getData()).getId()) ) {
                 AppController.getInstance().updateView(nav);
                 return;
             }
@@ -195,26 +216,35 @@ public class AppController {
      * @param event - ActionEvent raised when clicking on the "New project" button.
      */
     public void createNewProject(ActionEvent event) {
-        Project project = new Project(
-                420,
-                "Test",
-                "Delete Later",
-                new Date(),
-                new Date(),
-                new Date(),
-                new Date(),
-                this.user
-        );
         try {
-            DatabaseConnection.getInstance().insertProject(project);
-            DatabaseConnection.getInstance().updateAllProjects(this.user);
-            System.out.println("Projects updated: "+this.user.getProjects());
-            this.navigateWithData(project);
-        } catch (SQLException e) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/dialogs/new-project-dialog.fxml"));
+            DialogPane pane = loader.load();
+            NewProjectDialogController controller = loader.getController();
+            Stage stage = new Stage();
+            stage.initOwner(((Node) event.getSource()).getScene().getWindow());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            controller.initialize(stage);
+            stage.setTitle("New Project");
+            stage.setScene(new Scene(pane));
+            stage.setResizable(false);
+            stage.show();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    public void updateRecentContainer() {
+        for (NavigableView nav : this.recents) {
+            ((Button) nav.getNavSource()).setText(nav.getData().toString());
+        }
+        ((VBox) this.recentContainer.getChildren().getLast()).getChildren().setAll(this.recents.stream().map(NavigableView::getNavSource).toList());
+    }
+
+    public void deleteRecent(Object data) {
+        NavigableView nav = this.recents.stream().filter(obj -> obj.getData() == data).toList().getFirst();
+        this.recents.remove(nav);
+    }
+      
     /**
      * getAccount - Getter for the account member of the AppController class.
      * @return NavigableView - The account member of the class.
@@ -222,5 +252,4 @@ public class AppController {
     public NavigableView getAccount(){
         return this.account;
     }
-
 }
