@@ -26,7 +26,7 @@ The Project Management Desktop App offers configuration options to customize set
 
 To connect to a local database, follow those steps.
 
-1. To create the database, refer to the README of the web app where every step is explained.
+1. To create the database structure, refer to the README of the web app where every step is explained.
 2. Go to java/com/maestro/desktop/utils/DatabaseConnection.java and update those variables with the data from your local database:
    private static final String URL;
    private static final String USER;
