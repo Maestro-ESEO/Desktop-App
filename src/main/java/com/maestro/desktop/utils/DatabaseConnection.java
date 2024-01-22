@@ -22,9 +22,6 @@ import java.util.stream.Collectors;
 public class DatabaseConnection {
     private static DatabaseConnection instance;
     private Connection connection;
-    //private static final String URL = "jdbc:mysql://192.168.4.193:3306/BddMaestro";
-   // private static final String USER = "admin";
-    //private static final String PASS = "network";
     private static final String URL = "jdbc:mysql://monorail.proxy.rlwy.net:56240/railway";
     private static final String USER = "root";
     private static final String PASS = "HcCee21C-F43ff-FaDf6d4g4A5C5eEc6";
