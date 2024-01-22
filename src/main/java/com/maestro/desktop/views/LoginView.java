@@ -30,7 +30,7 @@ public class LoginView {
 
             // Load the FXML file and get the root node
             Parent root = loader.load();
-
+            stage = new Stage();
             // Set up the stage
             stage.setTitle("Login Maestro");
             stage.setMinWidth(800);
