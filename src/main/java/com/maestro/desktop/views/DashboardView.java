@@ -34,7 +34,7 @@ public class DashboardView {
      */
     public void setDashboardView() throws IOException {
         System.out.println("in view");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/maestro/desktop/views/dashboard.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/dashboard.fxml"));
         javafx.scene.Parent root = loader.load();
         DashboardController controller = loader.getController();
         controller.initialize(this.user);

@@ -90,7 +90,7 @@ public class AccountController extends NavigationViewController{
     @FXML
     public void changeViewAccount(ActionEvent event){
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/maestro/desktop/views/accountEdit.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/accountEdit.fxml"));
             DialogPane pane = loader.load();
             EditAccountDialogController controller = loader.getController();
             Stage stage = new Stage();
@@ -99,7 +99,7 @@ public class AccountController extends NavigationViewController{
             controller.initialize(stage, this.user);
             stage.setScene(new Scene(pane));
             stage.setTitle("Edit account");
-            stage.getIcons().add(new Image(getClass().getResourceAsStream("/com/maestro/desktop/images/logo.png")));
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/logo.png")));
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

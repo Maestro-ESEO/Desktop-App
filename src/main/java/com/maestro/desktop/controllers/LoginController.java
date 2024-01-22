@@ -141,7 +141,8 @@ public class LoginController {
             DatabaseConnection.getInstance().addSignUpData(firstname, lastname, email, password);
             stage.close();
             // add data of the new account in database
-            view.initUI();
+//            view.initUI();
+            AppView appView = new AppView(email, password);
         }else{
             wrongSignup.setText("Passwords must be the same.");
         }

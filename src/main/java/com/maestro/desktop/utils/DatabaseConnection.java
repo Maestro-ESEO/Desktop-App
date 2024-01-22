@@ -76,9 +76,6 @@ public class DatabaseConnection {
                 this.dateFromString(rs.getString("created_at")),
                 this.dateFromString(rs.getString("updated_at"))
         );
-        if(user.getProfilePhotoPath() == null){
-            user.setProfilePhotoPath("/com/maestro/desktop/images/profile.png");
-        }
         user.setProjects(this.fetchAllProjects(user));
         return user;
     }
@@ -267,12 +264,6 @@ public class DatabaseConnection {
             if (rs.next()) {
                 userCreation = new User(rs.getInt("id"), rs.getString("first_name"), rs.getString("last_name"), rs.getString("email"), rs.getString("password"), rs.getString("profile_photo_path"));
                 userCreation.setProjects(DatabaseConnection.getInstance().fetchAllProjects(userCreation));
-                System.out.println("Id: " + userCreation.getId());
-                System.out.println("Firstname: " + userCreation.getFirstname());
-                System.out.println("Lastname: " + userCreation.getLastname());
-                System.out.println("Email: " + userCreation.getEmail());
-                System.out.println("Password: " + userCreation.getPassword());
-                System.out.println("Picture: " + userCreation.getProfilePhotoPath());
             } else {
                 System.out.println("User not completed");
             }
@@ -558,13 +549,14 @@ public class DatabaseConnection {
         PreparedStatement ps;
         boolean accountAdded = false;
         // Check if the email is valid
-        String query = "INSERT INTO users(first_name,last_name,email,password) VALUES(?,?,?,?)";
+        String query = "INSERT INTO users(first_name,last_name,email,password, profile_photo_path, created_at, updated_at) VALUES(?,?,?,?,?, NOW(), NOW())";
         try {
             ps = this.connection.prepareStatement(query);
             ps.setString(1, firstname);
             ps.setString(2, lastname);
             ps.setString(3, email);
             ps.setString(4, password);
+            ps.setString(5, "");
             int affectedRows = ps.executeUpdate();
 
             if (affectedRows > 0) {

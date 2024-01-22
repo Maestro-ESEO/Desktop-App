@@ -64,6 +64,7 @@ public class AppController {
     public User getUser() { return this.user; }
 
     public NavigableView getAllProjects() { return allProjects; }
+    public NavigableView getDashboard() { return dashboard; }
     public Button getProfileBtn() { return this.profileBtn; }
 
     /**
@@ -76,11 +77,7 @@ public class AppController {
         this.profileBtn.setText(this.user.getName());
         Circle clipShape = new Circle(15, 15, 15);
         this.profileBtn.getGraphic().setClip(clipShape);
-        if(this.user.getProfilePhotoPath() != null) {
-            ((ImageView) this.profileBtn.getGraphic()).setImage(new Image(this.user.getProfilePhotoPath()));
-        }else{
-            ((ImageView) this.profileBtn.getGraphic()).setImage(new Image("/com/maestro/desktop/images/profile.png"));
-        }
+        ((ImageView) this.profileBtn.getGraphic()).setImage(new Image(this.user.getProfilePhotoPath().isEmpty() ? getClass().getResource("/images/default-pfp.png").toString() : this.user.getProfilePhotoPath()));
         AppController.INSTANCE = this;
         this.dashboard = new NavigableView(this.user, NavigableView.FxmlView.DASHBOARD, dashboardButton);
         this.allProjects = new NavigableView(this.user.getProjects(), NavigableView.FxmlView.ALL_PROJECTS, allProjectsButton);
@@ -142,6 +139,7 @@ public class AppController {
         Object source = e.getSource();
         if (source instanceof Button) {
             if (source == dashboardButton) {
+                dashboard.setData(this.user);
                 updateView(dashboard);
             } else if (source == allProjectsButton) {
                 allProjects.setData(this.user.getProjects());
@@ -171,6 +169,7 @@ public class AppController {
                     || (data instanceof Task
                     && nav.getData() instanceof Task
                     && ((Task) data).getId() == ((Task) nav.getData()).getId()) ) {
+                nav.setData(data);
                 AppController.getInstance().updateView(nav);
                 return;
             }

@@ -1,8 +1,10 @@
 package com.maestro.desktop.controllers;
 
+import com.maestro.desktop.App;
 import com.maestro.desktop.models.Project;
 import com.maestro.desktop.models.Task;
 import com.maestro.desktop.models.User;
+import com.maestro.desktop.utils.DatabaseConnection;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -11,6 +13,7 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -59,7 +62,17 @@ public class DashboardController extends NavigationViewController{
                         // Set the alignment of the button within the TilePane
                         TilePane.setAlignment(btn, Pos.CENTER);
                         // set the button to display the page of the related project
-                        btn.setOnAction(event -> AppController.getInstance().navigateWithData(task));
+                        btn.setOnAction(event -> {
+                            try {
+                                DatabaseConnection.getInstance().updateTaskStatus(task, Task.Status.COMPLETED);
+                                task.setStatus(Task.Status.COMPLETED);
+                                DatabaseConnection.getInstance().updateAllTasks(task.getParentProject());
+                                AppController.getInstance().navigateWithData(task);
+//                                AppController.getInstance().updateView(AppController.getInstance().getDashboard());
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                        });
                         this.taskContainer.getChildren().add(btn);
                         counter++;
                     } catch (IOException e) {

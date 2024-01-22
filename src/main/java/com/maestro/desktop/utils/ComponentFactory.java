@@ -196,7 +196,7 @@ public class ComponentFactory {
             return null;
         }
         ImageView iv = new ImageView();
-        iv.setUserData(comment.getAuthor().getProfilePhotoPath());
+        iv.setUserData(comment.getAuthor().getProfilePhotoPath().isEmpty() ? getClass().getResource("/images/default-pfp.png").toString() : comment.getAuthor().getProfilePhotoPath());
         iv.setFitWidth(32);
         iv.setFitHeight(32);
         Circle clipShape = new Circle(16, 16, 16);

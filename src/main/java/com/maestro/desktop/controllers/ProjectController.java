@@ -124,7 +124,7 @@ public class ProjectController extends NavigationViewController {
             stage.setScene(new Scene(pane));
             stage.setTitle("New Task");
             stage.setResizable(false);
-            stage.getIcons().add(new Image(getClass().getResourceAsStream("/com/maestro/desktop/images/logo.png")));
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/logo.png")));
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -143,7 +143,7 @@ public class ProjectController extends NavigationViewController {
             stage.setScene(new Scene(pane));
             stage.setTitle("Edit Project");
             stage.setResizable(false);
-            stage.getIcons().add(new Image(getClass().getResourceAsStream("/com/maestro/desktop/images/logo.png")));
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/logo.png")));
 
             stage.show();
         } catch (IOException e) {

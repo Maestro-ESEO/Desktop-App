@@ -33,7 +33,7 @@ public class AccountView {
     public void setAccountView() {
         try {
             // Load the FXML file
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/maestro/desktop/views/account.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/account.fxml"));
 
             // Load the FXML file and get the root node
             Parent root = loader.load();
@@ -45,11 +45,11 @@ public class AccountView {
             stage.setMinWidth(800);
             stage.setMinHeight(600);
             stage.setScene(new Scene(root));
-            stage.getIcons().add(new Image(getClass().getResourceAsStream("/com/maestro/desktop/images/logo.png")));
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/logo.png")));
 
             Scene scene = stage.getScene();
-            System.out.println(scene.getStylesheets().add(getClass().getResource("/com/maestro/desktop/styles/style.css").toExternalForm()));
-            scene.getStylesheets().add(getClass().getResource("/com/maestro/desktop/styles/style.css").toExternalForm());
+            System.out.println(scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm()));
+            scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
             stage.setScene(scene);
 
             stage.show();
@@ -64,7 +64,7 @@ public class AccountView {
     public void setAccountEditView() {
         try {
             // Load the FXML file
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/maestro/desktop/views/accountEdit.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/accountEdit.fxml"));
 
             // Load the FXML file and get the root node
             Parent root = loader.load();
@@ -75,11 +75,11 @@ public class AccountView {
             stage.setMinWidth(800);
             stage.setMinHeight(600);
             stage.setScene(new Scene(root));
-            stage.getIcons().add(new Image(getClass().getResourceAsStream("/com/maestro/desktop/images/logo.png")));
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/logo.png")));
 
             Scene scene = stage.getScene();
-            System.out.println(scene.getStylesheets().add(getClass().getResource("/com/maestro/desktop/styles/style.css").toExternalForm()));
-            scene.getStylesheets().add(getClass().getResource("/com/maestro/desktop/styles/style.css").toExternalForm());
+            System.out.println(scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm()));
+            scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
             stage.setScene(scene);
 
             stage.show();

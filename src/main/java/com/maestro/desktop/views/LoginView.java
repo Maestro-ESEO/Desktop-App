@@ -28,7 +28,7 @@ public class LoginView {
     public void initUI() {
         try {
             // Load the FXML file
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/maestro/desktop/views/login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/login.fxml"));
 
             // Load the FXML file and get the root node
             Parent root = loader.load();
@@ -39,10 +39,10 @@ public class LoginView {
             stage.setMinHeight(600);
             stage.setScene(new Scene(root));
             // Display the logo as a favicon
-            stage.getIcons().add(new Image(getClass().getResourceAsStream("/com/maestro/desktop/images/logo.png")));
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/logo.png")));
 
             Scene scene = stage.getScene();
-            scene.getStylesheets().add(getClass().getResource("/com/maestro/desktop/styles/style.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
             stage.setScene(scene);
 
             stage.show();
@@ -58,7 +58,7 @@ public class LoginView {
     public void setCreateAccountView(){
         try {
             // Load the FXML file
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/maestro/desktop/views/createAccount.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/createAccount.fxml"));
 
             // Load the FXML file and get the root node
             Parent root = loader.load();
@@ -68,10 +68,10 @@ public class LoginView {
             stage.setMinWidth(800);
             stage.setMinHeight(600);
             stage.setScene(new Scene(root));
-            stage.getIcons().add(new Image(getClass().getResourceAsStream("/com/maestro/desktop/images/logo.png")));
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/logo.png")));
 
             Scene scene = stage.getScene();
-            scene.getStylesheets().add(getClass().getResource("/com/maestro/desktop/styles/style.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {

@@ -126,7 +126,7 @@ public class NewTaskDialogController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        AppController.getInstance().updateView(AppController.getInstance().getAccount());
+        AppController.getInstance().navigateWithData(task.getParentProject());
         this.stage.close();
     }
 }
