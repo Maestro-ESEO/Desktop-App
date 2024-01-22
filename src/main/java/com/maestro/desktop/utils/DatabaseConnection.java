@@ -8,6 +8,8 @@ import com.maestro.desktop.models.Project;
 import com.maestro.desktop.models.Task;
 import com.maestro.desktop.models.User;
 
+import java.time.Instant;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Date;
 import java.sql.*;
@@ -15,6 +17,7 @@ import java.sql.DriverManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DatabaseConnection {
     private static DatabaseConnection instance;
@@ -77,6 +80,7 @@ public class DatabaseConnection {
                     user
             );
             project.setTasks(this.fetchAllTasks(project));
+            project.setUsers(this.fetchProjectUsers(project));
             list.add(project);
         }
         return list;
@@ -165,6 +169,47 @@ public class DatabaseConnection {
             return null;
         }
     }
+    public User fetchUserFromEmail(String email) throws SQLException{
+        String query = "select u.id, u.first_name, u.last_name, u.email, u.profile_photo_path, u.created_at, u.updated_at from users u where u.email = ?";
+        PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+        preparedStatement.setString(1, email);
+        ResultSet rs = preparedStatement.executeQuery();
+        if(rs.next()) {
+            var user = new User(
+                    rs.getInt("id"),
+                    rs.getString("first_name"),
+                    rs.getString("last_name"),
+                    rs.getString("email"),
+                    rs.getString("profile_photo_path"),
+                    this.dateFromString(rs.getString("created_at")),
+                    this.dateFromString(rs.getString("updated_at"))
+            );
+            return user;
+        } else {
+            return null;
+        }
+    }
+
+    public List<User> fetchProjectUsers(Project project) throws SQLException{
+        var list = new ArrayList<User>();
+        String query = "select u.id, u.first_name, u.last_name, u.email, u.profile_photo_path, u.created_at, u.updated_at from users u, user_project up where up.project_id = ? and up.user_id = u.id and up.is_admin = 0";
+        PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+        preparedStatement.setInt(1, project.getId());
+        ResultSet rs = preparedStatement.executeQuery();
+        while (rs.next()) {
+            var user = new User(
+                    rs.getInt("id"),
+                    rs.getString("first_name"),
+                    rs.getString("last_name"),
+                    rs.getString("email"),
+                    rs.getString("profile_photo_path"),
+                    this.dateFromString(rs.getString("created_at")),
+                    this.dateFromString(rs.getString("updated_at"))
+            );
+            list.add(user);
+        }
+        return list;
+    }
 
     public void insertProject(Project project) throws SQLException {
         String query = "insert into projects(name, description, start_date, end_date, created_at, updated_at) values (?, ?, ?, ?, ?, NOW())";
@@ -250,6 +295,31 @@ public class DatabaseConnection {
         preparedStatement.executeUpdate();
     }
 
+    public void updateProject(Project project, List<User> newCollaborators) throws SQLException{
+        String query = "update projects set name = ?, description = ?, start_date = ?, end_date = ?, updated_at = NOW() where id = ?";
+        PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+        preparedStatement.setString(1, project.getName());
+        preparedStatement.setString(2, project.getDescription());
+        preparedStatement.setTimestamp(3, new Timestamp(project.getStartDate().getTime()));
+        preparedStatement.setTimestamp(4, new Timestamp(project.getEndDate().getTime()));
+        preparedStatement.setInt(5, project.getId());
+        preparedStatement.executeUpdate();
+
+        String query2 = "delete from user_project where id in (select id from (select * from user_project where project_id = ? and is_admin = 0 and user_id not in ("+this.getIdsFromList(project.getUsers().stream().map(User::getId).toList())+")) as to_delete)";
+        PreparedStatement preparedStatement2 = this.connection.prepareStatement(query2);
+        preparedStatement2.setInt(1, project.getId());
+        preparedStatement2.executeUpdate();
+
+        for (User user : newCollaborators){
+            String query3 = "insert into user_project(user_id, project_id, is_admin, created_at, updated_at) values (?, ?, ?, NOW(), NOW())";
+            PreparedStatement preparedStatement3  = this.connection.prepareStatement(query3);
+            preparedStatement3.setInt(1, user.getId());
+            preparedStatement3.setInt(2, project.getId());
+            preparedStatement3.setInt(3, 0);
+            preparedStatement3.executeUpdate();
+        }
+    }
+
 //    public void checkProjectUpdate(Project project) throws SQLException{
 //        String query = "select p.name, p.description, p.start_date, p.end_date, p.updated_at from projects p where p.id = ? and p.updated_at != ?";
 //        PreparedStatement preparedStatement = this.connection.prepareStatement(query);
@@ -273,5 +343,11 @@ public class DatabaseConnection {
         } catch (ParseException | NullPointerException e) {
             return new Date(0);
         }
+    }
+
+    private String getIdsFromList(List<Integer> ints) {
+        return ints.isEmpty() ? "-1" : ints.stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(", "));
     }
 }

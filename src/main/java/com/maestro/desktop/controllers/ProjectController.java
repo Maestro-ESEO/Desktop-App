@@ -108,6 +108,25 @@ public class ProjectController extends NavigationViewController {
             controller.initialize(stage, this.project);
             stage.setScene(new Scene(pane));
             stage.setTitle("New Task");
+            stage.setResizable(false);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void editProject(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/dialogs/edit-project-dialog.fxml"));
+            DialogPane pane = loader.load();
+            EditProjectDialogController controller = loader.getController();
+            Stage stage = new Stage();
+            stage.initOwner(((Node) event.getSource()).getScene().getWindow());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            controller.initialize(stage, this.project);
+            stage.setScene(new Scene(pane));
+            stage.setTitle("Edit Project");
+            stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

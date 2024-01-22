@@ -9,9 +9,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.DialogPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -58,6 +67,9 @@ public class AppController {
     public void initialize(User user) {
         this.user = user;
         this.profileBtn.setText(this.user.getName());
+        Circle clipShape = new Circle(15, 15, 15);
+        this.profileBtn.getGraphic().setClip(clipShape);
+        ((ImageView) this.profileBtn.getGraphic()).setImage(new Image(this.user.getProfilePhotoPath()));
         AppController.INSTANCE = this;
         this.dashboard = new NavigableView(null, NavigableView.FxmlView.DASHBOARD, dashboardButton);
         this.allProjects = new NavigableView(this.user.getProjects(), NavigableView.FxmlView.ALL_PROJECTS, allProjectsButton);
@@ -164,22 +176,27 @@ public class AppController {
     }
 
     public void createNewProject(ActionEvent event) {
-        Project project = new Project(
-                420,
-                "Test",
-                "Delete Later",
-                new Date(),
-                new Date(),
-                new Date(),
-                new Date(),
-                this.user
-        );
         try {
-            DatabaseConnection.getInstance().insertProject(project);
-            DatabaseConnection.getInstance().updateAllProjects(this.user);
-            this.navigateWithData(project);
-        } catch (SQLException e) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/dialogs/new-project-dialog.fxml"));
+            DialogPane pane = loader.load();
+            NewProjectDialogController controller = loader.getController();
+            Stage stage = new Stage();
+            stage.initOwner(((Node) event.getSource()).getScene().getWindow());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            controller.initialize(stage);
+            stage.setTitle("New Project");
+            stage.setScene(new Scene(pane));
+            stage.setResizable(false);
+            stage.show();
+        } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void updateRecentContainer() {
+        for (NavigableView nav : this.recents) {
+            ((Button) nav.getNavSource()).setText(nav.getData().toString());
+        }
+        ((VBox) this.recentContainer.getChildren().getLast()).getChildren().setAll(this.recents.stream().map(NavigableView::getNavSource).toList());
     }
 }

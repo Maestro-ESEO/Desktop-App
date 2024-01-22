@@ -44,7 +44,7 @@ public class ComponentFactory {
                 btn.setOnAction(event -> btn.getParent().fireEvent(event));
                 btn.getStyleClass().setAll("actor-pfp");
                 ImageView iv = new ImageView();
-                iv.setUserData(actorList.get(i).getProfilePhotoPath());
+                iv.setUserData(actorList.get(i).getProfilePhotoPath().isEmpty() ? getClass().getResource("/images/default-pfp.png").toString() : actorList.get(i).getProfilePhotoPath());
                 iv.setFitWidth(24);
                 iv.setFitHeight(24);
                 Circle clipShape = new Circle(12, 12, 12);
@@ -55,6 +55,7 @@ public class ComponentFactory {
                 }
                 container.getChildren().add(btn);
                 new Thread(() -> {
+                    System.out.println(iv.getUserData());
                     iv.setImage(new Image((String) iv.getUserData()));
                 }).start();
             }
@@ -64,7 +65,7 @@ public class ComponentFactory {
                 btn.setMouseTransparent(true);
                 btn.getStyleClass().setAll("actor-pfp");
                 ImageView iv = new ImageView();
-                iv.setUserData(actorList.get(i).getProfilePhotoPath());
+                iv.setUserData(actorList.get(i).getProfilePhotoPath().isEmpty() ? getClass().getResource("/images/default-pfp.png").toString() : actorList.get(i).getProfilePhotoPath());
                 iv.setFitWidth(24);
                 iv.setFitHeight(24);
                 Circle clipShape = new Circle(12, 12, 12);

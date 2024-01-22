@@ -35,9 +35,9 @@
                   </HBox>
                   <VBox spacing="5.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <Button fx:id="profileBtn" alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="180.0" styleClass="profile-btn" text="Enzo Herbreteau">
+                        <Button fx:id="profileBtn" alignment="CENTER" graphicTextGap="10.0" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="180.0" styleClass="profile-btn" text="Enzo Herbreteau">
                            <graphic>
-                              <ImageView fitHeight="31.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../images/default-pfp.png" />
                                  </image>

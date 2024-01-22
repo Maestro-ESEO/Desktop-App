@@ -65,3 +65,8 @@
     -fx-text-fill: #818181;
     -fx-font-size: 12;
 }
+
+ScrollPane {
+    -fx-focus-color: transparent;
+    -fx-border-width: 0;
+}
