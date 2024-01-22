@@ -18,7 +18,7 @@ public class DatabaseConnection {
     private static DatabaseConnection instance;
     private Connection connection;
     //private static final String URL = "jdbc:mysql://192.168.4.193:3306/BddMaestro";
-   // private static final String USER = "admin";
+    // private static final String USER = "admin";
     //private static final String PASS = "network";
     private static final String URL = "jdbc:mysql://monorail.proxy.rlwy.net:56240/railway";
     private static final String USER = "root";
@@ -27,10 +27,12 @@ public class DatabaseConnection {
     private DatabaseConnection() throws SQLException {
         this.connection = DriverManager.getConnection(URL, USER, PASS);
     }
+
     public Connection getConnection() {
         return connection;
     }
-    public static DatabaseConnection getInstance(){
+
+    public static DatabaseConnection getInstance() {
         try {
             if (instance == null) {
                 instance = new DatabaseConnection();
@@ -125,13 +127,14 @@ public class DatabaseConnection {
         }
         return list;
     }
+
     public User updateUser(int userId) {
         User userCreation = null;
         PreparedStatement ps;
         ResultSet rs;
         String query = "SELECT * FROM `users` WHERE `id` = ?";
         try {
-            ps = com.maestro.desktop.models.DatabaseConnection.getConnection().prepareStatement(query);
+            ps = this.getConnection().prepareStatement(query);
             ps.setInt(1, userId);
 
             rs = ps.executeQuery();
@@ -154,6 +157,7 @@ public class DatabaseConnection {
         }
         return userCreation;
     }
+
     public void insertProject(Project project) throws SQLException {
         String query = "insert into projects(name, description, start_date, end_date, created_at, updated_at) values (?, ?, ?, ?, ?, NOW())";
         PreparedStatement prepStatement = this.connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -169,15 +173,15 @@ public class DatabaseConnection {
         }
 
         String query2 = "insert into user_project(user_id, project_id, is_admin, created_at, updated_at) values (?, ?, ?, NOW(), NOW())";
-        PreparedStatement preparedStatement  = this.connection.prepareStatement(query2);
+        PreparedStatement preparedStatement = this.connection.prepareStatement(query2);
         preparedStatement.setInt(1, project.getAdmin().getId());
         preparedStatement.setInt(2, project.getId());
         preparedStatement.setInt(3, 1);
         preparedStatement.executeUpdate();
 
-        for (User user : project.getUsers()){
+        for (User user : project.getUsers()) {
             String query3 = "insert into user_project(user_id, project_id, is_admin, created_at, updated_at) values (?, ?, ?, NOW(), NOW())";
-            PreparedStatement preparedStatement2  = this.connection.prepareStatement(query3);
+            PreparedStatement preparedStatement2 = this.connection.prepareStatement(query3);
             preparedStatement2.setInt(1, user.getId());
             preparedStatement2.setInt(2, project.getId());
             preparedStatement2.setInt(3, 0);
@@ -200,9 +204,9 @@ public class DatabaseConnection {
             task.setId(rs.getInt(1));
         }
 
-        for (User user : task.getActors()){
+        for (User user : task.getActors()) {
             String query3 = "insert into user-task(user_id, task_id, created_at, updated_at) values (?, ?, NOW(), NOW())";
-            PreparedStatement preparedStatement  = this.connection.prepareStatement(query3);
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query3);
             preparedStatement.setInt(1, user.getId());
             preparedStatement.setInt(2, task.getId());
             preparedStatement.executeUpdate();
@@ -217,7 +221,7 @@ public class DatabaseConnection {
         project.setTasks(this.fetchAllTasks(project));
     }
 
-    public void checkProjectUpdate(Project project) throws SQLException{
+    public void checkProjectUpdate(Project project) throws SQLException {
         String query = "select p.name, p.description, p.start_date, p.end_date, p.updated_at from projects p where p.id = ? and p.updated_at != ?";
         PreparedStatement preparedStatement = this.connection.prepareStatement(query);
         preparedStatement.setInt(1, project.getId());
@@ -233,8 +237,8 @@ public class DatabaseConnection {
     }
 
     private Date dateFromString(String str) {
-        System.out.println("str: "+str);
-        if(str!= null) {
+        System.out.println("str: " + str);
+        if (str != null) {
             var df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             try {
                 Date date = df.parse(str);
@@ -270,4 +274,93 @@ public class DatabaseConnection {
             throw new RuntimeException(e);
         }
     }
+
+
+    /**
+     * checkLogin - Check in the database if the given email is found and if the given password matches the email.
+     *
+     * @param email    - Given email.
+     * @param password - Given password.
+     * @return - True if the email and password are correct, or else false.
+     */
+    public boolean checkLogin(String email, String password) {
+        PreparedStatement ps;
+        ResultSet rs;
+        boolean isPasswordCorrect = false;
+        String query = "SELECT * FROM `users` WHERE `email` = ?";
+        try {
+            ps = DatabaseConnection.getInstance().getConnection().prepareStatement(query);
+            ps.setString(1, email);
+
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                String storedPassword = rs.getString("password");
+
+                isPasswordCorrect = password.equals(storedPassword);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return isPasswordCorrect;
+    }
+
+    /**
+     * addSignUpData - Create a new user in the database.
+     *
+     * @param firstname - Given firstname.
+     * @param lastname  - Given lastname.
+     * @param email     - Given email.
+     * @param password  - Given password.
+     * @return - True if the database was updated, or else false.
+     */
+    public boolean addSignUpData(String firstname, String lastname, String email, String password) {
+        PreparedStatement ps;
+        boolean accountAdded = false;
+        // Check if the email is valid
+        String query = "INSERT INTO users(first_name,last_name,email,password) VALUES(?,?,?,?)";
+        try {
+            ps = this.connection.prepareStatement(query);
+            ps.setString(1, firstname);
+            ps.setString(2, lastname);
+            ps.setString(3, email);
+            ps.setString(4, password);
+            int affectedRows = ps.executeUpdate();
+
+            if (affectedRows > 0) {
+                System.out.println("User added successfully!");
+                accountAdded = true;
+            } else {
+                System.out.println("Failed to add user.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return accountAdded;
+    }
+
+    /**
+     * checkEmailInDatabase - Check if the email already exists in the database.
+     * @param email - Given email.
+     * @return - True if the email is found in the database, or else false.
+     */
+    public boolean checkEmailInDatabase(String email){
+        boolean emailExists = false;
+        String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, email);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    // If the count is greater than 0, the email exists
+                    emailExists = resultSet.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return emailExists;
+    }
+
+
 }

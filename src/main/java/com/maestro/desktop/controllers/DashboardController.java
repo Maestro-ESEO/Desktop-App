@@ -1,28 +1,16 @@
 package com.maestro.desktop.controllers;
 
-import com.maestro.desktop.models.DatabaseConnection;
 import com.maestro.desktop.models.Project;
 import com.maestro.desktop.models.Task;
 import com.maestro.desktop.models.User;
-import com.maestro.desktop.views.AccountView;
-import com.maestro.desktop.views.DashboardView;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.TilePane;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
 
 import java.io.IOException;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 
 /**

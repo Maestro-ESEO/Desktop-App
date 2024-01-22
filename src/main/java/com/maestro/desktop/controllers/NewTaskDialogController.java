@@ -34,7 +34,7 @@ public class NewTaskDialogController {
     private Button cancelButton;
 
     /**
-     * initialize - Sets the stage and displays the different item from the page.
+     * initialize - Sets the stage and displays the different item of the page.
      * @param stage - Stage of the window.
      * @param parentProject - Parent project of the task.
      */

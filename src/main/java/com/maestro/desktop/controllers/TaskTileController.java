@@ -18,6 +18,9 @@ import javafx.scene.shape.Circle;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+/**
+ * TaskTileController - Controller's methods related to the task tile of the project page.
+ */
 public class TaskTileController {
 
     @FXML
@@ -29,6 +32,10 @@ public class TaskTileController {
 
     private Task task;
 
+    /**
+     * initialize - Sets the task and displays the different item of the page.
+     * @param task - Task to display.
+     */
     public void initialize(Task task) {
         this.task = task;
         this.projectTitle.setText(this.task.getParentProject().getName());

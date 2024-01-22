@@ -1,6 +1,6 @@
 package com.maestro.desktop.controllers;
 
-import com.maestro.desktop.models.DatabaseConnection;
+import com.maestro.desktop.utils.DatabaseConnection;
 import com.maestro.desktop.views.AccountView;
 import com.maestro.desktop.views.AppView;
 import com.maestro.desktop.views.DashboardView;
@@ -32,9 +32,6 @@ import javax.crypto.spec.PBEKeySpec;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
-
-import static com.maestro.desktop.models.DatabaseConnection.executeQuery;
-import static com.maestro.desktop.models.DatabaseConnection.getConnection;
 
 /**
  * LoginController - Controller's methods related to the login page and the creation of account page.
@@ -80,7 +77,7 @@ public class LoginController {
         String emailLogin = email.getText();
         String passwordLogin = password.getText();
         // Compare the given email and password to the database data
-        boolean check = checkLogin(emailLogin, passwordLogin);
+        boolean check = DatabaseConnection.getInstance().checkLogin(emailLogin, passwordLogin);
         // Check if one of the field is empty
         if(email.getText().isEmpty() || password.getText().isEmpty()) {
             wrongLogin.setText("Please enter your data.");
@@ -94,34 +91,6 @@ public class LoginController {
         else {
             wrongLogin.setText("Wrong username or password!");
         }
-    }
-
-    /**
-     * checkLogin - Check in the database if the given email is found and if the given password matches the email.
-     * @param email - Given email.
-     * @param password - Given password.
-     * @return - True if the email and password are correct, or else false.
-     */
-    public boolean checkLogin(String email, String password) {
-        PreparedStatement ps;
-        ResultSet rs;
-        boolean isPasswordCorrect = false;
-        String query = "SELECT * FROM `users` WHERE `email` = ?";
-        try {
-            ps = DatabaseConnection.getConnection().prepareStatement(query);
-            ps.setString(1, email);
-
-            rs = ps.executeQuery();
-
-            if (rs.next()) {
-                String storedPassword = rs.getString("password");
-
-                isPasswordCorrect = password.equals(storedPassword);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return isPasswordCorrect;
     }
 
     /**
@@ -157,7 +126,7 @@ public class LoginController {
             wrongSignup.setText("You must complete every field.");
         }
         // test if the email is not already in the database
-        else if(checkEmailInDatabase(email)){
+        else if(DatabaseConnection.getInstance().checkEmailInDatabase(email)){
             wrongSignup.setText("Email already used.");
         }
         // test if the password has every required elements
@@ -165,49 +134,14 @@ public class LoginController {
             wrongSignup.setText("Password must be of at least 8 characters and contain a lower case, an upper\n case, a number and a special character."); // not working !!
         }
         // test if the first password equals the second one
-        else if(password.equals(checkPassword)) {
-            addSignUpData(firstname, lastname, email, password);
+        else if(password.equals(checkPassword) && isValidEmail(email)) {
+            DatabaseConnection.getInstance().addSignUpData(firstname, lastname, email, password);
             // add data of the new account in database
             view.initUI();
             wrongLogin.setText("Your account has been successfully created!"); //not working !!
         }else{
             wrongSignup.setText("Passwords must be the same.");
         }
-    }
-
-    /**
-     * addSignUpData - Create a new user in the database.
-     * @param firstname - Given firstname.
-     * @param lastname - Given lastname.
-     * @param email - Given email.
-     * @param password - Given password.
-     * @return - True if the database was updated, or else false.
-     */
-    public boolean addSignUpData(String firstname, String lastname, String email, String password) {
-        PreparedStatement ps;
-        boolean accountAdded = false;
-        // Check if the email is valid
-        if(isValidEmail(email)) {
-            String query = "INSERT INTO users(first_name,last_name,email,password) VALUES(?,?,?,?)";
-            try {
-                ps = DatabaseConnection.getConnection().prepareStatement(query);
-                ps.setString(1, firstname);
-                ps.setString(2, lastname);
-                ps.setString(3, email);
-                ps.setString(4, password);
-                int affectedRows = ps.executeUpdate();
-
-                if (affectedRows > 0) {
-                    System.out.println("User added successfully!");
-                    accountAdded = true;
-                } else {
-                    System.out.println("Failed to add user.");
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return accountAdded;
     }
 
     /**
@@ -224,29 +158,6 @@ public class LoginController {
         Matcher matcher = pattern.matcher(email);
         // Return true if the email matches the pattern, otherwise false
         return matcher.matches();
-    }
-
-    /**
-     * checkEmailInDatabase - Check if the email already exists in the database.
-     * @param email - Given email.
-     * @return - True if the email is found in the database, or else false.
-     */
-    private boolean checkEmailInDatabase(String email){
-        boolean emailExists = false;
-        String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
-
-        try (PreparedStatement preparedStatement = DatabaseConnection.getConnection().prepareStatement(sql)) {
-            preparedStatement.setString(1, email);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    // If the count is greater than 0, the email exists
-                    emailExists = resultSet.getInt(1) > 0;
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return emailExists;
     }
 
     /**
