@@ -13,6 +13,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * NewTaskDialogController - Controller's methods related to the create task popup window.
+ */
 public class NewTaskDialogController {
     private Stage stage;
     private Project parentProject;
@@ -36,6 +39,11 @@ public class NewTaskDialogController {
     @FXML
     private Button cancelButton;
 
+    /**
+     * initialize - Sets the stage and displays the different item from the page.
+     * @param stage - Stage of the window.
+     * @param parentProject - Parent project of the task.
+     */
     public void initialize(Stage stage, Project parentProject) {
         this.parentProject = parentProject;
         this.stage = stage;
@@ -90,14 +98,10 @@ public class NewTaskDialogController {
             this.collaboratorMenu.getItems().add(checkMenuItem);
         }
     }
-
-//    public void updateSelectedCollaborators(){
-//        for (MenuItem menuItem : this.collaboratorMenu.getItems()) {
-//            if (((CheckMenuItem) menuItem).isSelected()) {
-//
-//            }
-//        }
-//    }
+  
+    /**
+     * createTask - Creates a new task and adds it in the database.
+     */
 
     public void createTask() {
         if (name.getText().isBlank()) {
@@ -122,7 +126,7 @@ public class NewTaskDialogController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        AppController.getInstance().navigateWithData(this.parentProject);
+        AppController.getInstance().updateView(AppController.getInstance().getAccount());
         this.stage.close();
     }
 }

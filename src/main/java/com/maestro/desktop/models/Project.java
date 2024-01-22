@@ -119,4 +119,38 @@ public class Project {
     }
 
     public String toString() { return name; }
+
+    public int getTasksToDo(){
+        int counter = 0;
+        for(Task task : this.tasks){
+            if(task.getStatus() == Task.Status.TO_DO){
+                counter++;
+            }
+        }
+        return counter;
+    }
+
+    public int getTasksInProgress(){
+        int counter = 0;
+        for(Task task : this.tasks){
+            if(task.getStatus() == Task.Status.IN_PROGRESS){
+                counter++;
+            }
+        }
+        return counter;
+    }
+
+    public int getTasksDone(){
+        int counter = 0;
+        for(Task task : this.tasks){
+            if(task.getStatus() == Task.Status.COMPLETED){
+                counter++;
+            }
+        }
+        return counter;
+    }
+
+    public int getNumberOfTasks(){
+        return this.tasks.size();
+    }
 }

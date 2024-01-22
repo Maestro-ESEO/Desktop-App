@@ -10,6 +10,10 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * AllProjectsController - Controller's methods related to the all projects page.
+ * AllProjectsController is a subclass of NavigationViewController.
+ */
 public class AllProjectsController extends NavigationViewController{
 
     @FXML
@@ -17,6 +21,10 @@ public class AllProjectsController extends NavigationViewController{
 
     private List<Project> projectList;
 
+    /**
+     * initialize - Displays the page with all the projects of the user.
+     * @param data - List of projects of the user.
+     */
     @Override
     public void initialize(Object data) {
 

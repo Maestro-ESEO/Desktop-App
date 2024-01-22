@@ -22,6 +22,9 @@ import java.util.stream.Collectors;
 public class DatabaseConnection {
     private static DatabaseConnection instance;
     private Connection connection;
+    //private static final String URL = "jdbc:mysql://192.168.4.193:3306/BddMaestro";
+   // private static final String USER = "admin";
+    //private static final String PASS = "network";
     private static final String URL = "jdbc:mysql://monorail.proxy.rlwy.net:56240/railway";
     private static final String USER = "root";
     private static final String PASS = "HcCee21C-F43ff-FaDf6d4g4A5C5eEc6";
@@ -129,7 +132,6 @@ public class DatabaseConnection {
         }
         return list;
     }
-
     public List<Comment> fetchTaskComments(Task task) throws SQLException{
         var list = new ArrayList<Comment>();
         String query = "select * from comments where task_id = ? order by created_at desc";
@@ -210,7 +212,35 @@ public class DatabaseConnection {
         }
         return list;
     }
+    public User updateUser(int userId) {
+        User userCreation = null;
+        PreparedStatement ps;
+        ResultSet rs;
+        String query = "SELECT * FROM `users` WHERE `id` = ?";
+        try {
+            ps = com.maestro.desktop.models.DatabaseConnection.getConnection().prepareStatement(query);
+            ps.setInt(1, userId);
 
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                // Assuming your password column in the database is named "password"
+                userCreation = new User(rs.getInt("id"), rs.getString("first_name"), rs.getString("last_name"), rs.getString("email"), rs.getString("password"), rs.getString("profile_photo_path"));
+                userCreation.setProjects(DatabaseConnection.getInstance().fetchAllProjects(userCreation));
+                System.out.println("Id: " + userCreation.getId());
+                System.out.println("Firstname: " + userCreation.getFirstname());
+                System.out.println("Lastname: " + userCreation.getLastname());
+                System.out.println("Email: " + userCreation.getEmail());
+                System.out.println("Password: " + userCreation.getPassword());
+                System.out.println("Picture: " + userCreation.getProfilePhotoPath());
+            } else {
+                System.out.println("User not completed");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return userCreation;
+    }
+  
     public void insertProject(Project project) throws SQLException {
         String query = "insert into projects(name, description, start_date, end_date, created_at, updated_at) values (?, ?, ?, ?, ?, NOW())";
         PreparedStatement prepStatement = this.connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -375,12 +405,41 @@ public class DatabaseConnection {
 //    }
 
     private Date dateFromString(String str) {
-        var df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        System.out.println("str: "+str);
+        if(str!= null) {
+            var df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            try {
+                Date date = df.parse(str);
+                return date;
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return new Date(0);
+            }
+        }
+        return null;
+    }
+
+
+    public void editTable(String table, String column, String row, int rowValue, String dataToChange) {
+        PreparedStatement ps;
+        ResultSet rs;
+        String query = "UPDATE " + table + " SET " + column + " = ? WHERE " + row + " = ?";
+
         try {
-            Date date = df.parse(str);
-            return date;
-        } catch (ParseException | NullPointerException e) {
-            return new Date(0);
+            // Create a prepared statement
+            try (PreparedStatement preparedStatement = this.connection.prepareStatement(query)) {
+                // Set parameter values
+                preparedStatement.setString(1, dataToChange);
+                preparedStatement.setInt(2, rowValue);
+
+                // Execute the update
+                int rowsAffected = preparedStatement.executeUpdate();
+                System.out.println(rowsAffected + " row(s) updated.");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

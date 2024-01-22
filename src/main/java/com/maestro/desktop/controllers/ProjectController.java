@@ -20,6 +20,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
+/**
+ * ProjectController - Controller's methods related to the project page.
+ */
 public class ProjectController extends NavigationViewController {
     private Project project;
 
@@ -42,6 +45,10 @@ public class ProjectController extends NavigationViewController {
     @FXML
     private Button accessProjects;
 
+    /**
+     * initialize - Sets the project and displays the items of the page.
+     * @param data - Project to display.
+     */
     @Override
     public void initialize(Object data) {
         this.project = (Project) data;
@@ -54,6 +61,9 @@ public class ProjectController extends NavigationViewController {
         this.accessProjects.setOnAction(event -> AppController.getInstance().updateView(AppController.getInstance().getAllProjects()));
     }
 
+    /**
+     * displayTasks - Displays the different tasks of the project on the page.
+     */
     public void displayTasks() {
         List<Task> inRevisionList = this.project.getTasks().stream().filter(task -> task.getStatus() == Task.Status.IN_REVISION).toList();
         List<Task> toDoList = this.project.getTasks().stream().filter(task -> task.getStatus() == Task.Status.TO_DO).toList();
@@ -97,6 +107,10 @@ public class ProjectController extends NavigationViewController {
         }
     }
 
+    /**
+     * addTask - Opens a new window and displays the page to create a new task.
+     * @param event - ActionEvent raised when clicking on the create a new task button.
+     */
     public void addTask(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/dialogs/new-task-dialog.fxml"));
@@ -109,6 +123,7 @@ public class ProjectController extends NavigationViewController {
             stage.setScene(new Scene(pane));
             stage.setTitle("New Task");
             stage.setResizable(false);
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/com/maestro/desktop/images/logo.png")));
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -127,6 +142,8 @@ public class ProjectController extends NavigationViewController {
             stage.setScene(new Scene(pane));
             stage.setTitle("Edit Project");
             stage.setResizable(false);
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/com/maestro/desktop/images/logo.png")));
+
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

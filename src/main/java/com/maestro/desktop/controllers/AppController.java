@@ -4,6 +4,7 @@ import com.maestro.desktop.models.Project;
 import com.maestro.desktop.models.Task;
 import com.maestro.desktop.models.User;
 import com.maestro.desktop.utils.DatabaseConnection;
+import com.maestro.desktop.views.LoginView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,32 +30,32 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static com.maestro.desktop.views.LoginView.stage;
 
+/**
+ * AppController - Controller's methods related to the sidebar and the global app.
+ */
 public class AppController {
 
     private static AppController INSTANCE = new AppController();
     private User user;
-
     public List<NavigableView> recents;
-
     private NavigableView dashboard;
-
     private NavigableView allProjects;
+    private NavigableView account;
 
     @FXML
     private AnchorPane currentView;
-
     @FXML
     private Button dashboardButton;
-
     @FXML
     private Button allProjectsButton;
-
     @FXML
     private VBox recentContainer;
-
     @FXML
     private Button profileBtn;
+    @FXML
+    private Button logout;
 
     public static AppController getInstance() {
         return INSTANCE;
@@ -64,22 +65,37 @@ public class AppController {
 
     public NavigableView getAllProjects() { return allProjects; }
 
-    public void initialize(User user) {
+    /**
+     * initialize - Sets the user and displays the items from the sidebar.
+     * @param user - User logged in.
+     * @throws SQLException - If a SQL exception occurs during user initialization.
+     */
+    public void initialize(User user) throws SQLException {
         this.user = user;
+        System.out.println("Id: "+this.user.getId());
+        System.out.println("Firstname: "+this.user.getFirstname());
+        System.out.println("Lastname: "+this.user.getLastname());
+        System.out.println("Email: "+this.user.getEmail());
+        System.out.println("Password: "+this.user.getPassword());
+        System.out.println("Picture: "+this.user.getProfilePhotoPath());
         this.profileBtn.setText(this.user.getName());
         Circle clipShape = new Circle(15, 15, 15);
         this.profileBtn.getGraphic().setClip(clipShape);
         ((ImageView) this.profileBtn.getGraphic()).setImage(new Image(this.user.getProfilePhotoPath()));
         AppController.INSTANCE = this;
-        this.dashboard = new NavigableView(null, NavigableView.FxmlView.DASHBOARD, dashboardButton);
+        this.dashboard = new NavigableView(this.user, NavigableView.FxmlView.DASHBOARD, dashboardButton);
         this.allProjects = new NavigableView(this.user.getProjects(), NavigableView.FxmlView.ALL_PROJECTS, allProjectsButton);
+        this.account = new NavigableView(this.user, NavigableView.FxmlView.ACCOUNT, profileBtn);
         recents = new ArrayList<>();
         this.recentContainer.setVisible(false);
         updateView(dashboard);
     }
 
+    /**
+     * updateView - Sets the user and displays the items from the sidebar.
+     * @param nav - User logged in.
+     */
     public void updateView(NavigableView nav) {
-//        DatabaseConnection.getInstance().updateView(nav);
         if (nav.getNavSource() != null && nav.getNavSource() instanceof Button) {
             for (NavigableView sidebarItem : Stream.concat(recents.stream(), Stream.of(dashboard, allProjects)).toList()) {
                 if (sidebarItem.getNavSource() == nav.getNavSource()) {
@@ -107,24 +123,44 @@ public class AppController {
         this.recentContainer.setVisible(!this.recents.isEmpty());
     }
 
+    /**
+     * logout - Destroys the user instance and displays the login page.
+     */
     public void logout() {
+        this.user = null;
+        LoginView view = new LoginView(stage);
+        LoginController controller = new LoginController(view);
         System.out.println("Logging out");
     }
 
+    /**
+     * changeView - Choose which page to display.
+     * @param e - ActionEvent raised when a button is activated.
+     */
     public void changeView(ActionEvent e) {
+        this.user = DatabaseConnection.getInstance().updateUser(this.user.getId());
         Object source = e.getSource();
         if (source instanceof Button) {
             if (source == dashboardButton) {
-                updateView(this.dashboard);
-            } else if (source == allProjectsButton){
+                updateView(dashboard);
+            } else if (source == allProjectsButton) {
                 allProjects.setData(this.user.getProjects());
+                System.out.println("projects: " + this.user.getProjects());
                 updateView(allProjects);
-            } else {
+            } else if (source == profileBtn) {
+                updateView(account);
+            } else if (source == logout) {
+                logout();
+            }else {
                 throw new Error("Button not recognized");
             }
         }
     }
 
+    /**
+     * navigateWithData - Displays the recent pages in the sidebar.
+     * @param data - User logged in.
+     */
     public void navigateWithData(Object data) {
 
         // Check if already in recent Navigable Views
@@ -175,6 +211,10 @@ public class AppController {
         this.updateView(newRecentNavigableView);
     }
 
+    /**
+     * createNewProject - Creates a new project and adds it in the database.
+     * @param event - ActionEvent raised when clicking on the "New project" button.
+     */
     public void createNewProject(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/dialogs/new-project-dialog.fxml"));
@@ -203,5 +243,13 @@ public class AppController {
     public void deleteRecent(Object data) {
         NavigableView nav = this.recents.stream().filter(obj -> obj.getData() == data).toList().getFirst();
         this.recents.remove(nav);
+    }
+      
+    /**
+     * getAccount - Getter for the account member of the AppController class.
+     * @return NavigableView - The account member of the class.
+     */
+    public NavigableView getAccount(){
+        return this.account;
     }
 }
