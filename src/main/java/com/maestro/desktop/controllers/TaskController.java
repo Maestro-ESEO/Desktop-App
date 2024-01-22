@@ -6,11 +6,17 @@ import com.maestro.desktop.utils.ComponentFactory;
 import com.maestro.desktop.utils.DatabaseConnection;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
@@ -98,6 +104,24 @@ public class TaskController extends NavigationViewController{
                     .findFirst().map(obj -> this.task.getComments().indexOf(obj)).orElse(this.task.getComments().size()), comment);
            AppController.getInstance().navigateWithData(this.task);
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void editTask(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/dialogs/edit-task-dialog.fxml"));
+            DialogPane pane = loader.load();
+            EditTaskDialogController controller = loader.getController();
+            Stage stage = new Stage();
+            stage.initOwner(((Node) event.getSource()).getScene().getWindow());
+            stage.initModality(Modality.APPLICATION_MODAL);
+            controller.initialize(stage, this.task);
+            stage.setScene(new Scene(pane));
+            stage.setTitle("Edit Task");
+            stage.setResizable(false);
+            stage.show();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

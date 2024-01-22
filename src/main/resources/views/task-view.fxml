@@ -62,7 +62,7 @@
                            </children>
                         </VBox>
                         <Region HBox.hgrow="ALWAYS" />
-                        <Button minWidth="-Infinity" mnemonicParsing="false" styleClass="action-btn" text="Edit Task">
+                        <Button minWidth="-Infinity" mnemonicParsing="false" onAction="#editTask" styleClass="action-btn" text="Edit Task">
                            <graphic>
                               <Button id="edit-icon" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="16.0" prefWidth="16.0" />
                            </graphic>

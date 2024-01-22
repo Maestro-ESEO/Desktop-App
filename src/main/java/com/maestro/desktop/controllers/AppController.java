@@ -199,4 +199,9 @@ public class AppController {
         }
         ((VBox) this.recentContainer.getChildren().getLast()).getChildren().setAll(this.recents.stream().map(NavigableView::getNavSource).toList());
     }
+
+    public void deleteRecent(Object data) {
+        NavigableView nav = this.recents.stream().filter(obj -> obj.getData() == data).toList().getFirst();
+        this.recents.remove(nav);
+    }
 }

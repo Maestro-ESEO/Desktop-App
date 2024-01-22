@@ -16,14 +16,14 @@
 }
 
 #delete-btn {
-    -fx-background-color: #F7422B;
+    -fx-background-color: #dd0c0c;
     -fx-background-radius: 10;
     -fx-text-fill: #fff;
     -fx-font-weight: bold;
     -fx-effect: dropshadow(three-pass-box, rgba(123, 123, 123, 0.5), 4, 0, -2, 2);
 }
 
-.status, .priority {
+.status, .priority, .collaboratorMenu {
     -fx-background-color: #d1d1d1;
 }
 

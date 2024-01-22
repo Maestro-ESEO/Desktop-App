@@ -258,7 +258,7 @@ public class DatabaseConnection {
         }
 
         for (User user : task.getActors()){
-            String query3 = "insert into user-task(user_id, task_id, created_at, updated_at) values (?, ?, NOW(), NOW())";
+            String query3 = "insert into user_task(user_id, task_id, created_at, updated_at) values (?, ?, NOW(), NOW())";
             PreparedStatement preparedStatement  = this.connection.prepareStatement(query3);
             preparedStatement.setInt(1, user.getId());
             preparedStatement.setInt(2, task.getId());
@@ -318,6 +318,45 @@ public class DatabaseConnection {
             preparedStatement3.setInt(3, 0);
             preparedStatement3.executeUpdate();
         }
+    }
+
+    public void deleteProject(Project project) throws SQLException {
+        String query = "delete from projects where id = ?";
+        PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+        preparedStatement.setInt(1, project.getId());
+        preparedStatement.executeUpdate();
+    }
+
+    public void updateTask(Task task, List<User> newActors) throws SQLException {
+        String query = "update tasks set name = ?, description = ?, deadline = ?, status = ?, priority = ?, updated_at = NOW() where id = ?";
+        PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+        preparedStatement.setString(1, task.getName());
+        preparedStatement.setString(2, task.getDescription());
+        preparedStatement.setTimestamp(3, new Timestamp(task.getDeadline().getTime()));
+        preparedStatement.setInt(4, task.getStatus().getValue());
+        preparedStatement.setInt(5, task.getPriority().getValue());
+        preparedStatement.setInt(6, task.getId());
+        preparedStatement.executeUpdate();
+
+        String query2 = "delete from user_task where id in (select id from (select * from user_task where task_id = ? and user_id not in ("+this.getIdsFromList(task.getActors().stream().map(User::getId).toList())+")) as to_delete)";
+        PreparedStatement preparedStatement2 = this.connection.prepareStatement(query2);
+        preparedStatement2.setInt(1, task.getId());
+        preparedStatement2.executeUpdate();
+
+        for (User user : newActors){
+            String query3 = "insert into user_task(user_id, task_id, created_at, updated_at) values (?, ?, NOW(), NOW())";
+            PreparedStatement preparedStatement3  = this.connection.prepareStatement(query3);
+            preparedStatement3.setInt(1, user.getId());
+            preparedStatement3.setInt(2, task.getId());
+            preparedStatement3.executeUpdate();
+        }
+    }
+
+    public void deleteTask(Task task) throws SQLException {
+        String query = "delete from tasks where id = ?";
+        PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+        preparedStatement.setInt(1, task.getId());
+        preparedStatement.executeUpdate();
     }
 
 //    public void checkProjectUpdate(Project project) throws SQLException{

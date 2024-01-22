@@ -2,6 +2,7 @@ package com.maestro.desktop.controllers;
 
 import com.maestro.desktop.models.Project;
 import com.maestro.desktop.models.Task;
+import com.maestro.desktop.models.User;
 import com.maestro.desktop.utils.DatabaseConnection;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -9,10 +10,13 @@ import javafx.stage.Stage;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NewTaskDialogController {
     private Stage stage;
     private Project parentProject;
+    private List<User> selectedUsers;
 
     @FXML
     private TextField name;
@@ -24,6 +28,8 @@ public class NewTaskDialogController {
     private MenuButton status;
     @FXML
     private MenuButton priority;
+    @FXML
+    private MenuButton collaboratorMenu;
 
     @FXML
     private Button createButton;
@@ -33,6 +39,8 @@ public class NewTaskDialogController {
     public void initialize(Stage stage, Project parentProject) {
         this.parentProject = parentProject;
         this.stage = stage;
+        this.selectedUsers = new ArrayList<>();
+        this.collaboratorMenu.setText("0 user(s) selected");
         this.deadline.setValue(new Date(this.parentProject.getEndDate().getTime()).toLocalDate());
         this.createButton.setDisable(true);
         this.name.textProperty().addListener((observable, oldValue, newValue) -> { this.createButton.setDisable(this.name.getText().isBlank()); });
@@ -64,7 +72,32 @@ public class NewTaskDialogController {
             });
             this.priority.getItems().add(menuItem);
         }
+        this.collaboratorMenu.getItems().clear();
+        if (this.parentProject.getUsers().isEmpty()){
+            this.collaboratorMenu.setText("No users found");
+            this.collaboratorMenu.setDisable(true);
+        }
+        for (User user : this.parentProject.getUsers()) {
+            var checkMenuItem = new CheckMenuItem(user.getName());
+            checkMenuItem.setOnAction(event -> {
+                if (checkMenuItem.isSelected()) {
+                    this.selectedUsers.add(user);
+                } else {
+                    this.selectedUsers.removeIf(obj -> obj.getId() == user.getId());
+                }
+                this.collaboratorMenu.setText(this.selectedUsers.size() + " user(s) selected");
+            });
+            this.collaboratorMenu.getItems().add(checkMenuItem);
+        }
     }
+
+//    public void updateSelectedCollaborators(){
+//        for (MenuItem menuItem : this.collaboratorMenu.getItems()) {
+//            if (((CheckMenuItem) menuItem).isSelected()) {
+//
+//            }
+//        }
+//    }
 
     public void createTask() {
         if (name.getText().isBlank()) {
@@ -82,6 +115,7 @@ public class NewTaskDialogController {
                 new java.util.Date(),
                 new java.util.Date()
         );
+        task.setActors(this.selectedUsers);
         try {
             DatabaseConnection.getInstance().insertTask(task);
             DatabaseConnection.getInstance().updateAllTasks(this.parentProject);

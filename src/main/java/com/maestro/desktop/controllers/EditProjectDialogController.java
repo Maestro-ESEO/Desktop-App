@@ -43,6 +43,8 @@ public class EditProjectDialogController {
     private Button updateButton;
     @FXML
     private Button cancelButton;
+    @FXML
+    private Button deleteButton;
 
     public void initialize(Stage stage, Project project) {
         this.stage = stage;
@@ -50,6 +52,7 @@ public class EditProjectDialogController {
         this.updateButton.setDisable(true);
         this.updateButton.setOnAction(event -> this.updateProject());
         this.cancelButton.setOnAction(event -> this.stage.close());
+        this.deleteButton.setOnAction(event -> this.deleteProject());
         this.name.textProperty().addListener((observable, oldValue, newValue) -> { this.updateButton.setDisable(this.name.getText().isBlank()); });
         this.findCollaborators.setOnAction(event -> this.checkUser());
         this.findCollaborators.textProperty().addListener((observable, oldValue, newValue) -> { this.findCollaborators.getStyleClass().setAll("text-field"); });
@@ -133,5 +136,19 @@ public class EditProjectDialogController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void deleteProject() {
+        try {
+            DatabaseConnection.getInstance().deleteProject(this.project);
+            AppController.getInstance().getUser().removeProject(this.project);
+            DatabaseConnection.getInstance().updateAllProjects(AppController.getInstance().getUser());
+            AppController.getInstance().updateView(AppController.getInstance().getAllProjects());
+            AppController.getInstance().deleteRecent(this.project);
+            AppController.getInstance().updateRecentContainer();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        this.stage.close();
     }
 }

@@ -45,4 +45,6 @@ public class User {
     public void setProjects(List<Project> projects) {
         this.projects = projects;
     }
+
+    public void removeProject(Project project) { this.projects.remove(project); }
 }
