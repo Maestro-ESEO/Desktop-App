@@ -31,6 +31,11 @@ public class ProjectTileController {
     private Label percentage;
 
     private Project project;
+
+    /**
+     * initialize - Sets the project and displays the items of the tile.
+     * @param project - Project to display.
+     */
     public void initialize(Project project) {
         this.project = project;
         this.projectTitle.setText(this.project.getName());
@@ -43,6 +48,10 @@ public class ProjectTileController {
         ComponentFactory.getInstance().displayActors(this.actors, 4, this.project.getActors());
     }
 
+    /**
+     * getTasksLeft - Check how many tasks they are left.
+     * @return - String to display how many tasks they are left .
+     */
     private String getTasksLeft() {
         if (this.project.getTasks().isEmpty()) {
             return "No tasks yet";
@@ -55,6 +64,10 @@ public class ProjectTileController {
         }
     }
 
+    /**
+     * getPercentage - Calculates the percentage of advancement of the project.
+     * @return - True if the email has a correct format, or else false.
+     */
     private int getPercentage() {
         int totalTasks = this.project.getTasks().size();
         if (totalTasks == 0) {

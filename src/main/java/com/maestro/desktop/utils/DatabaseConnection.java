@@ -19,12 +19,16 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * DatabaseConnection - Methods to access or update the database.
+ */
 public class DatabaseConnection {
     private static DatabaseConnection instance;
     private Connection connection;
-    //private static final String URL = "jdbc:mysql://192.168.4.193:3306/BddMaestro";
-   // private static final String USER = "admin";
-    //private static final String PASS = "network";
+    /*private static final String URL = "jdbc:mysql://localhost:3306/maestro";
+    private static final String USER = "root";
+    private static final String PASS = "yF5PZvy?";*/
+
     private static final String URL = "jdbc:mysql://monorail.proxy.rlwy.net:56240/railway";
     private static final String USER = "root";
     private static final String PASS = "HcCee21C-F43ff-FaDf6d4g4A5C5eEc6";
@@ -32,10 +36,17 @@ public class DatabaseConnection {
     private DatabaseConnection() throws SQLException {
         this.connection = DriverManager.getConnection(URL, USER, PASS);
     }
+
     public Connection getConnection() {
         return connection;
     }
-    public static DatabaseConnection getInstance(){
+
+    /**
+     * getInstance - Create or get the instance of the DatabaseConnection class.
+     *
+     * @return - The instance of the class.
+     */
+    public static DatabaseConnection getInstance() {
         try {
             if (instance == null) {
                 instance = new DatabaseConnection();
@@ -48,6 +59,13 @@ public class DatabaseConnection {
         }
     }
 
+    /**
+     * login - Check that the password matches the email.
+     *
+     * @param email - Given email.
+     * @param password - Given password.
+     * @return - The user matching the email and the password.
+     */
     public User login(String email, String password) throws SQLException {
         String query = String.format("select id, first_name, last_name, email, profile_photo_path, created_at, updated_at from users where email = '%s' and password = '%s'", email, password);
         Statement stmt = this.connection.createStatement();
@@ -66,6 +84,12 @@ public class DatabaseConnection {
         return user;
     }
 
+    /**
+     * fetchAllProjects - Get from the database every project of a user.
+     *
+     * @param user - User in which to search for the projects.
+     * @return - List of the projects of the user.
+     */
     public List<Project> fetchAllProjects(User user) throws SQLException {
         var list = new ArrayList<Project>();
         String query = String.format("select p.id, p.name, p.description, p.start_date, p.end_date, p.created_at, p.updated_at from projects p, user_project up where up.is_admin = 1 and p.id = up.project_id and up.user_id = %d", user.getId());
@@ -89,6 +113,12 @@ public class DatabaseConnection {
         return list;
     }
 
+    /**
+     * fetchAllTasks - Get every task of a project.
+     *
+     * @param project - Project in which to search for the tasks.
+     * @return - List of the tasks of the project.
+     */
     public List<Task> fetchAllTasks(Project project) throws SQLException {
         var list = new ArrayList<Task>();
         String query = String.format("select id, name, description, deadline, status, priority, created_at, updated_at from tasks where project_id = '%d'", project.getId());
@@ -113,6 +143,12 @@ public class DatabaseConnection {
         return list;
     }
 
+    /**
+     * fetchTaskActors - Get every user related to a task.
+     *
+     * @param task - Task in which to search for the users.
+     * @return - List of the users related to the task.
+     */
     public List<User> fetchTaskActors(Task task) throws SQLException {
         var list = new ArrayList<User>();
         String query = String.format("select u.id, u.first_name, u.last_name, u.email, u.profile_photo_path, u.created_at, u.updated_at from users u, user_task ut where ut.task_id = '%d' and ut.user_id = u.id", task.getId());
@@ -212,18 +248,24 @@ public class DatabaseConnection {
         }
         return list;
     }
+
+    /**
+     * updateUser - Update the user in the database.
+     *
+     * @param userId - Id of the user to update.
+     * @return - Updated user instance.
+     */
     public User updateUser(int userId) {
         User userCreation = null;
         PreparedStatement ps;
         ResultSet rs;
         String query = "SELECT * FROM `users` WHERE `id` = ?";
         try {
-            ps = com.maestro.desktop.models.DatabaseConnection.getConnection().prepareStatement(query);
+            ps = this.getConnection().prepareStatement(query);
             ps.setInt(1, userId);
 
             rs = ps.executeQuery();
             if (rs.next()) {
-                // Assuming your password column in the database is named "password"
                 userCreation = new User(rs.getInt("id"), rs.getString("first_name"), rs.getString("last_name"), rs.getString("email"), rs.getString("password"), rs.getString("profile_photo_path"));
                 userCreation.setProjects(DatabaseConnection.getInstance().fetchAllProjects(userCreation));
                 System.out.println("Id: " + userCreation.getId());
@@ -240,7 +282,12 @@ public class DatabaseConnection {
         }
         return userCreation;
     }
-  
+
+    /**
+     * insertProject - Add a project in the database.
+     *
+     * @param project - Project to update.
+     */
     public void insertProject(Project project) throws SQLException {
         String query = "insert into projects(name, description, start_date, end_date, created_at, updated_at) values (?, ?, ?, ?, ?, NOW())";
         PreparedStatement prepStatement = this.connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -256,15 +303,15 @@ public class DatabaseConnection {
         }
 
         String query2 = "insert into user_project(user_id, project_id, is_admin, created_at, updated_at) values (?, ?, ?, NOW(), NOW())";
-        PreparedStatement preparedStatement  = this.connection.prepareStatement(query2);
+        PreparedStatement preparedStatement = this.connection.prepareStatement(query2);
         preparedStatement.setInt(1, project.getAdmin().getId());
         preparedStatement.setInt(2, project.getId());
         preparedStatement.setInt(3, 1);
         preparedStatement.executeUpdate();
 
-        for (User user : project.getUsers()){
+        for (User user : project.getUsers()) {
             String query3 = "insert into user_project(user_id, project_id, is_admin, created_at, updated_at) values (?, ?, ?, NOW(), NOW())";
-            PreparedStatement preparedStatement2  = this.connection.prepareStatement(query3);
+            PreparedStatement preparedStatement2 = this.connection.prepareStatement(query3);
             preparedStatement2.setInt(1, user.getId());
             preparedStatement2.setInt(2, project.getId());
             preparedStatement2.setInt(3, 0);
@@ -272,6 +319,11 @@ public class DatabaseConnection {
         }
     }
 
+    /**
+     * insertTask - Add a task in the database.
+     *
+     * @param task - Task to add in the database.
+     */
     public void insertTask(Task task) throws SQLException {
         String query = "insert into tasks(name, description, deadline, status, priority, project_id, created_at, updated_at) values (?, ?, ?, ?, ?, ?, NOW(), NOW())";
         PreparedStatement prepStatement = this.connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -309,10 +361,20 @@ public class DatabaseConnection {
         }
     }
 
+    /**
+     * updateAllProjects - Update the projects of a user.
+     *
+     * @param user - User to update.
+     */
     public void updateAllProjects(User user) throws SQLException {
         user.setProjects(this.fetchAllProjects(user));
     }
 
+    /**
+     * updateAllTasks - Update the task of a project.
+     *
+     * @param project - Project to update.
+     */
     public void updateAllTasks(Project project) throws SQLException {
         project.setTasks(this.fetchAllTasks(project));
     }
@@ -352,6 +414,8 @@ public class DatabaseConnection {
 
     public void deleteProject(Project project) throws SQLException {
         String query = "delete from projects where id = ?";
+    public void checkProjectUpdate(Project project) throws SQLException {
+        String query = "select p.name, p.description, p.start_date, p.end_date, p.updated_at from projects p where p.id = ? and p.updated_at != ?";
         PreparedStatement preparedStatement = this.connection.prepareStatement(query);
         preparedStatement.setInt(1, project.getId());
         preparedStatement.executeUpdate();
@@ -389,9 +453,15 @@ public class DatabaseConnection {
         preparedStatement.executeUpdate();
     }
 
+    /**
+     * dateFromString - Create a string with a given date.
+     *
+     * @param str - Table to update.
+     * @return - String with the given pattern.
+     */
     private Date dateFromString(String str) {
-        System.out.println("str: "+str);
-        if(str!= null) {
+        System.out.println("str: " + str);
+        if (str != null) {
             var df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             try {
                 Date date = df.parse(str);
@@ -404,7 +474,15 @@ public class DatabaseConnection {
         return null;
     }
 
-
+    /**
+     * editTable - Edit a table of the database.
+     *
+     * @param table - Table to update.
+     * @param column - Column to update.
+     * @param row - Row to update.
+     * @param rowValue - Number of the row.
+     * @param dataToChange - Data to add in the database.
+     */
     public void editTable(String table, String column, String row, int rowValue, String dataToChange) {
         PreparedStatement ps;
         ResultSet rs;
@@ -433,4 +511,93 @@ public class DatabaseConnection {
                 .map(Object::toString)
                 .collect(Collectors.joining(", "));
     }
+}
+
+    /**
+     * checkLogin - Check in the database if the given email is found and if the given password matches the email.
+     *
+     * @param email    - Given email.
+     * @param password - Given password.
+     * @return - True if the email and password are correct, or else false.
+     */
+    public boolean checkLogin(String email, String password) {
+        PreparedStatement ps;
+        ResultSet rs;
+        boolean isPasswordCorrect = false;
+        String query = "SELECT * FROM `users` WHERE `email` = ?";
+        try {
+            ps = DatabaseConnection.getInstance().getConnection().prepareStatement(query);
+            ps.setString(1, email);
+
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                String storedPassword = rs.getString("password");
+
+                isPasswordCorrect = password.equals(storedPassword);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return isPasswordCorrect;
+    }
+
+    /**
+     * addSignUpData - Create a new user in the database.
+     *
+     * @param firstname - Given firstname.
+     * @param lastname  - Given lastname.
+     * @param email     - Given email.
+     * @param password  - Given password.
+     * @return - True if the database was updated, or else false.
+     */
+    public boolean addSignUpData(String firstname, String lastname, String email, String password) {
+        PreparedStatement ps;
+        boolean accountAdded = false;
+        // Check if the email is valid
+        String query = "INSERT INTO users(first_name,last_name,email,password) VALUES(?,?,?,?)";
+        try {
+            ps = this.connection.prepareStatement(query);
+            ps.setString(1, firstname);
+            ps.setString(2, lastname);
+            ps.setString(3, email);
+            ps.setString(4, password);
+            int affectedRows = ps.executeUpdate();
+
+            if (affectedRows > 0) {
+                System.out.println("User added successfully!");
+                accountAdded = true;
+            } else {
+                System.out.println("Failed to add user.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return accountAdded;
+    }
+
+    /**
+     * checkEmailInDatabase - Check if the email already exists in the database.
+     * @param email - Given email.
+     * @return - True if the email is found in the database, or else false.
+     */
+    public boolean checkEmailInDatabase(String email){
+        boolean emailExists = false;
+        String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, email);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    // If the count is greater than 0, the email exists
+                    emailExists = resultSet.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return emailExists;
+    }
+
+
 }

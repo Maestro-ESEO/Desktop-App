@@ -1,6 +1,9 @@
 package com.maestro.desktop.controllers;
 
 import com.maestro.desktop.models.Comment;
+/**
+ * TaskController - Controller's methods related to the task page.
+ */
 import com.maestro.desktop.models.Task;
 import com.maestro.desktop.utils.ComponentFactory;
 import com.maestro.desktop.utils.DatabaseConnection;
@@ -47,6 +50,11 @@ public class TaskController extends NavigationViewController{
     @FXML
     private Button publishCommentBtn;
 
+
+    /**
+     * initialize - Sets the task.
+     * @param data - Task to display.
+     */
     public void initialize(Object data){
         this.task = (Task) data;
         this.title.setText(this.task.getName());

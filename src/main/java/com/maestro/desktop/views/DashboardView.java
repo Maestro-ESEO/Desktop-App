@@ -15,6 +15,9 @@ import java.io.IOException;
 
 import static com.maestro.desktop.views.LoginView.stage;
 
+/**
+ * DashboardView - View methods for the dashboard page.
+ */
 public class DashboardView {
 
     private DashboardController dashboardController;
@@ -26,7 +29,9 @@ public class DashboardView {
         setDashboardView();
     }
 
-    // display the dashboard on the window
+    /**
+     * setDashboardView - Displays the dashboard page.
+     */
     public void setDashboardView() throws IOException {
         System.out.println("in view");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/maestro/desktop/views/dashboard.fxml"));

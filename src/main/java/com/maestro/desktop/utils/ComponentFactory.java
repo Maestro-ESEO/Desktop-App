@@ -23,9 +23,17 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * ComponentFactory - Methods to display the tile.
+ */
 public class ComponentFactory {
     private static ComponentFactory instance;
 
+    /**
+     * getInstance - Create or get the instance of this class.
+     *
+     * @return - Instance of the ComponentFactory class.
+     */
     public static ComponentFactory getInstance() {
         if (instance == null) {
             instance = new ComponentFactory();
@@ -33,6 +41,13 @@ public class ComponentFactory {
         return instance;
     }
 
+    /**
+     * displayActors - Displays the actors of the project.
+     *
+     * @param container - Container in which to display the actors.
+     * @param limit - Limit of profile picture to display.
+     * @param actorList - List of user related to the project.
+     */
     public void displayActors(HBox container, int limit, List<User> actorList) {
         container.getChildren().clear();
         if (actorList.isEmpty()) {
@@ -93,6 +108,11 @@ public class ComponentFactory {
         }
     }
 
+    /**
+     * createTaskItem - Create the component of the task.
+     *
+     * @param task - Task to create.
+     */
     public HBox createTaskItem(Task task) {
         if (task == null) {
             return null;
