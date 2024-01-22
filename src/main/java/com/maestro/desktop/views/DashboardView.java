@@ -29,7 +29,9 @@ public class DashboardView {
         setDashboardView();
     }
 
-    // display the dashboard on the window
+    /**
+     * setDashboardView - Displays the dashboard page.
+     */
     public void setDashboardView() throws IOException {
         System.out.println("in view");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/maestro/desktop/views/dashboard.fxml"));

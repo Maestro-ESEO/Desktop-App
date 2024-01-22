@@ -23,25 +23,29 @@ import static com.maestro.desktop.views.LoginView.stage;
 public class AppView {
 
     private User loggedInUser;
-        public AppView(String emailUser, String password) {
+    public AppView(String emailUser, String password) {
             setAppView(emailUser, password);
         }
 
-        public void setAppView(String emailUser, String password) {
-            try {
-                this.loggedInUser = DatabaseConnection.getInstance().login(emailUser, password);
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/app-view.fxml"));
-                Parent load = loader.load();
-                AppController appController = loader.getController();
-                appController.initialize(loggedInUser);
-                stage.setScene(new Scene(load));
-                stage.setTitle("Maestro");
-                stage.show();
-            } catch (IOException error) {
-                error.printStackTrace();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+
+    /**
+     * setAppView - Displays the app page.
+     */
+    public void setAppView(String emailUser, String password) {
+        try {
+            this.loggedInUser = DatabaseConnection.getInstance().login(emailUser, password);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/app-view.fxml"));
+            Parent load = loader.load();
+            AppController appController = loader.getController();
+            appController.initialize(loggedInUser);
+            stage.setScene(new Scene(load));
+            stage.setTitle("Maestro");
+            stage.show();
+        } catch (IOException error) {
+            error.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
+}
 

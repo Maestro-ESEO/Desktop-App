@@ -4,7 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Task - Task model class.
+ */
 public class Task {
+    /**
+     * Status enum - Status of a task.
+     */
     public enum Status {
         TO_DO("To do", 0),
         IN_PROGRESS("In Progress", 1),
@@ -36,6 +42,10 @@ public class Task {
             throw new IllegalArgumentException("Invalid Status value: " + value);
         }
     }
+
+    /**
+     * Priority enum - Priority of a task.
+     */
     public enum Priority {
         LOW("Low", 0),
         MEDIUM("Medium", 1),

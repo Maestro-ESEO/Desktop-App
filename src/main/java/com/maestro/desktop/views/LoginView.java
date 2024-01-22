@@ -22,14 +22,13 @@ public class LoginView {
         this.stage = primaryStage;
     }
 
-    // initialize the UI by loading the FXML file and setting up the stage
+    /**
+     * initUI - Displays the login page.
+     */
     public void initUI() {
         try {
             // Load the FXML file
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/maestro/desktop/views/login.fxml"));
-
-            // Set the controller for the FXML file (if not set in FXML file)
-            //loader.setController(this);
 
             // Load the FXML file and get the root node
             Parent root = loader.load();
@@ -52,6 +51,9 @@ public class LoginView {
         }
     }
 
+    /**
+     * setCreateAccountView - Displays the account creation page.
+     */
     @FXML
     public void setCreateAccountView(){
         try {
@@ -77,6 +79,5 @@ public class LoginView {
             e.printStackTrace();
         }
     }
-
 }
 

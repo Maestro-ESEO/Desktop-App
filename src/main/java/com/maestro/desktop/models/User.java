@@ -9,6 +9,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * User - User model class.
+ */
 public class User {
 
     private int id;
@@ -121,6 +124,11 @@ public class User {
         this.projects = projects;
     }
 
+    /**
+     * getTasksToDo - Get the number of tasks to do of the user.
+     *
+     * @return - Amount of tasks to do.
+     */
     public int getTasksToDo(){
         int counter = 0;
         for(Project project : this.projects){
@@ -129,6 +137,11 @@ public class User {
         return counter;
     }
 
+    /**
+     * getTasksInProgress - Get the number of tasks in progress of the user.
+     *
+     * @return - Amount of tasks in progress.
+     */
     public int getTasksInProgress(){
         int counter = 0;
         for(Project project : this.projects){
@@ -137,6 +150,11 @@ public class User {
         return counter;
     }
 
+    /**
+     * getTasksDone - Get the number of tasks done of the user.
+     *
+     * @return - Amount of tasks done.
+     */
     public int getTasksDone(){
         int counter = 0;
         for(Project project : this.projects){
@@ -145,6 +163,11 @@ public class User {
         return counter;
     }
 
+    /**
+     * getNumberOfTasks - Calculate the number of tasks of the user.
+     *
+     * @return - Amount of tasks of the user.
+     */
     public int getNumberOfTasks(){
         int counter = 0;
         for(Project project : this.projects){
