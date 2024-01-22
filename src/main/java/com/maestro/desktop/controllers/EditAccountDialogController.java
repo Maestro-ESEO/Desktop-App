@@ -14,6 +14,9 @@ import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * EditAccountDialogController - Controller's methods related to the edit account popup page.
+ */
 public class EditAccountDialogController {
     private Stage stage;
     private User user;
@@ -37,6 +40,11 @@ public class EditAccountDialogController {
     @FXML
     private Text wrongSave;
 
+    /**
+     * initialize - Sets the user, the stage and displays the items of the page.
+     * @param user - User logged in.
+     * @param stage - Stage of the window.
+     */
     public void initialize(Stage stage, User user) {
         this.user = user;
         this.stage = stage;
@@ -50,8 +58,12 @@ public class EditAccountDialogController {
 
     }
 
+    /**
+     * saveChanges - Checks the conditions to create an account.
+     * Called when clicking on the save button.
+     */
     @FXML
-    private void saveChanges() throws SQLException {
+    private void saveChanges() {
         // Define a regular expression pattern to check the password
         String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).+$";
         // Compile the pattern
@@ -79,7 +91,8 @@ public class EditAccountDialogController {
             if(!editPassword.getText().isEmpty() && !user.getPassword().equals(editPassword.getText())){
                 DatabaseConnection.getInstance().editTable("users", "password","id", user.getId(), editPassword.getText());
             }
-            AppController.getInstance().navigateWithData(this.user);
+            this.user = DatabaseConnection.getInstance().updateUser(this.user.getId());
+            System.out.println("New firstname : "+this.user.getFirstname());
             this.stage.close();
         }
     }

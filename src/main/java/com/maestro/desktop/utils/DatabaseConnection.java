@@ -17,6 +17,9 @@ import java.util.List;
 public class DatabaseConnection {
     private static DatabaseConnection instance;
     private Connection connection;
+    //private static final String URL = "jdbc:mysql://192.168.4.193:3306/BddMaestro";
+   // private static final String USER = "admin";
+    //private static final String PASS = "network";
     private static final String URL = "jdbc:mysql://monorail.proxy.rlwy.net:56240/railway";
     private static final String USER = "root";
     private static final String PASS = "HcCee21C-F43ff-FaDf6d4g4A5C5eEc6";
@@ -122,14 +125,14 @@ public class DatabaseConnection {
         }
         return list;
     }
-    public User setUser(String email) {
+    public User updateUser(int userId) {
         User userCreation = null;
         PreparedStatement ps;
         ResultSet rs;
-        String query = "SELECT * FROM `users` WHERE `email` = ?";
+        String query = "SELECT * FROM `users` WHERE `id` = ?";
         try {
             ps = com.maestro.desktop.models.DatabaseConnection.getConnection().prepareStatement(query);
-            ps.setString(1, email);
+            ps.setInt(1, userId);
 
             rs = ps.executeQuery();
 
@@ -151,36 +154,6 @@ public class DatabaseConnection {
         }
         return userCreation;
     }
-
-    /*public List<Project> fetchAllProjects(User user) {
-        System.out.println("fetch projects");
-        var list = new ArrayList<Project>();
-        try {
-            String query = String.format("select p.id, p.name, p.description, p.start_date, p.end_date, p.created_at from projects p, user_project up where up.is_admin = 1 and p.id = up.project_id and up.user_id = %d", user.getId());
-            Statement statement = this.connection.createStatement();
-            ResultSet rs = statement.executeQuery(query);
-            while (rs.next()) {
-                System.out.println("+");
-                var project = new Project(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getString("description"),
-                        this.dateFromString(rs.getString("start_date")),
-                        this.dateFromString(rs.getString("end_date")),
-                        this.dateFromString(rs.getString("created_at")),
-                        user
-                );
-                project.setTasks(this.fetchAllTasks(project));
-                System.out.println("Project id: "+project.getId());
-                list.add(project);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        System.out.println("list size: "+list.size());
-        return list;
-    }*/
-
     public void insertProject(Project project) throws SQLException {
         String query = "insert into projects(name, description, start_date, end_date, created_at, updated_at) values (?, ?, ?, ?, ?, NOW())";
         PreparedStatement prepStatement = this.connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);

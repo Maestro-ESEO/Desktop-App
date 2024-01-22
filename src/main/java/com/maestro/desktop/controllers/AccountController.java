@@ -23,13 +23,13 @@ import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
-
+/**
+ * AccountController - Controller's methods related to the account page.
+ * AccountController is a subclass of NavigationViewController.
+ */
 public class AccountController extends NavigationViewController{
 
     private User user;
-
-    private NavigableView editAccountView;
-
 
     @FXML
     private Text accountFirstname;
@@ -64,6 +64,10 @@ public class AccountController extends NavigationViewController{
     @FXML
     private Button editAccount;
 
+    /**
+     * initialize - Sets the user and displays the dynamic items of the account page.
+     * @param user - User logged in.
+     */
     @Override
     public void initialize(Object user){
         this.user = (User) user;
@@ -73,9 +77,9 @@ public class AccountController extends NavigationViewController{
         if(this.user.getProfilePhotoPath() == null) {
             profilePicture.setImage(new Image(getClass().getClassLoader().getResourceAsStream("images/default-pfp.png")));
         }else{
+            // Default profile photo
             profilePicture.setImage(new Image(this.user.getProfilePhotoPath()));
         }
-        System.out.println("picture: "+this.user.getProfilePhotoPath());
         accountPosition.setText(this.user.getPosition());
         projectsInProgress.setText(Integer.toString(this.user.getProjects().size()));
         tasksToDo.setText(Integer.toString(this.user.getTasksToDo()));
@@ -83,16 +87,11 @@ public class AccountController extends NavigationViewController{
         tasksDone.setText(Integer.toString(this.user.getTasksDone()));
     }
 
-    @FXML
-    private void editAccount(){
-        //view.setAccountEditView();
-        userFirstname.setText(user.getFirstname());
-        userLastname.setText(user.getLastname());
-        userEmail.setText(user.getEmail());
-        userPosition.setText(user.getPosition());
-        projectsInProgress.setText(Integer.toString(user.getProjects().size()));
-    }
-
+    /**
+     * changeViewAccount - Opens a new window for the edition of the account.
+     * @param event - ActionEvent detected after clicking on the "edit" button.
+     * Called after clicking on the edit button.
+     */
     @FXML
     public void changeViewAccount(ActionEvent event){
         try {

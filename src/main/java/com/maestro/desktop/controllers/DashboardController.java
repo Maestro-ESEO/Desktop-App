@@ -25,7 +25,12 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * DashboardController - Controller's methods related to the dashboard page.
+ * DashboardController is a subclass of NavigationViewController.
+ */
 public class DashboardController extends NavigationViewController{
+
     @FXML
     private Text dashboardFirstname;
     @FXML
@@ -37,6 +42,10 @@ public class DashboardController extends NavigationViewController{
 
     private User user;
 
+    /**
+     * initialize - Sets the user logged in and displays the items of the dashboard page.
+     * @param user - User logged in.
+     */
     @Override
     public void initialize(Object user) {
         int counter = 0;
@@ -48,7 +57,7 @@ public class DashboardController extends NavigationViewController{
         taskContainer.setVgap(10);
         // center the tile
         taskContainer.setAlignment(Pos.CENTER);
-        // for each project of the logged in user
+        // for each project of the user logged in
         for (Project project : this.user.getProjects()) {
             List<Task> tasks = project.getTasks();
             for (Task task : tasks) {

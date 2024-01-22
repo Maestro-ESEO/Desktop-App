@@ -11,6 +11,9 @@ import javafx.scene.layout.HBox;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+/**
+ * ProjectTileController - Controller's methods related to the tile of the project used in the all projects page.
+ */
 public class ProjectTileController {
     @FXML
     private Label projectTitle;

@@ -36,7 +36,9 @@ import java.util.Date;
 import static com.maestro.desktop.models.DatabaseConnection.executeQuery;
 import static com.maestro.desktop.models.DatabaseConnection.getConnection;
 
-// LoginController.java
+/**
+ * LoginController - Controller's methods related to the login page and the creation of account page.
+ */
 public class LoginController {
     private static LoginView view;
 
@@ -69,17 +71,24 @@ public class LoginController {
         this.view.initUI();
     }
 
+    /**
+     * handleLogin - Checks the conditions to login.
+     * Called after clicking on the login button.
+     */
     @FXML
-    public void handleLogin() throws IOException {
+    public void handleLogin() {
         String emailLogin = email.getText();
         String passwordLogin = password.getText();
+        // Compare the given email and password to the database data
         boolean check = checkLogin(emailLogin, passwordLogin);
-        System.out.println("Email found?: " + check);
-        if(email.getText().isEmpty() && password.getText().isEmpty()) {
+        // Check if one of the field is empty
+        if(email.getText().isEmpty() || password.getText().isEmpty()) {
             wrongLogin.setText("Please enter your data.");
         }
+        // Check if the given email and password are correct
         else if(check) {
             wrongLogin.setText("Success!");
+            // Display the dashboard view
             AppView appView = new AppView(email.getText(), password.getText());
         }
         else {
@@ -87,6 +96,12 @@ public class LoginController {
         }
     }
 
+    /**
+     * checkLogin - Check in the database if the given email is found and if the given password matches the email.
+     * @param email - Given email.
+     * @param password - Given password.
+     * @return - True if the email and password are correct, or else false.
+     */
     public boolean checkLogin(String email, String password) {
         PreparedStatement ps;
         ResultSet rs;
@@ -109,11 +124,21 @@ public class LoginController {
         return isPasswordCorrect;
     }
 
+    /**
+     * createAccount - Calls the method from LoginView to display the page of the creation of an account.
+     * Called when clicking on the "create an account" button.
+     */
     @FXML
     public void createAccount(){
         view.setCreateAccountView();
     }
 
+    /**
+     * signUp - Handles the user sign-up process.
+     * @throws NoSuchAlgorithmException - If the algorithm required for password hashing is not available.
+     * @throws InvalidKeySpecException - If an invalid key specification is encountered during password hashing.
+     * Called when clicking on the "create my account" button.
+     */
     @FXML
     public void signUp() throws NoSuchAlgorithmException, InvalidKeySpecException {
         String email = createEmail.getText();
@@ -141,7 +166,7 @@ public class LoginController {
         }
         // test if the first password equals the second one
         else if(password.equals(checkPassword)) {
-            checkSignup(firstname, lastname, email, password);
+            addSignUpData(firstname, lastname, email, password);
             // add data of the new account in database
             view.initUI();
             wrongLogin.setText("Your account has been successfully created!"); //not working !!
@@ -150,7 +175,15 @@ public class LoginController {
         }
     }
 
-    public boolean checkSignup(String firstname, String lastname, String email, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    /**
+     * addSignUpData - Create a new user in the database.
+     * @param firstname - Given firstname.
+     * @param lastname - Given lastname.
+     * @param email - Given email.
+     * @param password - Given password.
+     * @return - True if the database was updated, or else false.
+     */
+    public boolean addSignUpData(String firstname, String lastname, String email, String password) {
         PreparedStatement ps;
         boolean accountAdded = false;
         // Check if the email is valid
@@ -177,20 +210,27 @@ public class LoginController {
         return accountAdded;
     }
 
-    public static boolean isValidEmail(String email) {
+    /**
+     * isValidEmail - Check if the email has a correct format.
+     * @param email - Given email.
+     * @return - True if the email has a correct format, or else false.
+     */
+    private boolean isValidEmail(String email) {
         // Define a regular expression for a simple email validation
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-
         // Create a Pattern object
         Pattern pattern = Pattern.compile(emailRegex);
-
         // Create a matcher object
         Matcher matcher = pattern.matcher(email);
-
         // Return true if the email matches the pattern, otherwise false
         return matcher.matches();
     }
 
+    /**
+     * checkEmailInDatabase - Check if the email already exists in the database.
+     * @param email - Given email.
+     * @return - True if the email is found in the database, or else false.
+     */
     private boolean checkEmailInDatabase(String email){
         boolean emailExists = false;
         String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
@@ -209,6 +249,10 @@ public class LoginController {
         return emailExists;
     }
 
+    /**
+     * backToLogin - Calls the method from LoginView to display the login page.
+     * Called when clicking on the "login" button of the creation of account page.
+     */
     @FXML
     private void backToLogin(){
         view.initUI();

@@ -23,35 +23,28 @@ import java.util.stream.Stream;
 
 import static com.maestro.desktop.views.LoginView.stage;
 
-
+/**
+ * AppController - Controller's methods related to the sidebar and the global app.
+ */
 public class AppController {
 
     private static AppController INSTANCE = new AppController();
     private User user;
-
     public List<NavigableView> recents;
-
     private NavigableView dashboard;
-
     private NavigableView allProjects;
-
     private NavigableView account;
 
     @FXML
     private AnchorPane currentView;
-
     @FXML
     private Button dashboardButton;
-
     @FXML
     private Button allProjectsButton;
-
     @FXML
     private VBox recentContainer;
-
     @FXML
     private Button profileBtn;
-
     @FXML
     private Button logout;
 
@@ -59,6 +52,11 @@ public class AppController {
         return INSTANCE;
     }
 
+    /**
+     * initialize - Sets the user and displays the items from the sidebar.
+     * @param user - User logged in.
+     * @throws SQLException - If a SQL exception occurs during user initialization.
+     */
     public void initialize(User user) throws SQLException {
         this.user = user;
         System.out.println("Id: "+this.user.getId());
@@ -77,8 +75,11 @@ public class AppController {
         updateView(dashboard);
     }
 
+    /**
+     * updateView - Sets the user and displays the items from the sidebar.
+     * @param nav - User logged in.
+     */
     public void updateView(NavigableView nav) {
-//        DatabaseConnection.getInstance().updateView(nav);
         if (nav.getNavSource() != null && nav.getNavSource() instanceof Button) {
             for (NavigableView sidebarItem : Stream.concat(recents.stream(), Stream.of(dashboard, allProjects)).toList()) {
                 if (sidebarItem.getNavSource() == nav.getNavSource()) {
@@ -89,9 +90,7 @@ public class AppController {
             }
         }
         try {
-            System.out.println(nav.getFxml());
             FXMLLoader loader = new FXMLLoader(getClass().getResource(nav.getFxml()));
-            System.out.println(loader);
             AnchorPane view = (AnchorPane) loader.load();
             AnchorPane.setTopAnchor(view, 0.0);
             AnchorPane.setBottomAnchor(view, 0.0);
@@ -108,6 +107,9 @@ public class AppController {
         this.recentContainer.setVisible(!this.recents.isEmpty());
     }
 
+    /**
+     * logout - Destroys the user instance and displays the login page.
+     */
     public void logout() {
         this.user = null;
         LoginView view = new LoginView(stage);
@@ -115,7 +117,12 @@ public class AppController {
         System.out.println("Logging out");
     }
 
+    /**
+     * changeView - Choose which page to display.
+     * @param e - ActionEvent raised when a button is activated.
+     */
     public void changeView(ActionEvent e) {
+        this.user = DatabaseConnection.getInstance().updateUser(this.user.getId());
         Object source = e.getSource();
         if (source instanceof Button) {
             if (source == dashboardButton) {
@@ -134,6 +141,10 @@ public class AppController {
         }
     }
 
+    /**
+     * navigateWithData - Displays the recent pages in the sidebar.
+     * @param data - User logged in.
+     */
     public void navigateWithData(Object data) {
 
         // Check if already in recent Navigable Views
@@ -179,6 +190,10 @@ public class AppController {
         this.updateView(newRecentNavigableView);
     }
 
+    /**
+     * createNewProject - Creates a new project and adds it in the database.
+     * @param event - ActionEvent raised when clicking on the "New project" button.
+     */
     public void createNewProject(ActionEvent event) {
         Project project = new Project(
                 420,
@@ -198,6 +213,14 @@ public class AppController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * getAccount - Getter for the account member of the AppController class.
+     * @return NavigableView - The account member of the class.
+     */
+    public NavigableView getAccount(){
+        return this.account;
     }
 
 }
