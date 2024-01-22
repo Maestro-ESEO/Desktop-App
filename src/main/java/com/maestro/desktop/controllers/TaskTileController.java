@@ -38,7 +38,7 @@ public class TaskTileController {
      */
     public void initialize(Task task) {
         this.task = task;
-        this.projectTitle.setText(this.task.getParentProject().getName());
+        this.projectTitle.setText(this.task.getName());
         this.description.setText(this.task.getDescription());
         ComponentFactory.getInstance().displayActors(actors, 3, this.task.getActors());
     }

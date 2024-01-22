@@ -19,9 +19,13 @@ import java.util.List;
 public class DatabaseConnection {
     private static DatabaseConnection instance;
     private Connection connection;
-    private static final String URL = "jdbc:mysql://localhost:3306/maestro";
+    /*private static final String URL = "jdbc:mysql://localhost:3306/maestro";
     private static final String USER = "root";
-    private static final String PASS = "yF5PZvy?";
+    private static final String PASS = "yF5PZvy?";*/
+
+    private static final String URL = "jdbc:mysql://monorail.proxy.rlwy.net:56240/railway";
+    private static final String USER = "root";
+    private static final String PASS = "HcCee21C-F43ff-FaDf6d4g4A5C5eEc6";
 
     private DatabaseConnection() throws SQLException {
         this.connection = DriverManager.getConnection(URL, USER, PASS);
