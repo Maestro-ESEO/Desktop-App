@@ -78,21 +78,27 @@ public class EditAccountDialogController {
             // Edit the modified data in the database
             if(!editFirstname.getText().isEmpty() && !user.getFirstname().equals(editFirstname.getText())){
                 DatabaseConnection.getInstance().editTable("users", "first_name","id", user.getId(), editFirstname.getText());
+                this.user.setFirstname(editFirstname.getText());
             }
             if(!editLastname.getText().isEmpty() && !user.getLastname().equals(editLastname.getText())){
                 DatabaseConnection.getInstance().editTable("users", "last_name","id", user.getId(), editLastname.getText());
+                this.user.setLastname(editLastname.getText());
             }
             if(!editEmail.getText().isEmpty() && !user.getEmail().equals(editEmail.getText())){
                 DatabaseConnection.getInstance().editTable("users", "email","id", user.getId(), editEmail.getText());
+                this.user.setEmail(editEmail.getText());
             }
             if(!editPosition.getText().isEmpty() && user.getPosition() != null && !user.getPosition().equals(editPosition.getText())){
                 DatabaseConnection.getInstance().editTable("users", "position","id", user.getId(), editPosition.getText());
             }
             if(!editPassword.getText().isEmpty() && !user.getPassword().equals(editPassword.getText())){
                 DatabaseConnection.getInstance().editTable("users", "password","id", user.getId(), editPassword.getText());
+                this.user.setPassword(editPassword.getText());
             }
-            this.user = DatabaseConnection.getInstance().updateUser(this.user.getId());
+//            this.user = DatabaseConnection.getInstance().updateUser(this.user.getId());
             System.out.println("New firstname : "+this.user.getFirstname());
+            AppController.getInstance().getProfileBtn().setText(this.user.getName());
+            AppController.getInstance().updateView(AppController.getInstance().getAccount());
             this.stage.close();
         }
     }

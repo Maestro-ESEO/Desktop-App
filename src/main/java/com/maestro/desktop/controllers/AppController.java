@@ -64,6 +64,7 @@ public class AppController {
     public User getUser() { return this.user; }
 
     public NavigableView getAllProjects() { return allProjects; }
+    public Button getProfileBtn() { return this.profileBtn; }
 
     /**
      * initialize - Sets the user and displays the items from the sidebar.
@@ -72,12 +73,6 @@ public class AppController {
      */
     public void initialize(User user) throws SQLException {
         this.user = user;
-        System.out.println("Id: "+this.user.getId());
-        System.out.println("Firstname: "+this.user.getFirstname());
-        System.out.println("Lastname: "+this.user.getLastname());
-        System.out.println("Email: "+this.user.getEmail());
-        System.out.println("Password: "+this.user.getPassword());
-        System.out.println("Picture: "+this.user.getProfilePhotoPath());
         this.profileBtn.setText(this.user.getName());
         Circle clipShape = new Circle(15, 15, 15);
         this.profileBtn.getGraphic().setClip(clipShape);

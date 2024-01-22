@@ -1,8 +1,6 @@
 package com.maestro.desktop.controllers;
 
-import com.maestro.desktop.utils.DatabaseConnection;
 import com.maestro.desktop.models.User;
-import com.maestro.desktop.views.AccountView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,18 +9,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Stream;
+
 /**
  * AccountController - Controller's methods related to the account page.
  * AccountController is a subclass of NavigationViewController.
@@ -68,18 +61,20 @@ public class AccountController extends NavigationViewController{
      * initialize - Sets the user and displays the dynamic items of the account page.
      * @param user - User logged in.
      */
-    @Override
     public void initialize(Object user){
         this.user = (User) user;
         accountFirstname.setText(this.user.getFirstname());
         accountLastname.setText(this.user.getLastname());
         accountEmail.setText(this.user.getEmail());
-        if(this.user.getProfilePhotoPath() == null) {
-            profilePicture.setImage(new Image(getClass().getClassLoader().getResourceAsStream("images/default-pfp.png")));
-        }else{
-            // Default profile photo
-            profilePicture.setImage(new Image(this.user.getProfilePhotoPath()));
-        }
+        this.profilePicture.setUserData(this.user.getProfilePhotoPath().isEmpty() ? getClass().getResource("/images/default-pfp.png").toString() : this.user.getProfilePhotoPath());
+        this.profilePicture.setFitWidth(80);
+        this.profilePicture.setFitHeight(80);
+        Circle clipShape = new Circle(40, 40, 40);
+        this.profilePicture.setClip(clipShape);
+        new Thread(() -> {
+            this.profilePicture.setImage(new Image((String) this.profilePicture.getUserData()));
+        }).start();
+
         accountPosition.setText(this.user.getPosition());
         projectsInProgress.setText(Integer.toString(this.user.getProjects().size()));
         tasksToDo.setText(Integer.toString(this.user.getTasksToDo()));

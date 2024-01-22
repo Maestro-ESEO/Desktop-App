@@ -68,7 +68,6 @@ public class LoginView {
             Scene scene = stage.getScene();
             scene.getStylesheets().add(getClass().getResource("/com/maestro/desktop/styles/style.css").toExternalForm());
             stage.setScene(scene);
-
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

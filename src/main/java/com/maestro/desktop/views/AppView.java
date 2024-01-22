@@ -31,8 +31,9 @@ public class AppView {
                 Parent load = loader.load();
                 AppController appController = loader.getController();
                 appController.initialize(loggedInUser);
-                stage.setScene(new Scene(load));
+                stage.setScene(new Scene(load, 800, 600));
                 stage.setTitle("Maestro");
+                stage.sizeToScene();
                 stage.show();
             } catch (IOException error) {
                 error.printStackTrace();

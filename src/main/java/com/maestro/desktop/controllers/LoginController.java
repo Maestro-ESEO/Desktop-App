@@ -90,6 +90,7 @@ public class LoginController {
             wrongLogin.setText("Success!");
             // Display the dashboard view
             AppView appView = new AppView(email.getText(), password.getText());
+            view.stage.sizeToScene();
         }
         else {
             wrongLogin.setText("Wrong username or password!");
