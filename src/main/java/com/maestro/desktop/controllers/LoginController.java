@@ -139,6 +139,7 @@ public class LoginController {
         // test if the first password equals the second one
         else if(password.equals(checkPassword) && isValidEmail(email)) {
             DatabaseConnection.getInstance().addSignUpData(firstname, lastname, email, password);
+            stage.close();
             // add data of the new account in database
             view.initUI();
         }else{
