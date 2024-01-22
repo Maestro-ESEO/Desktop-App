@@ -15,6 +15,9 @@ import java.io.IOException;
 
 import static com.maestro.desktop.views.LoginView.stage;
 
+/**
+ * DashboardView - View methods for the dashboard page.
+ */
 public class DashboardView {
 
     private DashboardController dashboardController;

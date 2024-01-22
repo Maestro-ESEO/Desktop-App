@@ -11,6 +11,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * LoginView - View methods for the login page and the creation of the account page.
+ */
 public class LoginView {
 
     public static Stage stage;
@@ -74,19 +77,6 @@ public class LoginView {
             e.printStackTrace();
         }
     }
-
-    public String getEmail() {
-        // Implement this method if needed
-        return null;
-    }
-
-    @FXML
-    public String getPassword() {
-        TextField password;
-        String text ; //= password.getText();
-        return null ; //text;
-    }
-
 
 }
 

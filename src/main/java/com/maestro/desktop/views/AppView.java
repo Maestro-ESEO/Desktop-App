@@ -17,6 +17,9 @@ import java.sql.SQLException;
 
 import static com.maestro.desktop.views.LoginView.stage;
 
+/**
+ * AppView - View methods for the global page.
+ */
 public class AppView {
 
     private User loggedInUser;

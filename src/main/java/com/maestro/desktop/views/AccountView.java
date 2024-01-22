@@ -15,6 +15,9 @@ import java.text.BreakIterator;
 
 import static com.maestro.desktop.views.LoginView.stage;
 
+/**
+ * AccountView - View methods for the account page.
+ */
 public class AccountView {
 
     private AccountController accountController;
@@ -24,6 +27,9 @@ public class AccountView {
     }
 
     // initialize the UI by loading the FXML file and setting up the stage
+    /**
+     * setAccountView - Displays the account page.
+     */
     public void setAccountView() {
         try {
             // Load the FXML file
@@ -52,7 +58,9 @@ public class AccountView {
         }
     }
 
-    // display the account page in the window
+    /**
+     * setAccountEditView - Displays the account edition page.
+     */
     public void setAccountEditView() {
         try {
             // Load the FXML file
@@ -79,6 +87,4 @@ public class AccountView {
             e.printStackTrace();
         }
     }
-
-
 }
