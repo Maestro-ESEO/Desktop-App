@@ -79,8 +79,8 @@ public class EditProjectDialogController {
         }
         this.name.setText(this.project.getName());
         this.description.setText(this.project.getDescription());
-        this.startDate.setValue(LocalDate.ofInstant(this.project.getStartDate().toInstant(), ZoneId.systemDefault()));
-        this.endDate.setValue(LocalDate.ofInstant(this.project.getEndDate().toInstant(), ZoneId.systemDefault()));
+        this.startDate.setValue(new java.sql.Date(this.project.getStartDate().getTime()).toLocalDate());
+        this.endDate.setValue(new java.sql.Date(this.project.getEndDate().getTime()).toLocalDate());
     }
 
     public void updateProject() {
